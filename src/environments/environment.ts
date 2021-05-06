@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyDjK1jeg60i-Lgnkj_GOwJhiVUTmkLp3Lg',
-    authDomain: 'stack-overflow-2ac27.firebaseapp.com',
-    projectId: 'stack-overflow-2ac27',
-    storageBucket: 'stack-overflow-2ac27.appspot.com',
-    messagingSenderId: '227627989072',
-    appId: '1:227627989072:web:3ec7fab21d44077de13955'
+    apiKey: 'AIzaSyDMiSDGPRxa6EH3VzY59KtK2l07CECRGAs',
+    authDomain: 'stackoverflow-bba0e.firebaseapp.com',
+    projectId: 'stackoverflow-bba0e',
+    storageBucket: 'stackoverflow-bba0e.appspot.com',
+    messagingSenderId: '4422216162',
+    appId: '1:4422216162:web:78f905c2bee9cfc6f6b1bb'
   }
 };
 

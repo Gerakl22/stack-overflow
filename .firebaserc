@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "stackoverflow-bba0e"
+  },
+  "targets": {
+    "stackoverflow-bba0e": {
+      "hosting": {
+        "stack-overflow": [
+          "stackoverflow-bba0e"
+        ]
+      }
+    }
+  }
+}
