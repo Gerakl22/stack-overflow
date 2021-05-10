@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "stackoverflow-bba0e"
+    "default": "stackoverflow-bba0e",
+    "public": "public",
   },
   "targets": {
     "stackoverflow-bba0e": {
