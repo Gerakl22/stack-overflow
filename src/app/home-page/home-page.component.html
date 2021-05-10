@@ -1,0 +1,19 @@
+<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="c-app__header">
+  <nav class = "c-app__navigation">
+    <div class="c-app__home">
+      <a class="c-app__link" routerLink="/">Stack Overflow</a>
+    </div>
+    <div class="c-app__home">
+      <a *ngIf="isLog" class="c-app__link">{{email}}</a>
+    </div>
+    <ul class="c-app__buttons">
+      <li routerLinkActive="active" class="c-app__button">
+        <a mat-button mat-raised-button color="accent" routerLink="/login">Login</a>
+      </li>
+      <li class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up' >Sign Up</a></li>
+      <li class="c-app__button" routerLinkActive="active"><a *ngIf="isLog" mat-button mat-raised-button routerLink='/' (click)="signOut($event)">Sign Out</a></li>
+    </ul>
+  </nav>
+</mat-toolbar>
+
