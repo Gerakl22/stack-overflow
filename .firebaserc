@@ -1,15 +1,5 @@
 {
   "projects": {
-    "default": "stackoverflow-bba0e",
-    "public": "public",
-  },
-  "targets": {
-    "stackoverflow-bba0e": {
-      "hosting": {
-        "stack-overflow": [
-          "stackoverflow-bba0e"
-        ]
-      }
-    }
+    "default": "stackoverflow-bba0e"
   }
 }
