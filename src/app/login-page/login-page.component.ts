@@ -35,6 +35,10 @@ export class LoginPageComponent implements OnInit {
     return this.myForm.controls.password;
   }
 
+  getErrorUserIsNotExist(): any {
+    return this.auth.getError();
+  }
+
   getErrorEmail(): any {
     if (this.email.errors?.required) {
       return 'You must enter a value';

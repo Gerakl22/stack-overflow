@@ -25,6 +25,7 @@
         <button mat-icon-button (click)="logOnGitHub($event)"><mat-icon fontSet="fontawesome" fontIcon="fa-github"></mat-icon></button>
       </mat-card-content>
       <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid">Log in</button>
+      <mat-error *ngIf="getErrorUserIsNotExist() !== null">{{getErrorUserIsNotExist()}}</mat-error>
     </form>
   </mat-card>
 </div>

@@ -8,9 +8,14 @@ import {Observable} from 'rxjs';
 export class AuthService {
 
   public user: Observable<firebase.default.User | null>;
+  public error: any;
 
   constructor(private fireAuth: AngularFireAuth, private router: Router) {
     this.user = this.fireAuth.authState;
+  }
+
+  getError(): any {
+    return this.error;
   }
 
   login(email: string, password: string): any {
@@ -20,7 +25,8 @@ export class AuthService {
         this.router.navigate(['/']);
       })
       .catch(error => {
-        console.log('Something wrong: ', error.message);
+        this.error = 'This User is not register';
+        console.log(`Something wrong: ${error}`);
       });
   }
 
@@ -31,7 +37,8 @@ export class AuthService {
         this.router.navigate(['/']);
       })
       .catch(error => {
-      console.log(`Something wrong: ${error}`);
+        this.error = 'This User is register';
+        console.log(`Something wrong: ${error}`);
     });
   }
 
@@ -43,6 +50,7 @@ export class AuthService {
         this.router.navigate(['/']);
       })
       .catch((error: any) => {
+        this.error = error.message;
         console.log(`Something wrong: ${error}`);
       });
   }
@@ -55,6 +63,7 @@ export class AuthService {
         this.router.navigate(['/']);
       })
       .catch((error: any) => {
+        this.error = error.message;
         console.log(`Something wrong: ${error}`);
       });
   }
