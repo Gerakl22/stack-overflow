@@ -8,64 +8,27 @@ import {Observable} from 'rxjs';
 export class AuthService {
 
   public user: Observable<firebase.default.User | null>;
-  public error: any;
 
   constructor(private fireAuth: AngularFireAuth, private router: Router) {
-    this.user = this.fireAuth.authState;
+    this.user = this.fireAuth.authState; // change authGuard to do
   }
 
-  getError(): any {
-    return this.error;
+  login(email: string, password: string): Promise<any> {
+    return this.fireAuth.signInWithEmailAndPassword(email, password);
   }
 
-  login(email: string, password: string): any {
-    return this.fireAuth.signInWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('It worked');
-        this.router.navigate(['/']);
-      })
-      .catch(error => {
-        this.error = 'This User is not register';
-        console.log(`Something wrong: ${error}`);
-      });
-  }
-
-  signUp(email: string, password: string): any {
-   return this.fireAuth.createUserWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log(`Success ${value}`);
-        this.router.navigate(['/']);
-      })
-      .catch(error => {
-        this.error = 'This User is register';
-        console.log(`Something wrong: ${error}`);
-    });
-  }
-
-  async gitHubLogin(): Promise<any> {
+  gitHubLogin(): Promise<any> {
     const provider = new firebase.default.auth.GithubAuthProvider();
-    return await this.onAuthLogin(provider)
-      .then((value: any) => {
-        console.log(`Success ${value}`);
-        this.router.navigate(['/']);
-      })
-      .catch((error: any) => {
-        this.error = error.message;
-        console.log(`Something wrong: ${error}`);
-      });
+    return this.onAuthLogin(provider);
   }
 
-  async googleLogin(): Promise<any> {
+  googleLogin(): Promise<any> {
     const provider = new firebase.default.auth.GoogleAuthProvider();
-    return await this.onAuthLogin(provider)
-      .then((value: any) => {
-        console.log(`Success ${value}`);
-        this.router.navigate(['/']);
-      })
-      .catch((error: any) => {
-        this.error = error.message;
-        console.log(`Something wrong: ${error}`);
-      });
+    return this.onAuthLogin(provider);
+  }
+
+  signUp(email: string, password: string): Promise<any> {
+    return this.fireAuth.createUserWithEmailAndPassword(email, password);
   }
 
   signOut(): any {
@@ -75,7 +38,7 @@ export class AuthService {
       });
   }
 
-  private onAuthLogin(provider: any): any {
+  private onAuthLogin(provider: any): Promise<any> {
     return this.fireAuth.signInWithPopup(provider);
   }
 }

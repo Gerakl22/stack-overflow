@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../auth.service';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormGroup, FormControl, Validators, AbstractControl} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -11,8 +12,9 @@ export class LoginPageComponent implements OnInit {
 
   myForm!: FormGroup;
   isHide = true;
+  error!: string;
 
-  constructor(public auth: AuthService)  {}
+  constructor(public authService: AuthService, public router: Router)  {}
 
   ngOnInit(): void {
     this.myForm = new FormGroup({
@@ -27,19 +29,15 @@ export class LoginPageComponent implements OnInit {
       });
   }
 
-  get email(): any {
+  get email(): AbstractControl {
     return this.myForm.controls.email;
   }
 
-  get password(): any {
+  get password(): AbstractControl {
     return this.myForm.controls.password;
   }
 
-  getErrorUserIsNotExist(): any {
-    return this.auth.getError();
-  }
-
-  getErrorEmail(): any {
+  getErrorEmail(): string {
     if (this.email.errors?.required) {
       return 'You must enter a value';
     }
@@ -47,7 +45,7 @@ export class LoginPageComponent implements OnInit {
     return this.email.errors?.email ? 'Not a valid email' :  '';
   }
 
-  getErrorPassword(): any {
+  getErrorPassword(): string {
     if (this.password.errors?.required) {
       return 'You must enter value';
     }
@@ -55,24 +53,39 @@ export class LoginPageComponent implements OnInit {
     return this.password.errors?.minlength ? 'Min length 6 letters' : '';
   }
 
-  logOnGoogle(e: any): any {
-    e.preventDefault();
-    return this.auth.googleLogin();
+  logOnGoogle(): void {
+    this.authService.googleLogin()
+      .then(() => {
+        this.router.navigate(['/']);
+      })
+      .catch((err: Error) => {
+        this.error = err.message;
+      });
   }
 
-  logOnGitHub(e: any): any {
-    e.preventDefault();
-    return this.auth.gitHubLogin();
+  logOnGitHub(): void {
+    this.authService.gitHubLogin()
+      .then(() => {
+        this.router.navigate(['/']);
+      })
+      .catch((err: Error) => {
+        this.error = err.message;
+      });
   }
 
-  onSubmit(e: any): any {
+  onSubmit(e: { preventDefault: () => void; }): void {
     e.preventDefault();
-    return this.auth.login(this.myForm.value.email, this.myForm.value.password);
+    this.authService.login(this.myForm.value.email, this.myForm.value.password)
+      .then(() => {
+        this.router.navigate(['/']);
+      })
+      .catch((err: Error) => {
+        this.error = err.message;
+      });
   }
 
-  toggleIconPassword(e: any): boolean {
-    e.preventDefault();
-    return this.isHide = !this.isHide;
+  toggleIconPassword(): void {
+    this.isHide = !this.isHide;
   }
 
 }
