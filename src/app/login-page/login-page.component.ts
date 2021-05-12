@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 export class LoginPageComponent implements OnInit {
 
   myForm!: FormGroup;
-  isHide = true;
+  isHidePassword = true;
   error!: string;
 
   constructor(public authService: AuthService, public router: Router)  {}
@@ -20,7 +20,7 @@ export class LoginPageComponent implements OnInit {
     this.myForm = new FormGroup({
         email: new FormControl('', [
           Validators.required,
-          Validators.email
+          Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$'),
         ]),
         password: new FormControl('', [
           Validators.required,
@@ -42,7 +42,7 @@ export class LoginPageComponent implements OnInit {
       return 'You must enter a value';
     }
 
-    return this.email.errors?.email ? 'Not a valid email' :  '';
+    return this.email.errors?.pattern ? 'Not a valid email' :  '';
   }
 
   getErrorPassword(): string {
@@ -95,7 +95,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   toggleIconPassword(): void {
-    this.isHide = !this.isHide;
+    this.isHidePassword = !this.isHidePassword;
   }
 
 }

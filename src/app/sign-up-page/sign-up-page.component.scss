@@ -1,13 +1,22 @@
 .wrapper{
   display: flex;
   flex-direction: column;
+  width: 300px;
 
   mat-card-title{
     margin-bottom: 2rem;
     text-align: center;
   }
+
   mat-form-field {
     display: block;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
   }
 }
 
