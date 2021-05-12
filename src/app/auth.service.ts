@@ -17,6 +17,11 @@ export class AuthService {
     return this.fireAuth.signInWithEmailAndPassword(email, password);
   }
 
+  facebookLogin(): Promise<any> {
+    const provider = new firebase.default.auth.FacebookAuthProvider();
+    return this.onAuthLogin(provider);
+  }
+
   gitHubLogin(): Promise<any> {
     const provider = new firebase.default.auth.GithubAuthProvider();
     return this.onAuthLogin(provider);
@@ -31,7 +36,7 @@ export class AuthService {
     return this.fireAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  signOut(): any {
+  signOut(): void {
     this.fireAuth.signOut()
       .then(() => {
         this.router.navigate(['login']);

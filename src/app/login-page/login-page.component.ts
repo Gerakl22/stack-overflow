@@ -53,6 +53,16 @@ export class LoginPageComponent implements OnInit {
     return this.password.errors?.minlength ? 'Min length 6 letters' : '';
   }
 
+  logOnFacebook(): void {
+    this.authService.facebookLogin()
+      .then(() => {
+        this.router.navigate( ['/']);
+      })
+      .catch((err: Error) => {
+        this.error = err.message;
+      });
+  }
+
   logOnGoogle(): void {
     this.authService.googleLogin()
       .then(() => {
