@@ -8,7 +8,7 @@ export class AuthService {
 
   public user$: Observable<firebase.default.User | null>;
 
-  constructor(private fireAuth: AngularFireAuth) {
+  constructor(public fireAuth: AngularFireAuth) {
     this.user$ = this.fireAuth.authState; // change authGuard to do
   }
 
