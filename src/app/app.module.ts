@@ -7,7 +7,6 @@ import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AngularMaterialModule} from './_shared/_material/angular-material.module';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -39,7 +38,6 @@ import { HeaderComponent } from './_shared/header/header.component';
     ReactiveFormsModule,
     AngularMaterialModule,
     MatIconModule,
-    FlexLayoutModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

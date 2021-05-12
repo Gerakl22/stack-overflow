@@ -1,13 +1,15 @@
-<mat-toolbar color="primary" class="c-app__header">
-  <nav class = "c-app__navigation">
-    <div class="c-app__home">
-      <a class="c-app__link" routerLink="/">Stack Overflow</a>
+<mat-toolbar color="primary" class="c-home__header">
+  <nav class = "c-home__navigation">
+    <div class="c-home__home">
+      <a class="c-home__link" routerLink="/">Stack Overflow</a>
     </div>
-    <div class="c-app__home">
-      <a class="c-app__link">{{email}}</a>
+    <div class="c-home__home">
+      <a class="c-home__link">{{email}}</a>
     </div>
-    <ul class="c-app__buttons">
-      <li class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/' (click)="signOut()">Sign Out</a></li>
+    <ul class="c-home__buttons">
+      <li class="c-home__button" routerLinkActive="active">
+        <a mat-button mat-raised-button routerLink='/' (click)="signOut()">Sign Out</a>
+      </li>
     </ul>
   </nav>
 </mat-toolbar>
