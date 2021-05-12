@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../auth.service';
+import {AuthService} from '../../_shared/_services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -9,13 +10,11 @@ import {AuthService} from '../auth.service';
 export class HomePageComponent implements OnInit {
 
   public email: string | undefined;
-  public isLog: boolean | undefined;
 
-  constructor(private auth: AuthService) {
-    auth.user.subscribe((user: any) => {
+  constructor(private authService: AuthService, private router: Router) {
+    authService.user$.subscribe((user: any)  => {
       if (user) {
         this.email = user.email;
-        this.isLog = true;
       }
     });
   }
@@ -23,11 +22,11 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  signOut(e: any): any {
-    e.preventDefault();
-    this.auth.signOut();
-    this.isLog = false;
-    console.log('It worked');
+  signOut(): void {
+    this.authService.signOut()
+      .then(() => {
+      this.router.navigate(['login']);
+    });
   }
 
 }

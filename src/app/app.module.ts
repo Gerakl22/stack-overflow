@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
-import {AngularMaterialModule} from './angular-material.module';
+import {AngularMaterialModule} from './_shared/_material/angular-material.module';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,18 +16,21 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule} from '@angular/fire/auth-guard';
 
 import { AppComponent } from './app.component';
-import { HomePageComponent } from './home-page/home-page.component';
-import { LoginPageComponent } from './login-page/login-page.component';
-import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
+import { HomePageComponent } from './homeModule/home-page/home-page.component';
+import { LoginPageComponent } from './authModule/login-page/login-page.component';
+import { SignUpPageComponent } from './authModule/sign-up-page/sign-up-page.component';
 
-import {AuthService} from './auth.service';
+import {AuthService} from './_shared/_services/auth.service';
+import { HeaderComponent } from './_shared/header/header.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
     LoginPageComponent,
-    SignUpPageComponent
+    SignUpPageComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

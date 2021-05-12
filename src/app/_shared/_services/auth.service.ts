@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Router} from '@angular/router';
 import * as firebase from 'firebase/app';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Observable} from 'rxjs';
@@ -7,10 +6,10 @@ import {Observable} from 'rxjs';
 @Injectable()
 export class AuthService {
 
-  public user: Observable<firebase.default.User | null>;
+  public user$: Observable<firebase.default.User | null>;
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router) {
-    this.user = this.fireAuth.authState; // change authGuard to do
+  constructor(private fireAuth: AngularFireAuth) {
+    this.user$ = this.fireAuth.authState; // change authGuard to do
   }
 
   login(email: string, password: string): Promise<any> {
@@ -36,11 +35,8 @@ export class AuthService {
     return this.fireAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  signOut(): void {
-    this.fireAuth.signOut()
-      .then(() => {
-        this.router.navigate(['login']);
-      });
+  signOut(): Promise<any> {
+   return this.fireAuth.signOut();
   }
 
   private onAuthLogin(provider: any): Promise<any> {
