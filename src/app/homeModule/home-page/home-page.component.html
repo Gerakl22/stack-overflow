@@ -3,15 +3,16 @@
     <div class="c-home__home">
       <a class="c-home__link">Stack Overflow</a>
     </div>
-    <div class="c-home__home">
-      <a class="c-home__link">{{email}}</a>
-    </div>
     <ul class="c-home__buttons">
-      <li class="c_home__buttons" routerLinkActive="active">
-        <a>Add Question</a>
+      <li class="c-home__button" routerLinkActive="active">
+        <button type="button" mat-button mat-raised-button>Add Question</button>
       </li>
       <li class="c-home__button" routerLinkActive="active">
-        <a mat-button mat-raised-button routerLink='/' (click)="signOut()">Sign Out</a>
+        <a mat-button mat-raised-button [matMenuTriggerFor]="profile">{{email}}</a>
+        <mat-menu #profile="matMenu">
+          <a mat-menu-item>Profile</a>
+          <a mat-menu-item routerLink='/' (click)="signOut()">Sign Out</a>
+        </mat-menu>
       </li>
     </ul>
   </nav>
