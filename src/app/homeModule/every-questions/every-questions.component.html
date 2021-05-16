@@ -1,0 +1,65 @@
+<main class="c-everyQuestions">
+  <mat-toolbar color="accent" class="c-home__main">
+    <ul class="c-everyQuestions__list">
+      <li class="c-everyQuestions__item">
+        <a mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</a>
+        <mat-menu #filters="matMenu">
+          <form class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="responded">Responded</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="noReply">Make no reply</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="resolve">Resolve</mat-radio-button>
+            </mat-label>
+          </form>
+          <form class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label" *ngFor="let category of categoryList">
+              <mat-checkbox>{{category.item}}</mat-checkbox>
+            </mat-label>
+          </form>
+          <form class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="day">Per day</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="week">Per week</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="month">Per month</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="allTime">Per all time</mat-radio-button>
+            </mat-label>
+          </form>
+        </mat-menu>
+      </li>
+      <li class="c-everyQuestions__item">
+        <a mat-button mat-raised-button>Sort</a>
+      </li>
+      <li class="c-everyQuestions__item">
+        <a mat-button mat-raised-button [matMenuTriggerFor]="settings">Settings</a>
+        <mat-menu #settings="matMenu">
+          <form class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="tiled">Tiled display</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="line">Line display</mat-radio-button>
+            </mat-label>
+          </form>
+          <form class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="tiled">Light theme</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="line">Dark theme</mat-radio-button>
+            </mat-label>
+          </form>
+        </mat-menu>
+      </li>
+    </ul>
+  </mat-toolbar>
+</main>
