@@ -9,7 +9,7 @@
       </li>
       <li *ngIf="!isLogUser" class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up' >Sign Up</a></li>
       <li *ngIf="isLogUser" class="c-app__button" routerLinkActive="active">
-        <button type="button" mat-button mat-raised-button>Add Question</button>
+        <button type="button" mat-button mat-raised-button routerLink="/newQuestion" (click)="addQuestion()">Add Question</button>
       </li>
       <li class="c-app__button" routerLinkActive="active">
         <a *ngIf="isLogUser" mat-button mat-raised-button [matMenuTriggerFor]="profile">{{email}}</a>

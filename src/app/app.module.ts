@@ -18,9 +18,13 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './homeModule/home-page/home-page.component';
 import { LoginPageComponent } from './authModule/login-page/login-page.component';
 import { SignUpPageComponent } from './authModule/sign-up-page/sign-up-page.component';
+import { NewQuestionComponent } from './homeModule/new-question/new-question.component';
+import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
 
 import {AuthService} from './_shared/_services/auth.service';
 import { HeaderComponent } from './_shared/header/header.component';
+
+
 
 
 @NgModule({
@@ -29,7 +33,9 @@ import { HeaderComponent } from './_shared/header/header.component';
     HomePageComponent,
     LoginPageComponent,
     SignUpPageComponent,
-    HeaderComponent
+    HeaderComponent,
+    NewQuestionComponent,
+    EveryQuestionsComponent
   ],
   imports: [
     BrowserModule,

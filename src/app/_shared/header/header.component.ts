@@ -24,6 +24,10 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addQuestion(): void {
+    this.router.navigate(['/newQuestion']);
+  }
+
   signOut(): void {
     this.authService.signOut()
       .then(() => {

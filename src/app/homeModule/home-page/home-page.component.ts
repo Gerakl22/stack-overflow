@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as categories from '../../../assets/data/categories.json';
+
 
 @Component({
   selector: 'app-home-page',
@@ -8,12 +8,8 @@ import * as categories from '../../../assets/data/categories.json';
 })
 export class HomePageComponent implements OnInit {
 
-  categoryList?: { item: string; }[];
-
   constructor() {}
 
-  ngOnInit(): void {
-    this.categoryList = categories.categories;
-  }
+  ngOnInit(): void {}
 
 }
