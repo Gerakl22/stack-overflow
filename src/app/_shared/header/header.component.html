@@ -5,9 +5,19 @@
     </div>
     <ul class="c-app__buttons">
       <li routerLinkActive="active" class="c-app__button">
-        <a mat-button mat-raised-button color="accent" routerLink="/login">Login</a>
+        <a *ngIf="!isLogUser" mat-button mat-raised-button color="accent" routerLink="/login">Login</a>
       </li>
-      <li class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up' >Sign Up</a></li>
+      <li *ngIf="!isLogUser" class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up' >Sign Up</a></li>
+      <li *ngIf="isLogUser" class="c-app__button" routerLinkActive="active">
+        <button type="button" mat-button mat-raised-button>Add Question</button>
+      </li>
+      <li class="c-app__button" routerLinkActive="active">
+        <a *ngIf="isLogUser" mat-button mat-raised-button [matMenuTriggerFor]="profile">{{email}}</a>
+        <mat-menu #profile="matMenu">
+          <a mat-menu-item>Profile</a>
+          <a mat-menu-item routerLink='/' (click)="signOut()">Sign Out</a>
+        </mat-menu>
+      </li>
     </ul>
   </nav>
 </mat-toolbar>

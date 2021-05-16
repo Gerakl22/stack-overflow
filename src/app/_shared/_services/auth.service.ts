@@ -9,7 +9,7 @@ export class AuthService {
   public user$: Observable<firebase.default.User | null>;
 
   constructor(public fireAuth: AngularFireAuth) {
-    this.user$ = this.fireAuth.authState; // change authGuard to do
+    this.user$ = this.fireAuth.authState;
   }
 
   login(email: string, password: string): Promise<any> {

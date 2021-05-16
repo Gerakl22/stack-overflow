@@ -1,34 +1,24 @@
 .c-home {
-  &__header {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+  padding-top: 6rem;
+
+  &__main {
+    padding: 0rem 2rem;
   }
 
-  &__navigation {
-    height: 100%;
+  &__list {
     display: flex;
-    width: 100%;
-    flex-flow: row wrap;
     justify-content: space-between;
+    width: 100%;
   }
 
-  &__home {
-    height: 100%;
+  &__form {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    padding: 0.5rem;
   }
 
-  &__buttons {
-    display: flex;
-    align-items: center;
-  }
+}
 
-  &__button {
-    margin-left: 1rem;
-  }
+.mat-form-field-label {
+  padding-bottom: 0.2rem;
 }

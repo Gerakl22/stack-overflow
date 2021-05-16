@@ -1,20 +1,67 @@
-<mat-toolbar color="primary" class="c-home__header">
-  <nav class = "c-home__navigation">
-    <div class="c-home__home">
-      <a class="c-home__link">Stack Overflow</a>
-    </div>
-    <ul class="c-home__buttons">
-      <li class="c-home__button" routerLinkActive="active">
-        <button type="button" mat-button mat-raised-button>Add Question</button>
+<main class="c-home">
+  <mat-toolbar color="accent" class="c-home__main">
+    <ul class="c-home__list">
+      <li class="c-home__item">
+        <a mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</a>
+        <mat-menu #filters="matMenu">
+          <form class="c-home__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="responded">Responded</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="noReply">Make no reply</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="resolve">Resolve</mat-radio-button>
+            </mat-label>
+          </form>
+          <form class="c-home__form">
+            <mat-label class="mat-form-field-label" *ngFor="let category of categoryList">
+              <mat-checkbox>{{category.item}}</mat-checkbox>
+            </mat-label>
+          </form>
+          <form class="c-home__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="day">Per day</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="week">Per week</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="month">Per month</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="allTime">Per all time</mat-radio-button>
+            </mat-label>
+          </form>
+        </mat-menu>
       </li>
-      <li class="c-home__button" routerLinkActive="active">
-        <a mat-button mat-raised-button [matMenuTriggerFor]="profile">{{email}}</a>
-        <mat-menu #profile="matMenu">
-          <a mat-menu-item>Profile</a>
-          <a mat-menu-item routerLink='/' (click)="signOut()">Sign Out</a>
+      <li class="c-home__item">
+        <a mat-button mat-raised-button>Sort</a>
+      </li>
+      <li class="c-home__item">
+        <a mat-button mat-raised-button [matMenuTriggerFor]="settings">Settings</a>
+        <mat-menu #settings="matMenu">
+          <form class="c-home__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="tiled">Tiled display</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="line">Line display</mat-radio-button>
+            </mat-label>
+          </form>
+          <form class="c-home__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="tiled">Light theme</mat-radio-button>
+            </mat-label>
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" value="line">Dark theme</mat-radio-button>
+            </mat-label>
+          </form>
         </mat-menu>
       </li>
     </ul>
-  </nav>
-</mat-toolbar>
+  </mat-toolbar>
+</main>
+
 

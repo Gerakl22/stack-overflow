@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../_shared/_services/auth.service';
-import {Router} from '@angular/router';
+import * as categories from '../../../assets/data/categories.json';
 
 @Component({
   selector: 'app-home-page',
@@ -9,24 +8,12 @@ import {Router} from '@angular/router';
 })
 export class HomePageComponent implements OnInit {
 
-  public email: string | undefined;
+  categoryList?: { item: string; }[];
 
-  constructor(private authService: AuthService, private router: Router) {
-    authService.user$.subscribe((user: any)  => {
-      if (user) {
-        this.email = user.email;
-      }
-    });
-  }
+  constructor() {}
 
   ngOnInit(): void {
-  }
-
-  signOut(): void {
-    this.authService.signOut()
-      .then(() => {
-      this.router.navigate(['login']);
-    });
+    this.categoryList = categories.categories;
   }
 
 }
