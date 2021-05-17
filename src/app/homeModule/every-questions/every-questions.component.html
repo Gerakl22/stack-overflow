@@ -1,5 +1,5 @@
 <main class="c-everyQuestions">
-  <mat-toolbar color="accent" class="c-home__main">
+  <mat-toolbar color="accent" class="c-everyQuestions__main">
     <ul class="c-everyQuestions__list">
       <li class="c-everyQuestions__item">
         <a mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</a>
@@ -16,8 +16,8 @@
             </mat-label>
           </form>
           <form class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label" *ngFor="let category of categoryList">
-              <mat-checkbox>{{category.item}}</mat-checkbox>
+            <mat-label class="mat-form-field-label" *ngFor="let tag of tagsData">
+              <mat-checkbox>{{tag.item}}</mat-checkbox>
             </mat-label>
           </form>
           <form class="c-everyQuestions__form">

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as categories from '../../../assets/data/categories.json';
+import * as tags from '../../../assets/data/tags.json';
+import {ITags} from '../../_shared/_models/ITags';
 
 @Component({
   selector: 'app-every-questions',
@@ -8,12 +9,12 @@ import * as categories from '../../../assets/data/categories.json';
 })
 export class EveryQuestionsComponent implements OnInit {
 
-  categoryList?: { item: string; }[];
+  tagsData!: ITags[];
 
   constructor() { }
 
   ngOnInit(): void {
-    this.categoryList = categories.categories;
+    this.tagsData = tags.tags;
   }
 
 }

@@ -2,14 +2,20 @@
   <div class="c-newQuestion__wrapper">
     <h2 class="c-newQuestion__heading">New Question</h2>
     <hr>
-    <form class="c-newQuestion__form">
+    <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit()" class="c-newQuestion__form">
       <mat-card-content class="c-newQuestion__content">
+        <mat-form-field appearance="outline">
         <mat-label class="c-newQuestion__label">Title</mat-label>
-        <input class="c-newQuestion__input" type="text"/>
+        <input matInput class="c-newQuestion__input" type="text" formControlName="title"/>
+        <mat-error *ngIf="title.invalid && title.touched">{{getErrorTitle()}}</mat-error>
+        </mat-form-field>
       </mat-card-content>
       <mat-card-content class="c-newQuestion__content">
+        <mat-form-field appearance="outline">
         <mat-label class="c-newQuestion__label">Text</mat-label>
-        <textarea class="c-newQuestion__textarea" type="text"> </textarea>
+        <textarea matInput class="c-newQuestion__textarea" type="text" formControlName="textarea"> </textarea>
+          <mat-error *ngIf="textarea.invalid && textarea.touched">{{getErrorTextarea()}}</mat-error>
+        </mat-form-field>
       </mat-card-content>
       <mat-card-content class="c-newQuestion__content">
         <div class="c-newQuestion__categories">
@@ -17,14 +23,14 @@
             Tags
           </p>
           <div class="c-newQuestion__category">
-            <mat-label class="c-newQuestion__label" *ngFor="let category of categoryList">
-              <mat-checkbox class="c-newQuestion__checkbox">{{category.item}}</mat-checkbox>
+            <mat-label class="c-newQuestion__label" *ngFor="let tag of tagsFormArray.controls; let i = index" formArrayName="tags">
+              <mat-checkbox class="c-newQuestion__checkbox" [formControlName]="i">{{tagsData[i].item}}</mat-checkbox>
             </mat-label>
           </div>
         </div>
       </mat-card-content>
       <div class="c-newQuestion__buttons">
-        <button class="c-newQuestion__button" type="submit" mat-raised-button>Ok</button>
+        <button class="c-newQuestion__button" type="submit" mat-raised-button [disabled]="myForm.invalid">Ok</button>
         <button class="c-newQuestion__button" type="submit" mat-raised-button (click)="onCancel()">Cancel</button>
       </div>
     </form>
