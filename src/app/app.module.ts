@@ -25,7 +25,7 @@ import { NewQuestionComponent } from './homeModule/new-question/new-question.com
 import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
 
 import {AuthService} from './_shared/_services/auth.service';
-import {DatabaseService} from './_shared/_services/database.service';
+import {QuestionsService} from './_shared/_services/questions.service';
 
 
 @NgModule({
@@ -54,7 +54,7 @@ import {DatabaseService} from './_shared/_services/database.service';
     AngularFireDatabaseModule,
     HttpClientModule
   ],
-  providers: [AuthService, DatabaseService],
+  providers: [AuthService, QuestionsService],
   bootstrap: [AppComponent]
 })
 

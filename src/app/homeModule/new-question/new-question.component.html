@@ -32,6 +32,7 @@
       <div class="c-newQuestion__buttons">
         <button class="c-newQuestion__button" type="submit" mat-raised-button [disabled]="newQuestionForm.invalid">Ok</button>
         <button class="c-newQuestion__button" type="submit" mat-raised-button (click)="onCancel()">Cancel</button>
+        <mat-error>{{error}}</mat-error>
       </div>
     </form>
   </div>

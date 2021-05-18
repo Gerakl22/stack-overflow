@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import * as tags from '../../../assets/data/tags.json';
-import {ITags} from '../../_shared/_models/ITags';
+import {Tags} from '../../_shared/_models/Tags';
+import {Theme} from '../../_shared/_models/Theme';
+import {TagsConstants} from '../../_shared/constants/TagsConstants';
+import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
 
 @Component({
   selector: 'app-every-questions',
@@ -9,12 +11,14 @@ import {ITags} from '../../_shared/_models/ITags';
 })
 export class EveryQuestionsComponent implements OnInit {
 
-  tagsData!: ITags[];
+  tagsData!: Tags[];
+  themeData!: Theme[];
 
   constructor() { }
 
   ngOnInit(): void {
-    this.tagsData = tags.tags;
+    this.tagsData = TagsConstants;
+    this.themeData = ThemeConstants;
   }
 
 }
