@@ -1,28 +1,32 @@
 import {Injectable} from '@angular/core';
-import {AngularFireDatabase} from '@angular/fire/database';
+import { environment } from 'src/environments/environment';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {IQuestion} from '../_models/IQuestion';
-import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthService} from './auth.service';
 
 
 @Injectable({providedIn: 'root'})
 export class DatabaseService {
 
-  private dbPath = 'everyQuestions';
+  private headers = new HttpHeaders({'Content-type': 'application/json'});
+  private url = environment.apiUrl;
 
-  constructor(private db: AngularFireDatabase, private http: HttpClient) {
+  constructor(private http: HttpClient) {}
+
+  get(): Observable<IQuestion> {
+    return this.http.get<IQuestion>(`${this.url}`, {headers: this.headers});
   }
 
-  create(question: IQuestion): Observable<IQuestion> {
-    return this.http.post<IQuestion>(`https://stackoverflow-bba0e-default-rtdb.firebaseio.com/${this.dbPath}.json`, question);
+  post(question: IQuestion): Observable<IQuestion> {
+    return this.http.post<IQuestion>(`${this.url}`, question);
   }
 
-  // remove(key: string): Promise<void> {
-  //   return this.everyQuestionsRef$.remove(key);
-  // }
-  //
-  // update(key: string, value: any): Promise<void> {
-  //   return this.everyQuestionsRef$.update(key, value);
-  // }
+  put(question: IQuestion): Observable<IQuestion> {
+    return this.http.put<IQuestion>(`${this.url}`, question, {headers: this.headers});
+  }
+
+  remove(): Observable<IQuestion> {
+    return this.http.delete<IQuestion>(`${this.url}`);
+  }
+
 }

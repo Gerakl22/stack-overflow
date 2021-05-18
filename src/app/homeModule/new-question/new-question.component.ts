@@ -43,7 +43,7 @@ export class NewQuestionComponent implements OnInit {
   }
 
   addQuestion(question: IQuestion): void {
-    this.db.create(question).subscribe(
+    this.db.post(question).subscribe(
       error => throwError(error)
     );
 

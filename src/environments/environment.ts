@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'https://stackoverflow-bba0e-default-rtdb.firebaseio.com/everyQuestions.json',
   firebase: {
     apiKey: 'AIzaSyDMiSDGPRxa6EH3VzY59KtK2l07CECRGAs',
     authDomain: 'stackoverflow-bba0e.firebaseapp.com',
