@@ -36,7 +36,7 @@ export class NewQuestionComponent implements OnInit {
   }
 
   private addCheckBoxes(): void {
-    this.tagsData?.forEach(() => this.tagsFormArray.push(new FormControl(false)));
+    this.tagsData?.map(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
   createFormsInput(): void {
@@ -49,10 +49,8 @@ export class NewQuestionComponent implements OnInit {
       tags: this.fb.array([], atLeastOneCheckboxCheckedValidator(1))
     });
 
-    of(tags.tags).subscribe((next) => {
-      this.tagsData = next;
-      this.addCheckBoxes();
-    });
+    this.tagsData = tags.tags;
+    this.addCheckBoxes();
   }
 
   getErrorTitle(): string {
