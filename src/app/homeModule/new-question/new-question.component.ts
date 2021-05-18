@@ -9,6 +9,7 @@ import {IQuestion} from '../../_shared/_models/IQuestion';
 import {atLeastOneCheckboxCheckedValidator} from '../../_shared/validators/atLeastOneCheckboxCheckedValidator';
 import {throwError} from 'rxjs';
 
+
 @Component({
   selector: 'app-new-question',
   templateUrl: './new-question.component.html',
@@ -42,9 +43,11 @@ export class NewQuestionComponent implements OnInit {
   }
 
   addQuestion(question: IQuestion): void {
-    this.db.create(question)
-      .then(() => this.router.navigate(['everyQuestions']))
-      .catch((e) => throwError(e.message));
+    this.db.create(question).subscribe(
+      error => throwError(error)
+    );
+
+    this.router.navigate(['everyQuestions']);
   }
 
   createFormsInput(): void {

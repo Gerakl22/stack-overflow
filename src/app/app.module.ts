@@ -14,6 +14,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule} from '@angular/fire/auth-guard';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_shared/header/header.component';
@@ -51,6 +52,7 @@ import {DatabaseService} from './_shared/_services/database.service';
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
     AngularFireDatabaseModule,
+    HttpClientModule
   ],
   providers: [AuthService, DatabaseService],
   bootstrap: [AppComponent]
