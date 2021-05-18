@@ -2,14 +2,21 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
 
   public user$: Observable<firebase.default.User | null>;
+  public email: string | null | undefined;
 
   constructor(public fireAuth: AngularFireAuth) {
-    this.user$ = this.fireAuth.authState;
+    this.user$ = this.fireAuth.authState.pipe(
+      map( user => {
+        this.email = user?.email;
+        return user;
+      })
+    );
   }
 
   login(email: string, password: string): Promise<any> {

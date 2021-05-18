@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import * as tags from '../../../assets/data/tags.json';
 import {FormGroup, FormControl, FormArray, Validators, FormBuilder, AbstractControl} from '@angular/forms';
 import {Router} from '@angular/router';
+import {AuthService} from '../../_shared/_services/auth.service';
+import {DatabaseService} from '../../_shared/_services/database.service';
 import {ITags} from '../../_shared/_models/ITags';
+import {IQuestion} from '../../_shared/_models/IQuestion';
 import {atLeastOneCheckboxCheckedValidator} from '../../_shared/validators/atLeastOneCheckboxCheckedValidator';
-import {of} from 'rxjs';
-
+import {throwError} from 'rxjs';
 
 @Component({
   selector: 'app-new-question',
@@ -14,22 +16,22 @@ import {of} from 'rxjs';
 })
 export class NewQuestionComponent implements OnInit {
 
-  myForm!: FormGroup;
+  newQuestionForm!: FormGroup;
   tagsData!: ITags[];
 
   get tagsFormArray(): FormArray {
-    return this.myForm.controls.tags as FormArray;
-  }
-
-  get title(): AbstractControl {
-    return this.myForm.controls.title;
+    return this.newQuestionForm.controls.tags as FormArray;
   }
 
   get textarea(): AbstractControl {
-    return  this.myForm.controls.textarea;
+    return  this.newQuestionForm.controls.textarea;
   }
 
-  constructor(private router: Router, private fb: FormBuilder) {}
+  get title(): AbstractControl {
+    return this.newQuestionForm.controls.title;
+  }
+
+  constructor(private router: Router, private fb: FormBuilder, private fireAuth: AuthService, private db: DatabaseService) {}
 
   ngOnInit(): void {
     this.createFormsInput();
@@ -39,8 +41,14 @@ export class NewQuestionComponent implements OnInit {
     this.tagsData?.map(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
+  addQuestion(question: IQuestion): void {
+    this.db.create(question)
+      .then(() => this.router.navigate(['everyQuestions']))
+      .catch((e) => throwError(e.message));
+  }
+
   createFormsInput(): void {
-    this.myForm = this.fb.group({
+    this.newQuestionForm = this.fb.group({
       title: this.fb.control('', Validators.required),
       textarea: this.fb.control('', [
         Validators.required,
@@ -70,10 +78,21 @@ export class NewQuestionComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const selectedCTagsId = this.myForm.value.tags
+    const question: IQuestion = {
+      date: new Date().getTime(),
+      author: this.fireAuth.email,
+      title: this.title.value,
+      textarea: this.textarea.value,
+      tags: this.selectedCTagsId(),
+    };
+
+    this.addQuestion(question);
+  }
+
+  selectedCTagsId(): ITags[] {
+    return this.newQuestionForm.value.tags
       .map((checkedId: any, i: number) => checkedId ? this.tagsData[i].id : null)
       .filter((id: string) => id !== null);
-
-    console.log(selectedCTagsId);
   }
+
 }

@@ -13,6 +13,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule} from '@angular/fire/auth-guard';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_shared/header/header.component';
@@ -23,32 +24,35 @@ import { NewQuestionComponent } from './homeModule/new-question/new-question.com
 import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
 
 import {AuthService} from './_shared/_services/auth.service';
+import {DatabaseService} from './_shared/_services/database.service';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
+    HeaderComponent,
     LoginPageComponent,
     SignUpPageComponent,
-    HeaderComponent,
-    NewQuestionComponent,
-    EveryQuestionsComponent
+    HomePageComponent,
+    EveryQuestionsComponent,
+    NewQuestionComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
     MatIconModule,
-    BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
+    AngularFireDatabaseModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, DatabaseService],
   bootstrap: [AppComponent]
 })
 
