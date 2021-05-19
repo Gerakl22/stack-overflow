@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {QuestionsService} from '../../_shared/_services/questions.service';
+import {Router} from '@angular/router';
 import {Tags} from '../../_shared/_models/Tags';
 import {Question} from '../../_shared/_models/Question';
 import {Theme} from '../../_shared/_models/Theme';
@@ -24,7 +25,7 @@ export class EveryQuestionsComponent implements OnInit {
     return this.tagsForm.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService) { }
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router) { }
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;
@@ -46,6 +47,10 @@ export class EveryQuestionsComponent implements OnInit {
 
   private addCheckBoxes(): void {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  }
+
+  openScreenQuestion(question: Question): void {
+    this.router.navigate(['screenQuestion', question.id]);
   }
 
 }

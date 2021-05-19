@@ -61,7 +61,7 @@
   </mat-toolbar>
   <div class="c-everyQuestions__section">
     <mat-card class="c-everyQuestions__card" *ngFor="let question of questionsArray">
-      <mat-card-title class="c-everyQuestions__title">{{question.title}}</mat-card-title>
+      <mat-card-title class="c-everyQuestions__title" (click)="openScreenQuestion(question)">{{question.title}}</mat-card-title>
       <hr>
       <mat-card-content class="c-everyQuestions__content">
         <p class="c-everyQuestions__date">{{question.date | date: 'MMM d, y'}}</p>

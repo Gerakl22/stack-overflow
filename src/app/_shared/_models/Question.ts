@@ -1,7 +1,7 @@
 import {Tags} from './Tags';
 
 export class Question {
-    $key?: string | null;
+    id?: string | null;
     date: number;
     author: string | null | undefined;
     title: string;
@@ -9,14 +9,14 @@ export class Question {
     tags: Tags[];
 
     constructor(question: {
-      key: string | null;
+      id: string | null;
       date: number;
       author: string | null | undefined;
       title: string;
       textarea: string;
       tags: Tags[]})
     {
-      this.$key = question.key;
+      this.id = question.id;
       this.date = question.date;
       this.author = question.author;
       this.title = question.title;

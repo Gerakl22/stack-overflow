@@ -46,7 +46,7 @@ export class NewQuestionComponent implements OnInit {
     this.questionsService.post(question).subscribe(
       (resolve) => resolve,
       error => this.error = error,
-      () => this.router.navigate(['everyQuestions'])
+      () => this.onCancel(),
     );
   }
 
@@ -82,6 +82,7 @@ export class NewQuestionComponent implements OnInit {
 
   onSubmit(): void {
     const question: Question = {
+      id: new Date().getTime().toString(),
       date: new Date().getTime(),
       author: this.authService.email,
       title: this.title.value,

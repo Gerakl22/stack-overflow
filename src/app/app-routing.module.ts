@@ -15,8 +15,8 @@ const routes: Routes = [
       {path: '', redirectTo: '/everyQuestions', pathMatch: 'full'},
       {path: 'everyQuestions', component: EveryQuestionsComponent},
       {path: 'newQuestion', component: NewQuestionComponent},
-      {path: 'screenQuestion', component: ScreenQuestionComponent},
-      {path: 'editQuestion', component: EditQuestionComponent}
+      {path: 'screenQuestion/:id', component: ScreenQuestionComponent},
+      {path: 'editQuestion/:id', component: EditQuestionComponent}
     ]},
   {path: 'login', component: LoginPageComponent, canActivate: [AuthGuardHome]},
   {path: 'sign-up', component: SignUpPageComponent, canActivate: [AuthGuardHome]}
