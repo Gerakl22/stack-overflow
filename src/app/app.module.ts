@@ -24,9 +24,11 @@ import { HomePageComponent } from './homeModule/home-page/home-page.component';
 import { NewQuestionComponent } from './homeModule/new-question/new-question.component';
 import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
 import { ScreenQuestionComponent } from './homeModule/screen-question/screen-question.component';
+import { EditQuestionComponent } from './homeModule/edit-question/edit-question.component';
 
 import {AuthService} from './_shared/_services/auth.service';
 import {QuestionsService} from './_shared/_services/questions.service';
+
 
 
 
@@ -39,7 +41,8 @@ import {QuestionsService} from './_shared/_services/questions.service';
     HomePageComponent,
     EveryQuestionsComponent,
     NewQuestionComponent,
-    ScreenQuestionComponent
+    ScreenQuestionComponent,
+    EditQuestionComponent
   ],
   imports: [
     BrowserModule,

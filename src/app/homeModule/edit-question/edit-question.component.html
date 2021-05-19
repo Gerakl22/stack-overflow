@@ -1,0 +1,39 @@
+<main class="c-editQuestion__home">
+  <div class="c-editQuestion__wrapper">
+    <h2 class="c-editQuestion__heading">Edit Question</h2>
+    <hr>
+    <form class="c-editQuestion__form">
+      <mat-card-content class="c-editQuestion__content">
+        <mat-form-field appearance="outline">
+          <mat-label class="c-editQuestion__label">Title</mat-label>
+          <input matInput class="c-editQuestion__input" type="text" formControlName="title"/>
+          <mat-error></mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-content class="c-editQuestion__content">
+        <mat-form-field appearance="outline">
+          <mat-label class="c-editQuestion__label">Text</mat-label>
+          <textarea matInput class="c-editQuestion__textarea" type="text" formControlName="textarea"> </textarea>
+          <mat-error></mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-content class="c-editQuestion__content">
+        <div class="c-editQuestion__categories">
+          <p class="c-editQuestion__tags">
+            Tags
+          </p>
+          <div class="c-editQuestion__category">
+            <mat-label class="c-editQuestion__label">
+              <mat-checkbox class="c-editQuestion__checkbox"></mat-checkbox>
+            </mat-label>
+          </div>
+        </div>
+      </mat-card-content>
+      <div class="c-editQuestion__buttons">
+        <button class="c-editQuestion__button" type="submit" mat-raised-button>Save</button>
+        <button class="c-editQuestion__button" type="submit" mat-raised-button>Cancel</button>
+        <mat-error></mat-error>
+      </div>
+    </form>
+  </div>
+</main>
