@@ -5,6 +5,7 @@ import {Question} from '../_models/Question';
 import {Observable} from 'rxjs';
 
 
+
 @Injectable({providedIn: 'root'})
 export class QuestionsService {
 
@@ -14,7 +15,7 @@ export class QuestionsService {
 
   constructor(private http: HttpClient) {}
 
-  get(): Observable<Question> {
+  get(): Observable<any> {
     return this.http.get<Question>(`${this.url}${this.urlQuestions}`, {headers: this.headers});
   }
 

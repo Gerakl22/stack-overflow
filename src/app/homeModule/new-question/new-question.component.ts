@@ -86,17 +86,16 @@ export class NewQuestionComponent implements OnInit {
       author: this.authService.email,
       title: this.title.value,
       textarea: this.textarea.value,
-      tags: this.selectedCTagsId(),
+      tags: this.selectedCTagsItem(),
     };
 
     this.addQuestion(question);
-    console.log(question);
   }
 
-  selectedCTagsId(): Tags[] {
+  selectedCTagsItem(): Tags[] {
     return this.newQuestionForm.value.tags
-      .map((checkedId: Tags, i: number) => checkedId ? this.tagsData[i].id : null)
-      .filter((id: string) => id !== null);
+      .map((checkedItem: Tags, i: number) => checkedItem ? this.tagsData[i].item : null)
+      .filter((item: string) => item !== null);
   }
 
 }

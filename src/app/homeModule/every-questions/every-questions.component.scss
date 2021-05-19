@@ -17,6 +17,43 @@
     padding: 0.5rem;
   }
 
+  &__section {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__card {
+    margin: 3rem;
+    width: 15rem;
+    height: auto;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__content {
+    padding: 0.2rem;
+  }
+
+  &__date {
+    text-align: center;
+  }
+
+  &__tag {
+    padding: 0.2rem;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+  }
+
+  &__button {
+    margin-left: 0.4rem;
+  }
+
 }
 
 .mat-form-field-label {

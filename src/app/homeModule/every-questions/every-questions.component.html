@@ -15,9 +15,9 @@
               <mat-radio-button class="mat-radio-button" value="resolve">Resolve</mat-radio-button>
             </mat-label>
           </form>
-          <form class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label" *ngFor="let tag of tagsData">
-              <mat-checkbox>{{tag.item}}</mat-checkbox>
+          <form [formGroup]="tagsForm" class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label" *ngFor="let tag of tagsFormArray.controls, let i=index" formArrayName="tags">
+              <mat-checkbox [formControlName]="i">{{tagsData[i].item}}</mat-checkbox>
             </mat-label>
           </form>
           <form class="c-everyQuestions__form">
@@ -59,4 +59,19 @@
       </li>
     </ul>
   </mat-toolbar>
+  <div class="c-everyQuestions__section">
+    <mat-card class="c-everyQuestions__card" *ngFor="let question of questionsArray">
+      <mat-card-title class="c-everyQuestions__title">{{question.title}}</mat-card-title>
+      <hr>
+      <mat-card-content class="c-everyQuestions__content">
+        <p class="c-everyQuestions__date">{{question.date | date: 'MMM d, y'}}</p>
+        <a class="c-everyQuestions__tag" *ngFor="let tag of question['tags']">{{tag}} </a>
+      </mat-card-content>
+      <hr>
+      <div class="c-everyQuestions__buttons">
+        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary">Approve</button>
+        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="warn">Delete</button>
+      </div>
+    </mat-card>
+  </div>
 </main>
