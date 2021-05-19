@@ -35,7 +35,7 @@ export class EveryQuestionsComponent implements OnInit {
     });
 
     this.questionsService.get().subscribe(
-      (question: any) => {
+      (question) => {
         this.questionsArray = Object.values(question);
         console.log(this.questionsArray);
       });

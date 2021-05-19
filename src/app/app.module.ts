@@ -23,9 +23,11 @@ import { SignUpPageComponent } from './authModule/sign-up-page/sign-up-page.comp
 import { HomePageComponent } from './homeModule/home-page/home-page.component';
 import { NewQuestionComponent } from './homeModule/new-question/new-question.component';
 import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
+import { ScreenQuestionComponent } from './homeModule/screen-question/screen-question.component';
 
 import {AuthService} from './_shared/_services/auth.service';
 import {QuestionsService} from './_shared/_services/questions.service';
+
 
 
 @NgModule({
@@ -36,7 +38,8 @@ import {QuestionsService} from './_shared/_services/questions.service';
     SignUpPageComponent,
     HomePageComponent,
     EveryQuestionsComponent,
-    NewQuestionComponent
+    NewQuestionComponent,
+    ScreenQuestionComponent
   ],
   imports: [
     BrowserModule,

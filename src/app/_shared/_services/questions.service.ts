@@ -15,7 +15,7 @@ export class QuestionsService {
 
   constructor(private http: HttpClient) {}
 
-  get(): Observable<any> {
+  get(): Observable<Question> {
     return this.http.get<Question>(`${this.url}${this.urlQuestions}`, {headers: this.headers});
   }
 
