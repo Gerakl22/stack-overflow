@@ -61,16 +61,16 @@
   </mat-toolbar>
   <div class="c-everyQuestions__section">
     <mat-card class="c-everyQuestions__card" *ngFor="let question of questionsArray">
-      <mat-card-title class="c-everyQuestions__title" (click)="openScreenQuestion(question)">{{question.title}}</mat-card-title>
+      <mat-card-title class="c-everyQuestions__title" (click)="onOpenScreenQuestionById(question.key)">{{question.title}}</mat-card-title>
       <hr>
       <mat-card-content class="c-everyQuestions__content">
-        <p class="c-everyQuestions__date">{{question.date | date: 'MMM d, y'}}</p>
+        <p class="c-everyQuestions__date">{{question.date | date: 'MMM d, y, h:mm:ss a'}}</p>
         <a class="c-everyQuestions__tag" *ngFor="let tag of question['tags']">{{tag}} </a>
       </mat-card-content>
       <hr>
       <div class="c-everyQuestions__buttons">
         <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary">Approve</button>
-        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="warn">Delete</button>
+        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)">Delete</button>
       </div>
     </mat-card>
   </div>

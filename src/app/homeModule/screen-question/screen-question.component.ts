@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Question} from '../../_shared/_models/Question';
+import {QuestionsService} from '../../_shared/_services/questions.service';
+import {switchMap, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-screen-question',
@@ -8,15 +11,39 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class ScreenQuestionComponent implements OnInit {
 
-  urlPath!: string;
-  constructor(private activatedRoute: ActivatedRoute) {
-    this.activatedRoute.url.subscribe(
-      (url) => this.urlPath = url[1].path,
+  urlId!: string;
+  questionObject!: Question;
+
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private questionsService: QuestionsService) {}
+
+  ngOnInit(): void {
+    this.activatedRoute.params.pipe(
+      tap(url => {
+        this.urlId = url.id;
+      }),
+      switchMap(() => this.questionsService.getQuestionsById(this.urlId)),
+    ).subscribe(
+      questionObject => {
+        this.questionObject = questionObject;
+        console.log(this.questionObject);
+      },
     );
   }
 
-  ngOnInit(): void {
-    console.log(this.urlPath);
+  onBackEveryQuestions(): void {
+    this.router.navigate(['everyQuestions']);
+  }
+
+  onEditQuestionById(): void {
+    this.router.navigate([`editQuestion/${this.urlId}`]);
+  }
+
+  onRemoveQuestionById(): void {
+    this.questionsService.removeQuestionById(this.urlId).subscribe(
+      question => question,
+      error => error.message,
+      () => this.router.navigate(['everyQuestions']),
+    );
   }
 
 }

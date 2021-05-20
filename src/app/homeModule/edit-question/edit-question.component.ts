@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {AuthService} from '../../_shared/_services/auth.service';
 import {QuestionsService} from '../../_shared/_services/questions.service';
 import {Tags} from '../../_shared/_models/Tags';
 import {Question} from '../../_shared/_models/Question';
 import {TagsConstants} from '../../_shared/constants/TagsConstants';
 import {atLeastOneCheckboxCheckedValidator} from '../../_shared/validators/atLeastOneCheckboxCheckedValidator';
+import {switchMap, tap} from 'rxjs/operators';
 
 
 @Component({
@@ -16,7 +17,9 @@ import {atLeastOneCheckboxCheckedValidator} from '../../_shared/validators/atLea
 })
 export class EditQuestionComponent implements OnInit {
 
+  urlId!: string;
   editQuestionForm!: FormGroup;
+  editQuestion!: Question;
   tagsData!: Tags[];
   error!: string;
 
@@ -32,29 +35,43 @@ export class EditQuestionComponent implements OnInit {
     return this.editQuestionForm.controls.title;
   }
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private questionsService: QuestionsService) { }
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private questionsService: QuestionsService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.createFormsInput();
+    this.activatedRoute.params.pipe(
+      tap((url => {
+        this.urlId = url.id;
+      })),
+        switchMap(() => this.questionsService.getQuestionsById(this.urlId)),
+    ).subscribe(
+        question => {
+          this.editQuestion = question;
+          this.editFormsInput(this.editQuestion);
+        },
+    );
   }
 
-  private addCheckBoxes(): void {
-    this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  private addCheckBoxes(editQuestion: Question): void {
+    this.tagsData.filter((tag: Tags ) => {
+      (editQuestion.tags.indexOf(tag.item) !== -1) ?
+        this.tagsFormArray.push(new FormControl(true)) : this.tagsFormArray.push(new FormControl(false));
+    });
   }
 
-  createFormsInput(): void {
+  editFormsInput(editQuestion: Question): void {
     this.editQuestionForm = this.fb.group({
-      title: this.fb.control('', Validators.required),
-      textarea: this.fb.control('', [
+      title: this.fb.control(editQuestion.title, Validators.required),
+      textarea: this.fb.control(editQuestion.textarea, [
         Validators.required,
         Validators.minLength(6)
       ]),
       tags: this.fb.array([], atLeastOneCheckboxCheckedValidator(1))
     });
-
+    console.log(this.editQuestionForm);
     this.tagsData = TagsConstants;
-    this.addCheckBoxes();
+    this.addCheckBoxes(editQuestion);
   }
+
 
   getErrorTitle(): string {
     return this.title.errors?.required ? 'You must enter a value' : '';
@@ -69,19 +86,19 @@ export class EditQuestionComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['everyQuestions']);
+    this.router.navigate([`screenQuestion/${this.urlId}`]);
   }
 
   onSave(): void {
-    const question: Question = {
-      date: new Date().getTime(),
+    const questionObject: Question = {
+      date: this.editQuestion.date,
       author: this.authService.email,
       title: this.editQuestionForm.value.title,
-      textarea: this.editQuestionForm.value.text,
+      textarea: this.editQuestionForm.value.textarea,
       tags: this.selectedCTagsItem(),
     };
 
-    this.updateQuestion(question);
+    this.onUpdateQuestionById(this.urlId, questionObject);
   }
 
   selectedCTagsItem(): Tags[] {
@@ -90,9 +107,9 @@ export class EditQuestionComponent implements OnInit {
       .filter((item: string) => item != null);
   }
 
-  updateQuestion(question: Question): void {
-      this.questionsService.put(question).subscribe(
-        (res) => console.log(res),
+  onUpdateQuestionById(id: string, questionObject: Question): void {
+      this.questionsService.updateQuestionById(id, questionObject).subscribe(
+        (question: Question) => question,
     (error) => this.error = error,
         () => this.onCancel(),
       );

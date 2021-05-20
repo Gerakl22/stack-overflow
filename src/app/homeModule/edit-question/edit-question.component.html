@@ -2,7 +2,7 @@
   <div class="c-editQuestion__wrapper">
     <h2 class="c-editQuestion__heading">Edit Question</h2>
     <hr>
-    <form [formGroup]="editQuestionForm" novalidate (ngSubmit)="onSave()" class="c-editQuestion__form">
+    <form *ngIf="editQuestionForm" [formGroup]="editQuestionForm" novalidate (ngSubmit)="onSave()" class="c-editQuestion__form">
       <mat-card-content class="c-editQuestion__content">
         <mat-form-field appearance="outline">
           <mat-label class="c-editQuestion__label">Title</mat-label>

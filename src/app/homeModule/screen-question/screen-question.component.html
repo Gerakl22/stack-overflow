@@ -1,21 +1,22 @@
 <div class="c-screenQuestionsCard__home">
     <mat-card class="c-screenQuestionsCard__card mat-card">
     <div class="c-screenQuestionsCard__header">
-      <div class="c-screenQuestionsCard__author">Author</div>
-      <div class="c-screenQuestionsCard__date">Date</div>
+      <div class="c-screenQuestionsCard__author">{{questionObject?.author}}</div>
+      <div class="c-screenQuestionsCard__date">{{questionObject?.date | date: 'MMM d, y, h:mm:ss a'}}</div>
     </div>
-      <mat-card-title class="c-screenQuestionsCard__title mat-card-title">Tittle</mat-card-title>
+      <mat-card-title class="c-screenQuestionsCard__title mat-card-title">{{questionObject?.title}}</mat-card-title>
       <hr>
       <mat-card-content class="c-screenQuestionsCard__content mat-card-content">
-        <div class="c-screenQuestionsCard__textarea">Textarea</div>
+        <div class="c-screenQuestionsCard__textarea">{{questionObject?.textarea}}</div>
       </mat-card-content>
         <mat-card-footer class="c-screenQuestionsCard__footer">
-          <p class="c-screenQuestionsCard__tags">Tags</p>
+          <p class="c-screenQuestionsCard__tags" *ngFor="let tags of questionObject?.tags">{{tags}}</p>
           <div class="c-screenQuestionsCard__buttons">
             <small class="c-screenQuestionsCard__moderation">Moderation</small>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent">Edit</button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()">Edit</button>
             <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary">Approve</button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn">Delete</button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()">Delete</button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onBackEveryQuestions()">Back</button>
           </div>
         </mat-card-footer>
     </mat-card>

@@ -35,11 +35,10 @@ export class EveryQuestionsComponent implements OnInit {
       tags: this.fb.array([]),
     });
 
-    this.questionsService.get().subscribe(
-      (question) => {
-        this.questionsArray = Object.values(question);
+    this.questionsService.getQuestions().subscribe((question: Question) => {
+      this.questionsArray = question,
         console.log(this.questionsArray);
-      });
+    });
 
     this.addCheckBoxes();
 
@@ -49,8 +48,20 @@ export class EveryQuestionsComponent implements OnInit {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
-  openScreenQuestion(question: Question): void {
-    this.router.navigate(['screenQuestion', question.id]);
+  onOpenScreenQuestionById(id: string): void {
+    this.router.navigate([`screenQuestion/${id}`]);
   }
+
+  onRemoveQuestionById(id: string): void {
+    this.questionsService.removeQuestionById(id).subscribe(
+        (question: Question) => {
+          console.log(question),
+            this.questionsArray = this.questionsArray.filter((element: Question) => {
+              return element.key !== id;
+            });
+        },
+        error => error.message,
+      );
+    }
 
 }

@@ -19,6 +19,7 @@ export class NewQuestionComponent implements OnInit {
   newQuestionForm!: FormGroup;
   tagsData!: Tags[];
   error!: string;
+  author!: string | null | undefined;
 
   get tagsFormArray(): FormArray {
     return this.newQuestionForm.controls.tags as FormArray;
@@ -32,7 +33,9 @@ export class NewQuestionComponent implements OnInit {
     return this.newQuestionForm.controls.title;
   }
 
-  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private questionsService: QuestionsService) {}
+  constructor(private router: Router, private fb: FormBuilder, public authService: AuthService, private questionsService: QuestionsService) {
+    this.author = authService.email;
+  }
 
   ngOnInit(): void {
     this.createFormsInput();
@@ -43,7 +46,7 @@ export class NewQuestionComponent implements OnInit {
   }
 
   addQuestion(question: Question): void {
-    this.questionsService.post(question).subscribe(
+    this.questionsService.createQuestion(question).subscribe(
       (resolve) => resolve,
       error => this.error = error,
       () => this.onCancel(),
@@ -82,9 +85,8 @@ export class NewQuestionComponent implements OnInit {
 
   onSubmit(): void {
     const question: Question = {
-      id: new Date().getTime().toString(),
       date: new Date().getTime(),
-      author: this.authService.email,
+      author: this.author,
       title: this.title.value,
       textarea: this.textarea.value,
       tags: this.selectedCTagsItem(),

@@ -1,9 +1,9 @@
 export class Tags {
   id: string;
-  item: string;
+  item: any;
 
   constructor(tags: {
-    item: string;
+    item: any;
     id: string; }) {
     this.id = tags.id;
     this.item = tags.item;

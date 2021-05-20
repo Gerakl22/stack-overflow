@@ -1,34 +1,42 @@
 import {Injectable} from '@angular/core';
 import { environment } from 'src/environments/environment';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Question} from '../_models/Question';
 import {Observable} from 'rxjs';
-
+import {map} from 'rxjs/operators';
 
 
 @Injectable({providedIn: 'root'})
 export class QuestionsService {
 
-  private headers = new HttpHeaders({'Content-type': 'application/json'});
   private url = environment.apiUrl;
   private urlQuestions = 'everyQuestions.json';
 
   constructor(private http: HttpClient) {}
 
-  get(): Observable<Question> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}`, {headers: this.headers});
+  getQuestions(): Observable<any> {
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}`).pipe(
+      map(questions => {
+        const questionsKeys = Object.keys(questions);
+        return Object.values(questions).map((questionObject: Question[], i: number) => ({key: questionsKeys[i], ...questionObject}));
+      })
+    );
   }
 
-  post(question: Question): Observable<Question> {
+  getQuestionsById(id: string): Observable<Question> {
+    return this.http.get<Question>(`${this.url}everyQuestions/${id}.json`);
+  }
+
+  createQuestion(question: Question): Observable<Question> {
     return this.http.post<Question>(`${this.url}${this.urlQuestions}`, question);
   }
 
-  put(question: Question): Observable<Question> {
-    return this.http.put<Question>(`${this.url}${this.urlQuestions}`, question, {headers: this.headers});
+  updateQuestionById(id: string, question: Question): Observable<Question> {
+    return this.http.put<Question>(`${this.url}everyQuestions/${id}.json`, question);
   }
 
-  remove(): Observable<Question> {
-    return this.http.delete<Question>(`${this.url}${this.urlQuestions}`);
+  removeQuestionById(id: string): Observable<Question> {
+    return this.http.delete<Question>(`${this.url}everyQuestions/${id}.json`);
   }
 
 }
