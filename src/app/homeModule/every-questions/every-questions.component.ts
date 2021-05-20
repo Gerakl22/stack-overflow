@@ -35,7 +35,7 @@ export class EveryQuestionsComponent implements OnInit {
       tags: this.fb.array([]),
     });
 
-    this.questionsService.getQuestions().subscribe((question: Question) => {
+    this.questionsService.getQuestions().subscribe((question: Question[]) => {
       this.questionsArray = question,
         console.log(this.questionsArray);
     });
