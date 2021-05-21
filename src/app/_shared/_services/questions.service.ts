@@ -27,11 +27,15 @@ export class QuestionsService {
     return this.http.get<Question>(`${this.url}everyQuestions/${id}.json`);
   }
 
+  createComment(id: string, comment: object): Observable<any> {
+    return this.http.post<any>(`${this.url}everyQuestions/${id}/comments.json`, comment);
+  }
+
   createQuestion(question: Question): Observable<Question> {
     return this.http.post<Question>(`${this.url}${this.urlQuestions}`, question);
   }
 
-  updateQuestionById(id: string, question: Question): Observable<Question> {
+  updateQuestionByIdAndQuestion(id: string, question: Question): Observable<Question> {
     return this.http.put<Question>(`${this.url}everyQuestions/${id}.json`, question);
   }
 

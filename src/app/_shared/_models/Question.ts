@@ -7,6 +7,9 @@ export class Question {
     title: string;
     textarea: string;
     tags: Tags[];
+    comments: object[];
+    isApproval: boolean;
+    isResolve: boolean;
 
     constructor(question: {
       key: string;
@@ -14,7 +17,11 @@ export class Question {
       author: string | null | undefined;
       title: string;
       textarea: string;
-      tags: Tags[]})
+      tags: Tags[];
+      comments: object[];
+      isApproval: boolean;
+      isResolve: boolean;
+    })
     {
       this.key = question.key;
       this.date = question.date;
@@ -22,5 +29,8 @@ export class Question {
       this.title = question.title;
       this.textarea = question.textarea;
       this.tags = question.tags;
+      this.comments = question.comments;
+      this.isApproval = question.isApproval;
+      this.isResolve = question.isResolve;
 }
 }

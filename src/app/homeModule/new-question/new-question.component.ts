@@ -47,7 +47,7 @@ export class NewQuestionComponent implements OnInit {
 
   addQuestion(question: Question): void {
     this.questionsService.createQuestion(question).subscribe(
-      (resolve) => resolve,
+      (resolve: Question) => resolve,
       error => this.error = error,
       () => this.onCancel(),
     );
@@ -89,13 +89,16 @@ export class NewQuestionComponent implements OnInit {
       author: this.author,
       title: this.title.value,
       textarea: this.textarea.value,
-      tags: this.selectedCTagsItem(),
+      tags: this.selectedTagsItem(),
+      comments: [],
+      isApproval: false,
+      isResolve: false,
     };
 
     this.addQuestion(question);
   }
 
-  selectedCTagsItem(): Tags[] {
+  selectedTagsItem(): Tags[] {
     return this.newQuestionForm.value.tags
       .map((checkedItem: Tags, i: number) => checkedItem ? this.tagsData[i].item : null)
       .filter((item: string) => item !== null);

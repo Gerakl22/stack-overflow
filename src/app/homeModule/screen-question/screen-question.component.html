@@ -21,14 +21,14 @@
         </mat-card-footer>
     </mat-card>
 </div>
-<div class="c-screenQuestionsComments__home">
+<div class="c-screenQuestionsComments__home" *ngFor="let comment of commentsArray">
     <mat-card class="c-screenQuestionsComments__card mat-card">
       <h5 class="c-screenQuestionsComments__title">Comment</h5>
-      <div class="c-screenQuestionsComments__content">
-        <div class="c-screenQuestionsComments__author">Author</div>
-        <div class="c-screenQuestionsComments__textarea">Textarea</div>
+      <div class="c-screenQuestionsComments__content" >
+        <div class="c-screenQuestionsComments__author">{{comment.author}}</div>
+        <div class="c-screenQuestionsComments__textarea">{{comment.textarea}}</div>
         <mat-card-footer class="c-screenQuestionsComments__footer">
-          <div class="c-screenQuestionsComments__date">Date</div>
+          <div class="c-screenQuestionsComments__date">{{comment.date | date: 'MMM d, y, h:mm:ss a'}}</div>
           <div class="c-screenQuestionsComments__resolve">
             <mat-label class="c-screenQuestionsComments__label">
               <mat-checkbox></mat-checkbox>
@@ -41,14 +41,16 @@
 </div>
 
 <div class="c-screenQuestionsAnswer__home">
-  <mat-card class="c-screenQuestionsAnswer__card mat-card">
+  <mat-card class="c-screenQuestionsAnswer__card">
     <h5 class="c-screenQuestionsAnswer__title">Answer</h5>
-    <form class="c-screenQuestionsAnswer__form">
+    <form [formGroup]="commentQuestionForm" novalidate (ngSubmit)="onAddComment()" class="c-screenQuestionsAnswer__form">
+        <mat-form-field appearance="outline">
+          <mat-label>Answer</mat-label>
+          <textarea matInput class="c-screenQuestionsAnswer__textarea" type="text" placeholder="Input answer" formControlName="comment"></textarea>
+          <mat-error *ngIf="comment.invalid && comment.touched">{{getErrorComment()}}</mat-error>
+        </mat-form-field>
       <div class="c-screenQuestionsAnswer__item">
-        <textarea class="c-screenQuestionsAnswer__textarea" placeholder="Input answer"></textarea>
-      </div>
-      <div class="c-screenQuestionsAnswer__item">
-        <button class="c-screenQuestionsAnswer__button" type="submit" mat-raised-button color="primary">Add Answer</button>
+        <button class="c-screenQuestionsAnswer__button" type="submit" mat-raised-button color="primary" [disabled]="commentQuestionForm.invalid">Add Comment</button>
       </div>
     </form>
   </mat-card>

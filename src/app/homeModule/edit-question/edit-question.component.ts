@@ -95,24 +95,29 @@ export class EditQuestionComponent implements OnInit {
       author: this.authService.email,
       title: this.editQuestionForm.value.title,
       textarea: this.editQuestionForm.value.textarea,
-      tags: this.selectedCTagsItem(),
+      tags: this.selectedTagsItem(),
+      comments: this.editQuestion.comments,
+      isApproval: this.editQuestion.isApproval,
+      isResolve: this.editQuestion.isResolve,
     };
 
-    this.onUpdateQuestionById(this.urlId, questionObject);
+    this.onUpdateQuestionByIdAndQuestion(this.urlId, questionObject);
   }
 
-  selectedCTagsItem(): Tags[] {
+  onUpdateQuestionByIdAndQuestion(id: string, questionObject: Question): void {
+    this.questionsService.updateQuestionByIdAndQuestion(id, questionObject).subscribe(
+      (question: Question) => question,
+      (error) => this.error = error,
+      () => this.onCancel(),
+    );
+  }
+
+  selectedTagsItem(): Tags[] {
     return this.editQuestionForm.value.tags
       .map((checkedItem: Tags, i: number) => checkedItem ? this.tagsData[i].item : null)
       .filter((item: string) => item != null);
   }
 
-  onUpdateQuestionById(id: string, questionObject: Question): void {
-      this.questionsService.updateQuestionById(id, questionObject).subscribe(
-        (question: Question) => question,
-    (error) => this.error = error,
-        () => this.onCancel(),
-      );
-  }
+
 
 }
