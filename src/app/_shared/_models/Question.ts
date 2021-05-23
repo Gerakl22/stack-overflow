@@ -32,5 +32,5 @@ export class Question {
       this.comments = question.comments;
       this.isApproval = question.isApproval;
       this.isResolve = question.isResolve;
-}
+  }
 }

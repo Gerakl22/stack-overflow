@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Question} from '../_models/Question';
+import {Comment} from '../_models/Comment';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -10,37 +11,46 @@ import {map} from 'rxjs/operators';
 export class QuestionsService {
 
   private url = environment.apiUrl;
-  private urlQuestions = 'everyQuestions.json';
+  private urlQuestions = 'everyQuestions';
+  private urlComments = 'comments';
 
   constructor(private http: HttpClient) {}
 
   getQuestions(): Observable<any> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}`).pipe(
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}.json`).pipe(
       map(questions => {
-        const questionsKeys = Object.keys(questions);
-        return Object.values(questions).map((questionObject: Question[], i: number) => ({key: questionsKeys[i], ...questionObject}));
+        if (questions === undefined || questions === null) {
+          return;
+        } else {
+          const questionsKeys = Object.keys(questions);
+          return Object.values(questions).map((questionObject: Question[], i: number) => ({key: questionsKeys[i], ...questionObject}));
+        }
       })
     );
   }
 
   getQuestionsById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${this.url}everyQuestions/${id}.json`);
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`);
   }
 
-  createComment(id: string, comment: object): Observable<any> {
-    return this.http.post<any>(`${this.url}everyQuestions/${id}/comments.json`, comment);
+  createComment(id: string, comment: Comment): Observable<Comment> {
+    return this.http.post<Comment>(`${this.url}${this.urlQuestions}/${id}/${this.urlComments}.json`, comment);
   }
 
   createQuestion(question: Question): Observable<Question> {
-    return this.http.post<Question>(`${this.url}${this.urlQuestions}`, question);
+    return this.http.post<Question>(`${this.url}${this.urlQuestions}.json`, question);
+  }
+
+  updateCommentByIdAndComment(questionsId: string, commentId: string, comment: Comment): Observable<Comment> {
+    return this.http.put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment);
   }
 
   updateQuestionByIdAndQuestion(id: string, question: Question): Observable<Question> {
-    return this.http.put<Question>(`${this.url}everyQuestions/${id}.json`, question);
+    return this.http.put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question);
   }
 
   removeQuestionById(id: string): Observable<Question> {
-    return this.http.delete<Question>(`${this.url}everyQuestions/${id}.json`);
+    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`);
   }
 
 }

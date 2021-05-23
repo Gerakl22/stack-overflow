@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Question} from '../../_shared/_models/Question';
 import {QuestionsService} from '../../_shared/_services/questions.service';
-import {switchMap, tap} from 'rxjs/operators';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../_shared/_services/auth.service';
+import {Question} from '../../_shared/_models/Question';
+import {Comment} from '../../_shared/_models/Comment';
+import {switchMap, tap} from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-screen-question',
@@ -14,8 +16,8 @@ import {AuthService} from '../../_shared/_services/auth.service';
 export class ScreenQuestionComponent implements OnInit {
 
   urlIdQuestion!: string;
-  urlIdComment!: string;
-  questionObject!: Question;
+  urlIdComment!: string | undefined;
+  questionObject!: any;
   commentQuestionForm!: FormGroup;
   commentsArray!: any[];
 
@@ -33,9 +35,9 @@ export class ScreenQuestionComponent implements OnInit {
       switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)),
     ).subscribe(
       questionObject => {
-        this.questionObject = questionObject;
-        this.getCommentsArray(this.questionObject.comments);
-        console.log(this.commentsArray);
+          this.questionObject = questionObject;
+          this.getCommentsArray(this.questionObject.comments);
+          console.log(this.commentsArray);
       },
     );
 
@@ -56,32 +58,35 @@ export class ScreenQuestionComponent implements OnInit {
   }
 
   onAddComment(): void {
-    const commentObject = {
+    const commentObject: Comment = {
       author: this.authService.email,
       textarea: this.comment.value,
       date: new Date().getTime(),
+      isBestComment: false,
     };
 
-    console.log(this.comment.value);
     this.questionsService.createComment(this.urlIdQuestion, commentObject).pipe(
-      tap((url) => {
+      tap((url: Comment) => {
         this.urlIdComment = url.name;
-        console.log(this.urlIdComment);
       }),
       switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion))
     ).subscribe(
       (questionObject: Question) => {
+        this.questionObject = questionObject;
         this.getCommentsArray(questionObject.comments);
         this.commentQuestionForm.reset();
       }
     );
   }
 
-  getCommentsArray(commentsObj: object): void {
-    const commentsKeys = Object.keys(commentsObj);
-    this.commentsArray = Object.values(commentsObj).map((question: any, i: number) => ({key: commentsKeys[i], ...question}));
+  getCommentsArray(comments: object[]): void {
+    if (comments === undefined || comments === null) {
+      return;
+    } else {
+      const commentsKeys = Object.keys(comments);
+      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
+    }
   }
-
 
   onBackEveryQuestions(): void {
     this.router.navigate(['everyQuestions']);
@@ -97,6 +102,15 @@ export class ScreenQuestionComponent implements OnInit {
       error => error.message,
       () => this.onBackEveryQuestions(),
     );
+  }
+
+  toggleIsBestComment($event: { checked: boolean; }, commentId: string): void {
+        this.questionObject.comments[commentId].isBestComment = $event.checked;
+        this.questionsService.updateCommentByIdAndComment(this.urlIdQuestion, commentId, this.questionObject.comments[commentId])
+          .subscribe(
+          commentObj => commentObj,
+          error => error.message,
+        );
   }
 
 }
