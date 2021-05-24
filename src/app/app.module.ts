@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {AngularMaterialModule} from './_shared/_material/angular-material.module';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -29,7 +30,7 @@ import { EditQuestionComponent } from './homeModule/edit-question/edit-question.
 import {AuthService} from './_shared/_services/auth.service';
 import {QuestionsService} from './_shared/_services/questions.service';
 
-
+import {FilterPerPeriodOfTime} from './_shared/pipes/FilterPerPeriodOfTime';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {QuestionsService} from './_shared/_services/questions.service';
     EveryQuestionsComponent,
     NewQuestionComponent,
     ScreenQuestionComponent,
-    EditQuestionComponent
+    EditQuestionComponent,
+    FilterPerPeriodOfTime
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,8 @@ import {QuestionsService} from './_shared/_services/questions.service';
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
     AngularFireDatabaseModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSlideToggleModule
   ],
   providers: [AuthService, QuestionsService],
   bootstrap: [AppComponent]

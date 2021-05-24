@@ -11,6 +11,11 @@
     width: 100%;
   }
 
+  &__filters {
+    margin-top: 25rem;
+
+  }
+
   &__form {
     display: flex;
     flex-direction: column;
@@ -60,3 +65,5 @@
 .mat-form-field-label {
   padding-bottom: 0.2rem;
 }
+
+

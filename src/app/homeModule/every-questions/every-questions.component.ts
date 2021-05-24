@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {QuestionsService} from '../../_shared/_services/questions.service';
 import {Router} from '@angular/router';
@@ -20,6 +20,8 @@ export class EveryQuestionsComponent implements OnInit {
   tagsData!: Tags[];
   themeData!: Theme[];
   questionsArray: Question[] = [];
+  formPerPeriodOfTime!: FormGroup;
+  perPeriodOfTime = 365;
 
   get tagsFormArray(): FormArray {
     return this.tagsForm.controls.tags as FormArray;
@@ -35,9 +37,15 @@ export class EveryQuestionsComponent implements OnInit {
       tags: this.fb.array([]),
     });
 
+    this.formPerPeriodOfTime = this.fb.group({
+        periodOfTime: this.fb.control('allTime'),
+    });
+
+    console.log(this.formPerPeriodOfTime.controls.periodOfTime);
+
     this.questionsService.getQuestions().subscribe((question: Question[]) => {
       this.questionsArray = question,
-        console.log(this.questionsArray);
+      console.log(this.questionsArray);
     });
 
     this.addCheckBoxes();
@@ -46,6 +54,10 @@ export class EveryQuestionsComponent implements OnInit {
 
   private addCheckBoxes(): void {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  }
+
+  onFilterPerPeriodOfTime(periodOfTime: number): void {
+      this.perPeriodOfTime = periodOfTime;
   }
 
   onOpenScreenQuestionById(id: string): void {
