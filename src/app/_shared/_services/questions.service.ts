@@ -17,13 +17,13 @@ export class QuestionsService {
   constructor(private http: HttpClient) {}
 
   getQuestions(): Observable<any> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}.json`).pipe(
+    return this.http.get<Question[]>(`${this.url}${this.urlQuestions}.json`).pipe(
       map(questions => {
         if (questions === undefined || questions === null) {
           return;
         } else {
           const questionsKeys = Object.keys(questions);
-          return Object.values(questions).map((questionObject: Question[], i: number) => ({key: questionsKeys[i], ...questionObject}));
+          return Object.values(questions).map((questionObject: object, i: number) => ({key: questionsKeys[i], ...questionObject}));
         }
       })
     );
@@ -41,11 +41,11 @@ export class QuestionsService {
     return this.http.post<Question>(`${this.url}${this.urlQuestions}.json`, question);
   }
 
-  updateCommentByIdAndComment(questionsId: string, commentId: string, comment: Comment): Observable<Comment> {
+  updateCommentById(questionsId: string, commentId: any, comment: Comment): Observable<Comment> {
     return this.http.put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment);
   }
 
-  updateQuestionByIdAndQuestion(id: string, question: Question): Observable<Question> {
+  updateQuestionById(id: string, question: Question): Observable<Question> {
     return this.http.put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question);
   }
 

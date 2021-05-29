@@ -25,10 +25,10 @@
     <mat-card class="c-screenQuestionsComments__card mat-card" [ngClass]="{'isBestCommentStyle': questionObject.comments[comment.key].isBestComment}">
       <h5 class="c-screenQuestionsComments__title">Comment</h5>
       <div class="c-screenQuestionsComments__content" >
-        <div class="c-screenQuestionsComments__author">{{comment.author}}</div>
-        <div class="c-screenQuestionsComments__textarea">{{comment.textarea}}</div>
+        <div class="c-screenQuestionsComments__author">{{questionObject.comments[comment.key].author}}</div>
+        <div class="c-screenQuestionsComments__textarea">{{questionObject.comments[comment.key].textarea}}</div>
         <mat-card-footer class="c-screenQuestionsComments__footer">
-          <div class="c-screenQuestionsComments__date">{{comment.date | date: 'MMM d, y, h:mm:ss a'}}</div>
+          <div class="c-screenQuestionsComments__date">{{questionObject.comments[comment.key].date | date: 'MMM d, y, h:mm:ss a'}}</div>
           <div class="c-screenQuestionsComments__resolve">
             <mat-label class="c-screenQuestionsComments__label">
               <mat-checkbox [checked]="questionObject.comments[comment.key].isBestComment" (change)="toggleIsBestComment($event, comment.key)"></mat-checkbox>

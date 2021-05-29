@@ -91,8 +91,7 @@ export class NewQuestionComponent implements OnInit {
       textarea: this.textarea.value,
       tags: this.selectedTagsItem(),
       comments: [],
-      isApproval: false,
-      isResolve: false,
+      isApproval: false
     };
 
     this.addQuestion(question);

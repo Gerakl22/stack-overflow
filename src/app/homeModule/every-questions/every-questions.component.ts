@@ -43,10 +43,13 @@ export class EveryQuestionsComponent implements OnInit {
 
     console.log(this.formPerPeriodOfTime.controls.periodOfTime);
 
-    this.questionsService.getQuestions().subscribe((question: Question[]) => {
+    this.questionsService.getQuestions().subscribe(
+      (question) => {
       this.questionsArray = question,
       console.log(this.questionsArray);
-    });
+    },
+      error => error.message,
+    );
 
     this.addCheckBoxes();
 

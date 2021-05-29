@@ -1,4 +1,5 @@
 import {Tags} from './Tags';
+import {Comment} from './Comment';
 
 export class Question {
     key?: any;
@@ -7,20 +8,18 @@ export class Question {
     title: string;
     textarea: string;
     tags: Tags[];
-    comments: object[];
+    comments: Comment[];
     isApproval: boolean;
-    isResolve: boolean;
 
     constructor(question: {
-      key: string;
+      key: any;
       date: number;
       author: string | null | undefined;
       title: string;
       textarea: string;
       tags: Tags[];
-      comments: object[];
+      comments: Comment[];
       isApproval: boolean;
-      isResolve: boolean;
     })
     {
       this.key = question.key;
@@ -31,6 +30,5 @@ export class Question {
       this.tags = question.tags;
       this.comments = question.comments;
       this.isApproval = question.isApproval;
-      this.isResolve = question.isResolve;
   }
 }

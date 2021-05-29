@@ -16,16 +16,18 @@ import {switchMap, tap} from 'rxjs/operators';
 export class ScreenQuestionComponent implements OnInit {
 
   urlIdQuestion!: string;
-  urlIdComment!: string | undefined;
   questionObject!: any;
   commentQuestionForm!: FormGroup;
-  commentsArray!: any[];
+  commentsArray: { key: string; }[] | undefined;
+  author: string | null | undefined;
 
   get comment(): AbstractControl {
     return this.commentQuestionForm.controls.comment;
   }
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private questionsService: QuestionsService, private authService: AuthService) {}
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private questionsService: QuestionsService, public authService: AuthService) {
+    this.author = authService.email;
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.pipe(
@@ -39,52 +41,46 @@ export class ScreenQuestionComponent implements OnInit {
           this.getCommentsArray(this.questionObject.comments);
           console.log(this.commentsArray);
       },
+
+      error => error.message,
     );
 
     this.commentQuestionForm = new FormGroup({
       comment: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
+        Validators.required
       ])
     });
   }
 
   getErrorComment(): string {
-    if (this.comment.errors?.required) {
-      return 'You must enter value';
-    }
-
-    return this.comment.errors?.minlength ? 'Min length 6 letters' : '';
+    return this.comment.errors?.required ? 'You must enter value' : '';
   }
 
   onAddComment(): void {
     const commentObject: Comment = {
-      author: this.authService.email,
+      author: this.author,
       textarea: this.comment.value,
       date: new Date().getTime(),
       isBestComment: false,
     };
 
     this.questionsService.createComment(this.urlIdQuestion, commentObject).pipe(
-      tap((url: Comment) => {
-        this.urlIdComment = url.name;
-      }),
       switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion))
     ).subscribe(
       (questionObject: Question) => {
-        this.questionObject = questionObject;
         this.getCommentsArray(questionObject.comments);
+        this.questionObject = questionObject;
         this.commentQuestionForm.reset();
       }
     );
   }
 
-  getCommentsArray(comments: object[]): void {
+  getCommentsArray(comments: object[]): { key: string }[] | undefined {
     if (comments === undefined || comments === null) {
       return;
     } else {
       const commentsKeys = Object.keys(comments);
-      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
+      return this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
     }
   }
 
@@ -104,13 +100,12 @@ export class ScreenQuestionComponent implements OnInit {
     );
   }
 
-  toggleIsBestComment($event: { checked: boolean; }, commentId: string): void {
-        this.questionObject.comments[commentId].isBestComment = $event.checked;
-        this.questionsService.updateCommentByIdAndComment(this.urlIdQuestion, commentId, this.questionObject.comments[commentId])
+  toggleIsBestComment($event: { checked: boolean; }, commentId: string | number): void {
+        this.questionObject.comments[commentId as any].isBestComment = $event.checked;
+        this.questionsService.updateCommentById(this.urlIdQuestion, commentId, this.questionObject.comments[commentId as any])
           .subscribe(
           commentObj => commentObj,
           error => error.message,
         );
   }
-
 }

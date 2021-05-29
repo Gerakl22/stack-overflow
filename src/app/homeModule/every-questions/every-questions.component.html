@@ -20,7 +20,7 @@
               <mat-checkbox [formControlName]="i">{{tagsData[i].item}}</mat-checkbox>
             </mat-label>
           </ng-form>
-          <ng-form [formGroup]="formPerPeriodOfTime" class="c-everyQuestions__form">
+          <form [formGroup]="formPerPeriodOfTime" class="c-everyQuestions__form">
             <mat-label class="mat-form-field-label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime"  ngDefaultControl value="day" (click)="onFilterPerPeriodOfTime(1)">Per day</mat-radio-button>
             </mat-label>
@@ -33,7 +33,7 @@
             <mat-label class="mat-form-field-label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="allTime" (click)="onFilterPerPeriodOfTime(365)">Per all time</mat-radio-button>
             </mat-label>
-          </ng-form>
+          </form>
         </mat-menu>
       </li>
       <li class="c-everyQuestions__item">

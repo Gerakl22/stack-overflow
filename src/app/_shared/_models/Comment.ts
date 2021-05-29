@@ -1,6 +1,5 @@
 export class Comment {
   key?: any;
-  name?: string;
   author: string | null | undefined;
   textarea: string;
   date: number;
@@ -8,7 +7,6 @@ export class Comment {
 
   constructor(comment: {
     key: any;
-    name: string;
     author: string | null | undefined;
     textarea: string;
     date: number;
@@ -16,7 +14,6 @@ export class Comment {
     })
     {
     this.key = comment.key;
-    this.name = comment.name;
     this.author = comment.author;
     this.textarea = comment.textarea;
     this.date = comment.date;

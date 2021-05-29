@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../_shared/_services/auth.service';
 import {QuestionsService} from '../../_shared/_services/questions.service';
 import {Tags} from '../../_shared/_models/Tags';
@@ -91,21 +91,17 @@ export class EditQuestionComponent implements OnInit {
 
   onSave(): void {
     const questionObject: Question = {
-      date: this.editQuestion.date,
-      author: this.authService.email,
+      ...this.editQuestion,
       title: this.editQuestionForm.value.title,
       textarea: this.editQuestionForm.value.textarea,
       tags: this.selectedTagsItem(),
-      comments: this.editQuestion.comments,
-      isApproval: this.editQuestion.isApproval,
-      isResolve: this.editQuestion.isResolve,
     };
 
     this.onUpdateQuestionByIdAndQuestion(this.urlId, questionObject);
   }
 
   onUpdateQuestionByIdAndQuestion(id: string, questionObject: Question): void {
-    this.questionsService.updateQuestionByIdAndQuestion(id, questionObject).subscribe(
+    this.questionsService.updateQuestionById(id, questionObject).subscribe(
       (question: Question) => question,
       (error) => this.error = error,
       () => this.onCancel(),
