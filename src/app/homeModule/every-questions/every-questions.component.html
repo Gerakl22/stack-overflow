@@ -2,27 +2,30 @@
   <mat-toolbar color="accent" class="c-everyQuestions__main">
     <ul class="c-everyQuestions__list">
       <li class="c-everyQuestions__item">
-        <a type="button" mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</a>
+        <button mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</button>
         <mat-menu #filters="matMenu">
-          <ng-form  class="c-everyQuestions__form">
+          <form [formGroup]="formOnQuestions" class="c-everyQuestions__form">
             <mat-label class="mat-form-field-label">
-              <mat-radio-button class="mat-radio-button" value="responded">Responded</mat-radio-button>
+              <mat-radio-button checked class="mat-radio-button" formControlName="questions" ngDefaultControl value="allQuestions" (click)="onFilterOnQuestions('allQuestions')">All</mat-radio-button>
             </mat-label>
             <mat-label class="mat-form-field-label">
-              <mat-radio-button class="mat-radio-button" value="noReply">Make no reply</mat-radio-button>
+              <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="responded" (click)="onFilterOnQuestions('responded')">Responded</mat-radio-button>
             </mat-label>
             <mat-label class="mat-form-field-label">
-              <mat-radio-button class="mat-radio-button" value="resolve">Resolve</mat-radio-button>
+              <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="noReply" (click)="onFilterOnQuestions('noReply')">Make no reply</mat-radio-button>
             </mat-label>
-          </ng-form>
-          <ng-form [formGroup]="tagsForm" class="c-everyQuestions__form">
+            <mat-label class="mat-form-field-label">
+              <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="resolve" (click)="onFilterOnQuestions('resolve')">Resolve</mat-radio-button>
+            </mat-label>
+          </form>
+          <form [formGroup]="formTags" class="c-everyQuestions__form">
             <mat-label class="mat-form-field-label" *ngFor="let tag of tagsFormArray.controls, let i=index" formArrayName="tags">
-              <mat-checkbox [formControlName]="i">{{tagsData[i].item}}</mat-checkbox>
+              <mat-checkbox [formControlName]="i" [name]="tagsData[i].item" (change)="onFilterByTags($event)">{{tagsData[i].item}}</mat-checkbox>
             </mat-label>
-          </ng-form>
+          </form>
           <form [formGroup]="formPerPeriodOfTime" class="c-everyQuestions__form">
             <mat-label class="mat-form-field-label">
-              <mat-radio-button class="mat-radio-button" formControlName="periodOfTime"  ngDefaultControl value="day" (click)="onFilterPerPeriodOfTime(1)">Per day</mat-radio-button>
+              <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="day" (click)="onFilterPerPeriodOfTime(1)">Per day</mat-radio-button>
             </mat-label>
             <mat-label class="mat-form-field-label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="week" (click)="onFilterPerPeriodOfTime(7)">Per week</mat-radio-button>
@@ -37,7 +40,7 @@
         </mat-menu>
       </li>
       <li class="c-everyQuestions__item">
-        <a mat-button mat-raised-button>Sort</a>
+        <a mat-button mat-raised-button (click)="onSortQuestions()">Sort</a>
       </li>
       <li class="c-everyQuestions__item">
         <a mat-button mat-raised-button [matMenuTriggerFor]="settings">Settings</a>
@@ -60,7 +63,7 @@
     </ul>
   </mat-toolbar>
   <div class="c-everyQuestions__section">
-    <mat-card class="c-everyQuestions__card" *ngFor="let question of questionsArray | FilterPerPeriodOfTime: perPeriodOfTime">
+    <mat-card class="c-everyQuestions__card" *ngFor="let question of questionsArray | filterOnQuestions: electedQuestions | filterByTags: electedTags | filterPerPeriodOfTime: perPeriodOfTime | filterBySort: isSortQuestions ">
       <mat-card-title class="c-everyQuestions__title" (click)="onOpenScreenQuestionById(question.key)">{{question.title}}</mat-card-title>
       <hr>
       <mat-card-content class="c-everyQuestions__content">

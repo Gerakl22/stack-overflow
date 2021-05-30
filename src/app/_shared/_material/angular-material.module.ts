@@ -56,7 +56,10 @@ const materialModules = [
   MatBadgeModule,
   MatRadioModule,
   MatTooltipModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatIconModule,
+  MatMenuModule,
+  MatButtonModule,
 ];
 
 @NgModule({

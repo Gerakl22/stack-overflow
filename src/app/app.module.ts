@@ -6,8 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {AngularMaterialModule} from './_shared/_material/angular-material.module';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatIconRegistry} from '@angular/material/icon';
+
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -30,7 +30,13 @@ import { EditQuestionComponent } from './homeModule/edit-question/edit-question.
 import {AuthService} from './_shared/_services/auth.service';
 import {QuestionsService} from './_shared/_services/questions.service';
 
-import {FilterPerPeriodOfTime} from './_shared/pipes/FilterPerPeriodOfTime';
+import { FilterOnQuestionsPipe } from './_shared/pipes/filter-on-questions.pipe';
+import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
+import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
+import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
+
+
+
 
 
 @NgModule({
@@ -44,7 +50,10 @@ import {FilterPerPeriodOfTime} from './_shared/pipes/FilterPerPeriodOfTime';
     NewQuestionComponent,
     ScreenQuestionComponent,
     EditQuestionComponent,
-    FilterPerPeriodOfTime
+    FilterPerPeriodOfTimePipe,
+    FilterOnQuestionsPipe,
+    FilterByTagsPipe,
+    FilterBySortPipe
   ],
   imports: [
     BrowserModule,
@@ -53,15 +62,13 @@ import {FilterPerPeriodOfTime} from './_shared/pipes/FilterPerPeriodOfTime';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    MatIconModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
     AngularFireDatabaseModule,
-    HttpClientModule,
-    MatSlideToggleModule
+    HttpClientModule
   ],
   providers: [AuthService, QuestionsService],
   bootstrap: [AppComponent]

@@ -16,24 +16,29 @@ import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
 })
 export class EveryQuestionsComponent implements OnInit {
 
-  tagsForm!: FormGroup;
   tagsData!: Tags[];
   themeData!: Theme[];
   questionsArray: Question[] = [];
+  formTags!: FormGroup;
   formPerPeriodOfTime!: FormGroup;
+  formOnQuestions!: FormGroup;
   perPeriodOfTime = 365;
+  electedQuestions = 'allQuestions';
+  electedTags: Tags[] = [];
+  isSortQuestions = false;
+
 
   get tagsFormArray(): FormArray {
-    return this.tagsForm.controls.tags as FormArray;
+    return this.formTags.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router) { }
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router) {}
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;
     this.themeData = ThemeConstants;
 
-    this.tagsForm = this.fb.group({
+    this.formTags = this.fb.group({
       tags: this.fb.array([]),
     });
 
@@ -41,7 +46,9 @@ export class EveryQuestionsComponent implements OnInit {
         periodOfTime: this.fb.control('allTime'),
     });
 
-    console.log(this.formPerPeriodOfTime.controls.periodOfTime);
+    this.formOnQuestions = this.fb.group({
+      questions: this.fb.control('allQuestions'),
+    });
 
     this.questionsService.getQuestions().subscribe(
       (question) => {
@@ -57,6 +64,20 @@ export class EveryQuestionsComponent implements OnInit {
 
   private addCheckBoxes(): void {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  }
+
+  onFilterByTags(event: { source: { name: any; }; checked: boolean; }): void {
+    const tagName = event.source.name;
+    if (event.checked === true) {
+        this.electedTags.push(tagName);
+    }
+    if (event.checked === false) {
+        this.electedTags = this.electedTags.filter(tag => tag !== tagName);
+    }
+  }
+
+  onFilterOnQuestions(value: string): void {
+    this.electedQuestions = value;
   }
 
   onFilterPerPeriodOfTime(periodOfTime: number): void {
@@ -79,4 +100,7 @@ export class EveryQuestionsComponent implements OnInit {
       );
     }
 
+    onSortQuestions(): void {
+      this.isSortQuestions = !this.isSortQuestions;
+    }
 }
