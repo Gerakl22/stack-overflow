@@ -54,4 +54,16 @@ a {
   text-decoration: none;
 }
 
+.mat-icon {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: auto !important;
+}
+
+.material-icons {
+  color: white;
+  display: flex;
+}
+
 

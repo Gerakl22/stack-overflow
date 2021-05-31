@@ -20,7 +20,7 @@
       <mat-card-content class="c-editQuestion__content">
         <div class="c-editQuestion__categories">
           <p class="c-editQuestion__tags">
-            Tags
+            <mat-icon>tag</mat-icon>
           </p>
           <div class="c-editQuestion__category">
             <mat-label class="c-editQuestion__label" *ngFor="let tag of tagsFormArray.controls; let i=index" formArrayName="tags">
@@ -30,8 +30,8 @@
         </div>
       </mat-card-content>
       <div class="c-editQuestion__buttons">
-        <button class="c-editQuestion__button" type="submit" mat-raised-button [disabled]="editQuestionForm.invalid">Save</button>
-        <button class="c-editQuestion__button" type="submit" mat-raised-button (click)="onCancel()">Cancel</button>
+        <button class="c-editQuestion__button" type="submit" mat-raised-button [disabled]="editQuestionForm.invalid"><mat-icon>save</mat-icon></button>
+        <button class="c-editQuestion__button" type="submit" mat-raised-button (click)="onCancel()"><mat-icon>cancel</mat-icon></button>
         <mat-error>{{error}}</mat-error>
       </div>
     </form>

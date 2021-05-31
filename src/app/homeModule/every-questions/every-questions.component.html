@@ -2,59 +2,67 @@
   <mat-toolbar color="accent" class="c-everyQuestions__main">
     <ul class="c-everyQuestions__list">
       <li class="c-everyQuestions__item">
-        <button type="button" mat-button mat-raised-button [matMenuTriggerFor]="filters">Filters</button>
+        <button type="button" mat-button mat-raised-button [matMenuTriggerFor]="filters"><mat-icon>filter_alt</mat-icon></button>
         <mat-menu #filters="matMenu">
           <form [formGroup]="formOnQuestions" class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label">
+            <mat-icon>question_answer</mat-icon>
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button checked class="mat-radio-button" formControlName="questions" ngDefaultControl value="allQuestions" (click)="onFilterOnQuestions('allQuestions')">All</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="responded" (click)="onFilterOnQuestions('responded')">Responded</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="noReply" (click)="onFilterOnQuestions('noReply')">Make no reply</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="questions" ngDefaultControl value="resolve" (click)="onFilterOnQuestions('resolve')">Resolve</mat-radio-button>
             </mat-label>
           </form>
+          <mat-divider></mat-divider>
           <form [formGroup]="formTags" class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label" *ngFor="let tag of tagsFormArray.controls, let i=index" formArrayName="tags">
+            <mat-icon>tag</mat-icon>
+            <mat-label class="c-everyQuestions__label" *ngFor="let tag of tagsFormArray.controls, let i=index" formArrayName="tags">
               <mat-checkbox [formControlName]="i" [name]="tagsData[i].item" (change)="onFilterByTags($event)">{{tagsData[i].item}}</mat-checkbox>
             </mat-label>
           </form>
+          <mat-divider></mat-divider>
           <form [formGroup]="formPerPeriodOfTime" class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label">
+            <mat-icon>timeline</mat-icon>
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="day" (click)="onFilterPerPeriodOfTime(1)">Per day</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="week" (click)="onFilterPerPeriodOfTime(7)">Per week</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="month" (click)="onFilterPerPeriodOfTime(30)">Per month</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" formControlName="periodOfTime" ngDefaultControl value="allTime" (click)="onFilterPerPeriodOfTime(365)">Per all time</mat-radio-button>
             </mat-label>
           </form>
         </mat-menu>
       </li>
       <li class="c-everyQuestions__item">
-        <button type="button" mat-button mat-raised-button (click)="onSortQuestions()">Sort</button>
+        <button type="button" mat-button mat-raised-button (click)="onSortQuestions()"><mat-icon>sort</mat-icon></button>
       </li>
       <li class="c-everyQuestions__item">
-        <button type="button" mat-button mat-raised-button [matMenuTriggerFor]="settings">Settings</button>
+        <button type="button" mat-button mat-raised-button [matMenuTriggerFor]="settings"><mat-icon>settings</mat-icon></button>
         <mat-menu #settings="matMenu">
           <form class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label">
+            <mat-icon>view_module</mat-icon>
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button  class="mat-radio-button" value="tiled" (click)="onDisplayQuestions('tiled')">Tiled display</mat-radio-button>
             </mat-label>
-            <mat-label class="mat-form-field-label">
+            <mat-label class="c-everyQuestions__label">
               <mat-radio-button class="mat-radio-button" value="line" (click)="onDisplayQuestions('line')">Line display</mat-radio-button>
             </mat-label>
           </form>
+          <mat-divider></mat-divider>
           <form class="c-everyQuestions__form">
-            <mat-label class="mat-form-field-label" *ngFor="let theme of themeData">
+            <mat-icon>palette</mat-icon>
+            <mat-label class="c-everyQuestions__label" *ngFor="let theme of themeData">
               <mat-radio-button class="mat-radio-button" (click)="onChangeTheme(theme.name)">{{theme.name}} theme</mat-radio-button>
             </mat-label>
           </form>
@@ -73,8 +81,8 @@
       </mat-card-content>
       <hr>
       <div class="c-everyQuestions__buttons">
-        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary">Approve</button>
-        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)">Delete</button>
+        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
+        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
       </div>
     </mat-card>
   </div>
@@ -89,8 +97,8 @@
       </mat-card-content>
       <hr>
       <div class="c-everyQuestions__buttons">
-        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary">Approve</button>
-        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)">Delete</button>
+        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
+        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
       </div>
     </mat-card>
   </div>

@@ -13,10 +13,10 @@
           <p class="c-screenQuestionsCard__tags" *ngFor="let tags of questionObject?.tags">{{tags}}</p>
           <div class="c-screenQuestionsCard__buttons">
             <small class="c-screenQuestionsCard__moderation">Moderation</small>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()">Edit</button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary">Approve</button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()">Delete</button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onBackEveryQuestions()">Back</button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()"><mat-icon>edit</mat-icon></button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()"><mat-icon>delete_forever</mat-icon></button>
+            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onBackEveryQuestions()"><mat-icon>backspace</mat-icon></button>
           </div>
         </mat-card-footer>
     </mat-card>
@@ -50,7 +50,7 @@
           <mat-error *ngIf="comment.invalid && comment.touched">{{getErrorComment()}}</mat-error>
         </mat-form-field>
       <div class="c-screenQuestionsAnswer__item">
-        <button class="c-screenQuestionsAnswer__button" type="submit" mat-raised-button color="primary" [disabled]="commentQuestionForm.invalid">Add Comment</button>
+        <button class="c-screenQuestionsAnswer__button" type="submit" mat-raised-button color="primary" [disabled]="commentQuestionForm.invalid"><mat-icon>add_comment</mat-icon></button>
       </div>
     </form>
   </mat-card>

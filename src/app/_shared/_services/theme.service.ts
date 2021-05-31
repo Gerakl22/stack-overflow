@@ -6,8 +6,8 @@ import {Theme} from '../_models/Theme';
   providedIn: 'root'
 })
 export class ThemeService {
-  private lightTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'light');
-  private darkTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'dark');
+  private lightTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'Light');
+  private darkTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'Dark');
 
   private activeTheme: Theme | undefined = this.lightTheme;
 
@@ -16,10 +16,10 @@ export class ThemeService {
   }
 
   setTheme(themeName: string | null): void {
-    if (themeName === 'dark') {
+    if (themeName === 'Dark') {
       this.setActiveTheme(this.darkTheme);
     }
-    if (themeName === 'light') {
+    if (themeName === 'Light') {
       this.setActiveTheme(this.lightTheme);
     }
   }

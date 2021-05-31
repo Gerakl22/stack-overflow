@@ -3,7 +3,7 @@ import {Theme} from '../_models/Theme';
 export const ThemeConstants: Theme[] = [
   {
     id: '1',
-    name: 'light',
+    name: 'Light',
     properties: {
       '--foreground-default': '#08090A',
       '--foreground-secondary': '#41474D',
@@ -30,7 +30,7 @@ export const ThemeConstants: Theme[] = [
   },
   {
     id: '2',
-    name: 'dark',
+    name: 'Dark',
     properties: {
       '--foreground-default': '#5C7D99',
       '--foreground-secondary': '#A3B9CC',

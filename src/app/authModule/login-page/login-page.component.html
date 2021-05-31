@@ -24,7 +24,7 @@
         <button type="submit" mat-icon-button (click)="logOnGitHub()"><mat-icon fontSet="fontawesome" fontIcon="fa-github"></mat-icon></button>
         <button type="submit" mat-icon-button (click)="logOnFacebook()"><mat-icon fontSet="fontawesome" fontIcon="fa-facebook"></mat-icon></button>
       </mat-card-content>
-      <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid">Log in</button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid"><mat-icon>login</mat-icon></button>
       <mat-error>{{error}}</mat-error>
     </form>
   </mat-card>

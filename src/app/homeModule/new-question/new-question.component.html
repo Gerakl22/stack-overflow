@@ -20,7 +20,7 @@
       <mat-card-content class="c-newQuestion__content">
         <div class="c-newQuestion__categories">
           <p class="c-newQuestion__tags">
-            Tags
+            <mat-icon>tag</mat-icon>
           </p>
           <div class="c-newQuestion__category">
             <mat-label class="c-newQuestion__label" *ngFor="let tag of tagsFormArray.controls; let i = index" formArrayName="tags">
@@ -30,8 +30,8 @@
         </div>
       </mat-card-content>
       <div class="c-newQuestion__buttons">
-        <button class="c-newQuestion__button" type="submit" mat-raised-button [disabled]="newQuestionForm.invalid">Ok</button>
-        <button class="c-newQuestion__button" type="submit" mat-raised-button (click)="onCancel()">Cancel</button>
+        <button class="c-newQuestion__button" type="submit" mat-raised-button [disabled]="newQuestionForm.invalid"><mat-icon>add_circle_outline</mat-icon></button>
+        <button class="c-newQuestion__button" type="submit" mat-raised-button (click)="onCancel()"><mat-icon>cancel</mat-icon></button>
         <mat-error>{{error}}</mat-error>
       </div>
     </form>

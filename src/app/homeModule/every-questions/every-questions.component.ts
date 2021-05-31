@@ -34,11 +34,7 @@ export class EveryQuestionsComponent implements OnInit {
     return this.formTags.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {
-     if (localStorage.getItem('theme')) {
-       this.themeService.setTheme(localStorage.getItem('theme'));
-     }
-  }
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {}
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;

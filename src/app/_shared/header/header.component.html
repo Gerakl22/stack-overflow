@@ -4,18 +4,21 @@
       <a class="c-app__link">Stack Overflow</a>
     </div>
     <ul class="c-app__buttons">
+      <li class="c-app__button" >
+        <a mat-menu-item *ngIf="isLogUser">{{email}}</a>
+      </li>
       <li routerLinkActive="active" class="c-app__button">
         <a *ngIf="!isLogUser" mat-button mat-raised-button color="accent" routerLink="/login">Login</a>
       </li>
-      <li *ngIf="!isLogUser" class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up' >Sign Up</a></li>
+      <li *ngIf="!isLogUser" class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up'>Sign Up</a></li>
       <li *ngIf="isLogUser" class="c-app__button" routerLinkActive="active">
-        <button type="button" mat-button mat-raised-button routerLink="/newQuestion" (click)="addQuestion()">Add Question</button>
+        <button type="button" mat-button mat-raised-button routerLink="/newQuestion" (click)="addQuestion()"><mat-icon>post_add</mat-icon></button>
       </li>
       <li class="c-app__button" routerLinkActive="active">
-        <a *ngIf="isLogUser" mat-button mat-raised-button [matMenuTriggerFor]="profile">{{email}}</a>
+        <a *ngIf="isLogUser" mat-button mat-raised-button [matMenuTriggerFor]="profile"><mat-icon>email</mat-icon></a>
         <mat-menu #profile="matMenu">
-          <a mat-menu-item>Profile</a>
-          <a mat-menu-item routerLink='/' (click)="signOut()">Sign Out</a>
+          <a mat-menu-item><mat-icon>home</mat-icon></a>
+          <a mat-menu-item routerLink='/' (click)="signOut()"><mat-icon>logout</mat-icon></a>
         </mat-menu>
       </li>
     </ul>
