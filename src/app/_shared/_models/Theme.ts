@@ -1,12 +1,15 @@
 export class Theme {
   id: string;
-  item: string;
+  name: string;
+  properties: any;
 
   constructor(theme: {
-    item: string;
+    properties: any;
+    name: string;
     id: string;
   }) {
     this.id = theme.id;
-    this.item = theme.item;
+    this.name = theme.name;
+    this.properties = theme.properties;
   }
 }

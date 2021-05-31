@@ -7,6 +7,7 @@ import {Question} from '../../_shared/_models/Question';
 import {Theme} from '../../_shared/_models/Theme';
 import {TagsConstants} from '../../_shared/constants/TagsConstants';
 import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
+import {ThemeService} from '../../_shared/_services/theme.service';
 
 
 @Component({
@@ -33,7 +34,11 @@ export class EveryQuestionsComponent implements OnInit {
     return this.formTags.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router) {}
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {
+     if (localStorage.getItem('theme')) {
+       this.themeService.setTheme(localStorage.getItem('theme'));
+     }
+  }
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;
@@ -65,6 +70,11 @@ export class EveryQuestionsComponent implements OnInit {
 
   private addCheckBoxes(): void {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  }
+
+  onChangeTheme(themeName: string): void {
+    this.themeService.setTheme(themeName);
+    localStorage.setItem('theme', themeName);
   }
 
   onDisplayQuestions(display: string): void {

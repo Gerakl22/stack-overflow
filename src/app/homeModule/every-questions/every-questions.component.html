@@ -55,7 +55,7 @@
           </form>
           <form class="c-everyQuestions__form">
             <mat-label class="mat-form-field-label" *ngFor="let theme of themeData">
-              <mat-radio-button class="mat-radio-button" value="light">{{theme.item}} theme</mat-radio-button>
+              <mat-radio-button class="mat-radio-button" (click)="onChangeTheme(theme.name)">{{theme.name}} theme</mat-radio-button>
             </mat-label>
           </form>
         </mat-menu>

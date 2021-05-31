@@ -29,14 +29,12 @@ import { EditQuestionComponent } from './homeModule/edit-question/edit-question.
 
 import {AuthService} from './_shared/_services/auth.service';
 import {QuestionsService} from './_shared/_services/questions.service';
+import {ThemeService} from './_shared/_services/theme.service';
 
 import { FilterOnQuestionsPipe } from './_shared/pipes/filter-on-questions.pipe';
 import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
 import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
 import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
-
-
-
 
 
 @NgModule({
@@ -70,7 +68,7 @@ import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
     AngularFireDatabaseModule,
     HttpClientModule
   ],
-  providers: [AuthService, QuestionsService],
+  providers: [AuthService, QuestionsService, ThemeService],
   bootstrap: [AppComponent]
 })
 
