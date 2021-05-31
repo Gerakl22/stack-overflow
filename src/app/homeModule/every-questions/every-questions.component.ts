@@ -26,6 +26,7 @@ export class EveryQuestionsComponent implements OnInit {
   electedQuestions = 'allQuestions';
   electedTags: Tags[] = [];
   isSortQuestions = false;
+  isLineDisplay = false;
 
 
   get tagsFormArray(): FormArray {
@@ -64,6 +65,15 @@ export class EveryQuestionsComponent implements OnInit {
 
   private addCheckBoxes(): void {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+  }
+
+  onDisplayQuestions(display: string): void {
+      if (display === 'tiled') {
+        this.isLineDisplay = false;
+      }
+      if (display === 'line') {
+        this.isLineDisplay = true;
+      }
   }
 
   onFilterByTags(event: { source: { name: any; }; checked: boolean; }): void {

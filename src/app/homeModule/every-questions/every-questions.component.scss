@@ -24,8 +24,18 @@
 
   &__section {
     display: flex;
+  }
+
+  &__section--tiled {
+    flex-direction: row;
     flex-wrap: wrap;
   }
+
+  &__section--line {
+    align-items: center;
+    flex-direction: column;
+  }
+
 
   &__card {
     margin: 3rem;
