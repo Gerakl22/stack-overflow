@@ -16,9 +16,9 @@ import {switchMap, tap} from 'rxjs/operators';
 export class ScreenQuestionComponent implements OnInit {
 
   urlIdQuestion!: string;
-  questionObject!: any;
+  questionObject!: Question;
   commentQuestionForm!: FormGroup;
-  commentsArray: { key: string; }[] | undefined;
+  commentsArray: { key: string }[] = [];
   author: string | null | undefined;
 
   get comment(): AbstractControl {
@@ -75,12 +75,12 @@ export class ScreenQuestionComponent implements OnInit {
     );
   }
 
-  getCommentsArray(comments: object[]): { key: string }[] | undefined {
+  getCommentsArray(comments: Comment[]): void {
     if (comments === undefined || comments === null) {
       return;
     } else {
       const commentsKeys = Object.keys(comments);
-      return this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
+      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
     }
   }
 

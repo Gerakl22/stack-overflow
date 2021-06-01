@@ -3,8 +3,8 @@ import { environment } from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Question} from '../_models/Question';
 import {Comment} from '../_models/Comment';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, retry} from 'rxjs/operators';
 
 
 @Injectable({providedIn: 'root'})
@@ -16,41 +16,61 @@ export class QuestionsService {
 
   constructor(private http: HttpClient) {}
 
-  getQuestions(): Observable<any> {
-    return this.http.get<Question[]>(`${this.url}${this.urlQuestions}.json`).pipe(
-      map(questions => {
-        if (questions === undefined || questions === null) {
-          return;
-        } else {
-          const questionsKeys = Object.keys(questions);
-          return Object.values(questions).map((questionObject: object, i: number) => ({key: questionsKeys[i], ...questionObject}));
-        }
-      })
+  private httpError(error: { error: { message: string; }; status: any; message: any; }): Observable<never> {
+    let message = '';
+    error.error instanceof ErrorEvent ? message = error.error.message : message = `Error Code: ${error.status}\nMessage: ${error.message}`;
+
+    console.log(message);
+    return throwError(message);
+  }
+
+  getQuestions(): Observable<Question> {
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
     );
   }
 
   getQuestionsById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`);
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
   createComment(id: string, comment: Comment): Observable<Comment> {
-    return this.http.post<Comment>(`${this.url}${this.urlQuestions}/${id}/${this.urlComments}.json`, comment);
+    return this.http.post<Comment>(`${this.url}${this.urlQuestions}/${id}/${this.urlComments}.json`, comment).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
   createQuestion(question: Question): Observable<Question> {
-    return this.http.post<Question>(`${this.url}${this.urlQuestions}.json`, question);
+    return this.http.post<Question>(`${this.url}${this.urlQuestions}.json`, question).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
-  updateCommentById(questionsId: string, commentId: any, comment: Comment): Observable<Comment> {
-    return this.http.put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment);
+  updateCommentById(questionsId: string, commentId: string | number, comment: Comment): Observable<Comment> {
+    return this.http.put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
   updateQuestionById(id: string, question: Question): Observable<Question> {
-    return this.http.put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question);
+    return this.http.put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
   removeQuestionById(id: string): Observable<Question> {
-    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`);
+    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
   }
 
 }

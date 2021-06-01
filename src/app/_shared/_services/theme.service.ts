@@ -22,7 +22,7 @@ export class ThemeService {
     }
   }
 
-  setActiveTheme(theme: Theme | undefined): void {
+  private setActiveTheme(theme: Theme | undefined): void {
     this.activeTheme = theme;
 
     if (this.activeTheme !== undefined) {

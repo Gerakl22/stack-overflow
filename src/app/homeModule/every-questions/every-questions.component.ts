@@ -10,6 +10,7 @@ import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
 import {ThemeService} from '../../_shared/_services/theme.service';
 
 
+
 @Component({
   selector: 'app-every-questions',
   templateUrl: './every-questions.component.html',
@@ -19,7 +20,7 @@ export class EveryQuestionsComponent implements OnInit {
 
   tagsData!: Tags[];
   themeData!: Theme[];
-  questionsArray: Question[] = [];
+  questionsArray: any[] = [];
   formTags!: FormGroup;
   formPerPeriodOfTime!: FormGroup;
   formOnQuestions!: FormGroup;
@@ -53,9 +54,10 @@ export class EveryQuestionsComponent implements OnInit {
     });
 
     this.questionsService.getQuestions().subscribe(
-      (question) => {
-      this.questionsArray = question,
-      console.log(this.questionsArray);
+      (questions) => {
+        console.log(questions);
+        this.getQuestionsArray(questions);
+        console.log(this.questionsArray);
     },
       error => error.message,
     );
@@ -68,6 +70,15 @@ export class EveryQuestionsComponent implements OnInit {
     this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
+  getQuestionsArray(questions: Question): void {
+    if (questions === undefined || questions === null) {
+      return;
+    } else {
+      const questionsKeys = Object.keys(questions);
+      this.questionsArray = Object.values(questions).map((questionObject: object, i: number) => ({key: questionsKeys[i], ...questionObject}));
+    }
+  }
+
   onChangeTheme(themeName: string): void {
     this.themeService.setTheme(themeName);
     localStorage.setItem('theme', themeName);
@@ -76,19 +87,17 @@ export class EveryQuestionsComponent implements OnInit {
   onDisplayQuestions(display: string): void {
       if (display === 'tiled') {
         this.isLineDisplay = false;
-      }
-      if (display === 'line') {
+      } else {
         this.isLineDisplay = true;
       }
   }
 
-  onFilterByTags(event: { source: { name: any; }; checked: boolean; }): void {
+  onFilterByTags(event: { source: { name: any }; checked: boolean; }): void {
     const tagName = event.source.name;
-    if (event.checked === true) {
+    if (event.checked) {
         this.electedTags.push(tagName);
-    }
-    if (event.checked === false) {
-        this.electedTags = this.electedTags.filter(tag => tag !== tagName);
+    } else {
+      this.electedTags = this.electedTags.filter(tag => tag !== tagName);
     }
   }
 
@@ -105,13 +114,9 @@ export class EveryQuestionsComponent implements OnInit {
   }
 
   onRemoveQuestionById(id: string): void {
+    this.questionsArray = this.questionsArray.filter((element) => element.key !== id);
     this.questionsService.removeQuestionById(id).subscribe(
-        (question: Question) => {
-          console.log(question),
-            this.questionsArray = this.questionsArray.filter((element: Question) => {
-              return element.key !== id;
-            });
-        },
+        question => question,
         error => error.message,
       );
     }
