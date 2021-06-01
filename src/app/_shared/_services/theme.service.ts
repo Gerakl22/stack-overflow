@@ -6,21 +6,19 @@ import {Theme} from '../_models/Theme';
   providedIn: 'root'
 })
 export class ThemeService {
-  private lightTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'Light');
-  private darkTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === 'Dark');
+  private light = 'Light';
+  private dark = 'Dark';
+  private lightTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === this.light);
+  private darkTheme: Theme | undefined = ThemeConstants.find(theme => theme.name === this.dark);
 
   private activeTheme: Theme | undefined = this.lightTheme;
 
-  getActiveTheme(): Theme {
-    return this.activeTheme as Theme;
-  }
-
   setTheme(themeName: string | null): void {
-    if (themeName === 'Dark') {
-      this.setActiveTheme(this.darkTheme);
-    }
-    if (themeName === 'Light') {
+    if (themeName === this.light) {
       this.setActiveTheme(this.lightTheme);
+    }
+    if (themeName === this.dark) {
+      this.setActiveTheme(this.darkTheme);
     }
   }
 
