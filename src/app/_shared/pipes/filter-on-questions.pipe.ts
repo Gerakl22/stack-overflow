@@ -20,11 +20,10 @@ export class FilterOnQuestionsPipe implements PipeTransform {
         return question.comments === undefined;
       }
       if (electedQuestions === 'resolve' && question.comments !== undefined) {
-        return Object.values(question.comments).find(q => q.isBestComment === true ? questionArray : undefined);
+        return Object.values(question.comments).find(q => q.isBestComment === true);
       }
-      else {
-        return;
-      }
+
+      return false;
     });
   }
 

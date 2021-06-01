@@ -10,13 +10,11 @@ export class FilterByTagsPipe implements PipeTransform {
 
   transform(questionArray: Question[], electedTags: Tags[]): Question[] {
 
-    if (electedTags.length === 0) {
+    if (!electedTags.length) {
       return questionArray;
     }
 
-    return questionArray.filter((question) => {
-      return  question.tags.find((tag  ) => electedTags.includes(tag) ? questionArray : undefined);
-    });
+    return questionArray.filter((question: Question) => question.tags.find((tag: Tags) => electedTags.includes(tag)));
   }
 
 }

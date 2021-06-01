@@ -42,7 +42,7 @@ export class NewQuestionComponent implements OnInit {
   }
 
   private addCheckBoxes(): void {
-    this.tagsData?.map(() => this.tagsFormArray.push(new FormControl(false)));
+    this.tagsData?.forEach(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
   addQuestion(question: Question): void {

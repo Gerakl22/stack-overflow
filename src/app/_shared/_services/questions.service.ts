@@ -5,6 +5,7 @@ import {Question} from '../_models/Question';
 import {Comment} from '../_models/Comment';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
+import firebase from 'firebase';
 
 
 @Injectable({providedIn: 'root'})
@@ -24,8 +25,8 @@ export class QuestionsService {
     return throwError(message);
   }
 
-  getQuestions(): Observable<Question> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}.json`).pipe(
+  getQuestions(): Observable<firebase.database.Database> {
+    return this.http.get<firebase.database.Database>(`${this.url}${this.urlQuestions}.json`).pipe(
       retry(1),
       catchError(this.httpError)
     );

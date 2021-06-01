@@ -10,7 +10,6 @@ import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
 import {ThemeService} from '../../_shared/_services/theme.service';
 
 
-
 @Component({
   selector: 'app-every-questions',
   templateUrl: './every-questions.component.html',
@@ -20,7 +19,7 @@ export class EveryQuestionsComponent implements OnInit {
 
   tagsData!: Tags[];
   themeData!: Theme[];
-  questionsArray: any[] = [];
+  questionsArray: Question[] = [];
   formTags!: FormGroup;
   formPerPeriodOfTime!: FormGroup;
   formOnQuestions!: FormGroup;
@@ -35,7 +34,8 @@ export class EveryQuestionsComponent implements OnInit {
     return this.formTags.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {}
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {
+  }
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;
@@ -46,7 +46,7 @@ export class EveryQuestionsComponent implements OnInit {
     });
 
     this.formPerPeriodOfTime = this.fb.group({
-        periodOfTime: this.fb.control('allTime'),
+      periodOfTime: this.fb.control('allTime'),
     });
 
     this.formOnQuestions = this.fb.group({
@@ -58,7 +58,7 @@ export class EveryQuestionsComponent implements OnInit {
         console.log(questions);
         this.getQuestionsArray(questions);
         console.log(this.questionsArray);
-    },
+      },
       error => error.message,
     );
 
@@ -67,15 +67,14 @@ export class EveryQuestionsComponent implements OnInit {
   }
 
   private addCheckBoxes(): void {
-    this.tagsData.map(() => this.tagsFormArray.push(new FormControl(false)));
+    this.tagsData.forEach(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
-  getQuestionsArray(questions: Question): void {
+  getQuestionsArray(questions: any): void {
     if (questions === undefined || questions === null) {
       return;
     } else {
-      const questionsKeys = Object.keys(questions);
-      this.questionsArray = Object.values(questions).map((questionObject: object, i: number) => ({key: questionsKeys[i], ...questionObject}));
+      this.questionsArray = Object.keys(questions).map((key) => ({...questions[key], key}));
     }
   }
 
@@ -85,11 +84,7 @@ export class EveryQuestionsComponent implements OnInit {
   }
 
   onDisplayQuestions(display: string): void {
-      if (display === 'tiled') {
-        this.isLineDisplay = false;
-      } else {
-        this.isLineDisplay = true;
-      }
+    this.isLineDisplay = display === 'line';
   }
 
   onFilterByTags(event: { source: { name: any }; checked: boolean; }): void {

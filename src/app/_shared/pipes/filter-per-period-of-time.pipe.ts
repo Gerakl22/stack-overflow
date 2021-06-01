@@ -14,7 +14,7 @@ export class FilterPerPeriodOfTimePipe implements PipeTransform {
     }
 
     return questionsArray.filter(question => {
-      return new Date(question.date).getTime() > (new Date().getTime() - (periodOfTime * 24 * 60 * 60 * 1000));
+      return question.date > (new Date().getTime() - (periodOfTime * 24 * 60 * 60 * 1000));
     });
   }
 
