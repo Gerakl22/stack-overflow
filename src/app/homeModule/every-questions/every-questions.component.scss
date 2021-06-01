@@ -75,5 +75,13 @@
   padding-bottom: 0.2rem;
 }
 
+@media(max-width: 688px) {
+  .c-everyQuestions {
+    &__section--tiled {
+      align-items: center;
+      flex-direction: column-reverse;
+    }
+  }
+}
 
 

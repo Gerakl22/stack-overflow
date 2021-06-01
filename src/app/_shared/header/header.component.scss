@@ -31,4 +31,33 @@
   &__button {
     margin-left: 1rem;
   }
+
+  &__menu {
+    display: none;
+  }
+}
+
+@media(max-width: 600px){
+  .c-app {
+    &__menu {
+      display: block;
+    }
+
+    &__buttons--hide {
+      display: none;
+    }
+
+    &__button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding-bottom: 0.3rem;
+    }
+  }
+}
+
+.mat-menu-item {
+  height: auto;
+  line-height: 1rem;
 }

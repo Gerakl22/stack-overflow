@@ -3,7 +3,31 @@
     <div class="c-app__home">
       <a class="c-app__link">Stack Overflow</a>
     </div>
-    <ul class="c-app__buttons">
+      <button class="c-app__menu" mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+      <mat-menu #menu="matMenu">
+          <li class="c-app__button">
+            <a mat-menu-item *ngIf="isLogUser">{{email}}</a>
+          </li>
+          <li routerLinkActive="active" class="c-app__button">
+            <a *ngIf="!isLogUser" mat-button mat-raised-button color="accent" routerLink="/login">Login</a>
+          </li>
+          <mat-divider></mat-divider>
+          <li *ngIf="!isLogUser" class="c-app__button" routerLinkActive="active"><a mat-button mat-raised-button routerLink='/sign-up'>Sign Up</a></li>
+          <li *ngIf="isLogUser" class="c-app__button" routerLinkActive="active">
+            <a type="button" mat-button mat-raised-button routerLink="/newQuestion" (click)="addQuestion()"><mat-icon>post_add</mat-icon></a>
+          </li>
+          <mat-divider></mat-divider>
+          <li class="c-app__button" routerLinkActive="active">
+            <a *ngIf="isLogUser" mat-menu-item [matMenuTriggerFor]="profile"><mat-icon>email</mat-icon></a>
+          </li>
+      </mat-menu>
+        <mat-menu #profile="matMenu" yPosition="above">
+          <a mat-menu-item><mat-icon>home</mat-icon></a>
+          <mat-divider></mat-divider>
+          <a mat-menu-item routerLink='/' (click)="signOut()"><mat-icon>logout</mat-icon></a>
+        </mat-menu>
+
+    <ul class="c-app__buttons c-app__buttons--hide">
       <li class="c-app__button" >
         <a mat-menu-item *ngIf="isLogUser">{{email}}</a>
       </li>
