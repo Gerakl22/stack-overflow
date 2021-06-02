@@ -1,9 +1,9 @@
 export class User {
-  email: string;
+  email: string | null;
+  isAdmin: boolean;
 
-  constructor(user: {
-    email: string;
-  }) {
+  constructor(user: { isAdmin: boolean; email: string | null }) {
     this.email = user.email;
+    this.isAdmin = user.isAdmin;
   }
 }

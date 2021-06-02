@@ -9,11 +9,11 @@ import {Router} from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  public email: string | undefined;
+  public email: string | null | undefined;
   public isLogUser: boolean | undefined;
 
   constructor(private authService: AuthService, private router: Router) {
-    authService.user$.subscribe((user: any)  => {
+    authService.checkUserIsLogged().subscribe((user)  => {
       if (user) {
         this.email = user.email;
         this.isLogUser = true;
@@ -21,8 +21,7 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   addQuestion(): void {
     this.router.navigate(['/newQuestion']);

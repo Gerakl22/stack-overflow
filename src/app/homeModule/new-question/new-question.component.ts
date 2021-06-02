@@ -34,7 +34,7 @@ export class NewQuestionComponent implements OnInit {
   }
 
   constructor(private router: Router, private fb: FormBuilder, public authService: AuthService, private questionsService: QuestionsService) {
-    this.author = authService.email;
+    this.author = authService.user?.email;
   }
 
   ngOnInit(): void {

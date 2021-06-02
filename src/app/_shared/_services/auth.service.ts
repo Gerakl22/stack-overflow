@@ -1,27 +1,60 @@
 import { Injectable } from '@angular/core';
+import {environment} from '../../../environments/environment';
 import * as firebase from 'firebase/app';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {User} from '../_models/User';
+import {Observable, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
 
 
 @Injectable()
 export class AuthService {
 
-  public user$: Observable<firebase.default.User | null>;
-  public email: string | null | undefined;
+  private url = environment.apiUrl;
+  private urlAdmins = '/admins';
+  public user$: Observable<User | null>;
+  public user!: User | null;
 
-  constructor(public fireAuth: AngularFireAuth) {
+
+  constructor(public fireAuth: AngularFireAuth, private http: HttpClient) {
     this.user$ = this.fireAuth.authState.pipe(
-      map( user => {
-        this.email = user?.email;
-        return user;
+      map( userFromFirebase => {
+        this.user = userFromFirebase ? new User({email: userFromFirebase.email, isAdmin: false}) : null;
+        return this.user;
+      }),
+      switchMap(() => this.getAdmins()),
+      map((admins) => {
+        if (this.user) {
+          this.checkUserIsAdmin(admins);
+        }
+        return this.user;
       })
     );
   }
 
-  login(email: string, password: string): Promise<any> {
-    return this.fireAuth.signInWithEmailAndPassword(email, password);
+  checkUserIsLogged(): Observable<User | null> {
+    if (this.user) {
+      return of(this.user);
+    } else {
+      return this.user$;
+    }
+  }
+
+  checkUserIsAdmin(admins: User[]): void {
+    admins.find(admin => {
+      if (admin.email === this.user?.email) {
+        this.user.isAdmin = true;
+      }
+    });
+  }
+
+  getAdmins(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.url}${this.urlAdmins}.json`);
+  }
+
+  private onAuthLogin(provider: any): Promise<any> {
+    return this.fireAuth.signInWithPopup(provider);
   }
 
   facebookLogin(): Promise<any> {
@@ -39,15 +72,16 @@ export class AuthService {
     return this.onAuthLogin(provider);
   }
 
+  login(email: string, password: string): Promise<any> {
+    return this.fireAuth.signInWithEmailAndPassword(email, password);
+  }
+
+  signOut(): Promise<any> {
+    return this.fireAuth.signOut();
+  }
+
   signUp(email: string, password: string): Promise<any> {
     return this.fireAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  signOut(): Promise<any> {
-   return this.fireAuth.signOut();
-  }
-
-  private onAuthLogin(provider: any): Promise<any> {
-    return this.fireAuth.signInWithPopup(provider);
-  }
 }

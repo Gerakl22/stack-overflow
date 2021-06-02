@@ -8,6 +8,8 @@ import {Theme} from '../../_shared/_models/Theme';
 import {TagsConstants} from '../../_shared/constants/TagsConstants';
 import {ThemeConstants} from '../../_shared/constants/ThemeConstants';
 import {ThemeService} from '../../_shared/_services/theme.service';
+import {AuthService} from '../../_shared/_services/auth.service';
+import {switchMap} from 'rxjs/operators';
 
 
 @Component({
@@ -20,22 +22,24 @@ export class EveryQuestionsComponent implements OnInit {
   tagsData!: Tags[];
   themeData!: Theme[];
   questionsArray: Question[] = [];
+  electedTags: Tags[] = [];
+  questionObject!: Question;
   formTags!: FormGroup;
   formPerPeriodOfTime!: FormGroup;
   formOnQuestions!: FormGroup;
   perPeriodOfTime = 365;
   electedQuestions = 'allQuestions';
-  electedTags: Tags[] = [];
+  author: string | null | undefined;
   isSortQuestions = false;
   isLineDisplay = false;
+  isAdmin: boolean | undefined;
 
 
   get tagsFormArray(): FormArray {
     return this.formTags.controls.tags as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService) {
-  }
+  constructor(private fb: FormBuilder, private questionsService: QuestionsService, private router: Router, private themeService: ThemeService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.tagsData = TagsConstants;
@@ -53,10 +57,14 @@ export class EveryQuestionsComponent implements OnInit {
       questions: this.fb.control('allQuestions'),
     });
 
-    this.questionsService.getQuestions().subscribe(
+    this.authService.checkUserIsLogged().pipe(
+      switchMap(() => this.questionsService.getQuestions())
+    )
+    .subscribe(
       (questions) => {
-        console.log(questions);
         this.getQuestionsArray(questions);
+        this.author = this.authService.user?.email;
+        this.isAdmin = this.authService.user?.isAdmin;
         console.log(this.questionsArray);
       },
       error => error.message,
@@ -76,6 +84,20 @@ export class EveryQuestionsComponent implements OnInit {
     } else {
       this.questionsArray = Object.keys(questions).map((key) => ({...questions[key], key}));
     }
+  }
+
+  onApproveQuestion(id: string): void {
+    this.questionsArray.find(question => {
+      if (question.key === id) {
+        question.isApproval = true;
+        this.questionObject = question;
+      }
+    });
+
+    this.questionsService.updateQuestionById(id, this.questionObject).subscribe(
+      question => this.questionObject = question,
+      error => error.message,
+    );
   }
 
   onChangeTheme(themeName: string): void {

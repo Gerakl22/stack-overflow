@@ -81,8 +81,9 @@
       </mat-card-content>
       <hr>
       <div class="c-everyQuestions__buttons">
-        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
-        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
+        <small *ngIf="question.isApproval === false && (question.author === author || isAdmin === true)" class="c-everyQuestions__moderation">Moderation</small>
+        <button *ngIf="question.isApproval === false && isAdmin === true" class="c-everyQuestions__button" type="submit" mat-raised-button color="primary" (click)="onApproveQuestion(question.key)"><mat-icon>approval</mat-icon></button>
+        <button *ngIf="question.author === author || isAdmin === true" class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
       </div>
     </mat-card>
   </div>
@@ -97,8 +98,9 @@
       </mat-card-content>
       <hr>
       <div class="c-everyQuestions__buttons">
-        <button class="c-everyQuestions__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
-        <button class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
+        <small *ngIf="question.isApproval === false && (question.author === author || isAdmin === true)" class="c-everyQuestions__moderation">Moderation</small>
+        <button *ngIf="question.isApproval === false && isAdmin === true" class="c-everyQuestions__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
+        <button *ngIf="question.author === author || isAdmin === true" class="c-everyQuestions__button" mat-raised-button color="warn" (click)="onRemoveQuestionById(question.key)"><mat-icon>delete_forever</mat-icon></button>
       </div>
     </mat-card>
   </div>

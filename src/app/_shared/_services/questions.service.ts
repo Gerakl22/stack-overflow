@@ -25,20 +25,6 @@ export class QuestionsService {
     return throwError(message);
   }
 
-  getQuestions(): Observable<firebase.database.Database> {
-    return this.http.get<firebase.database.Database>(`${this.url}${this.urlQuestions}.json`).pipe(
-      retry(1),
-      catchError(this.httpError)
-    );
-  }
-
-  getQuestionsById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
-      retry(1),
-      catchError(this.httpError)
-    );
-  }
-
   createComment(id: string, comment: Comment): Observable<Comment> {
     return this.http.post<Comment>(`${this.url}${this.urlQuestions}/${id}/${this.urlComments}.json`, comment).pipe(
       retry(1),
@@ -53,6 +39,27 @@ export class QuestionsService {
     );
   }
 
+  getQuestions(): Observable<firebase.database.Database> {
+    return this.http.get<firebase.database.Database>(`${this.url}${this.urlQuestions}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
+  }
+
+  getQuestionsById(id: string): Observable<Question> {
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
+  }
+
+  removeQuestionById(id: string): Observable<Question> {
+    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
+      retry(1),
+      catchError(this.httpError)
+    );
+  }
+
   updateCommentById(questionsId: string, commentId: string | number, comment: Comment): Observable<Comment> {
     return this.http.put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment).pipe(
       retry(1),
@@ -62,13 +69,6 @@ export class QuestionsService {
 
   updateQuestionById(id: string, question: Question): Observable<Question> {
     return this.http.put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question).pipe(
-      retry(1),
-      catchError(this.httpError)
-    );
-  }
-
-  removeQuestionById(id: string): Observable<Question> {
-    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(
       retry(1),
       catchError(this.httpError)
     );

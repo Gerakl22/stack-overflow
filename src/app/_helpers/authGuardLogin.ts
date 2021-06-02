@@ -10,7 +10,7 @@ export class AuthGuardLogin implements CanActivate{
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean> {
-    return this.authService.user$.pipe(
+    return this.authService.checkUserIsLogged().pipe(
       map(user => {
         if (user) {
           return true;

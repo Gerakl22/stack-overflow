@@ -20,28 +20,29 @@ export class ScreenQuestionComponent implements OnInit {
   commentQuestionForm!: FormGroup;
   commentsArray: { key: string }[] = [];
   author: string | null | undefined;
+  isAdmin: boolean | undefined;
 
   get comment(): AbstractControl {
     return this.commentQuestionForm.controls.comment;
   }
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private questionsService: QuestionsService, public authService: AuthService) {
-    this.author = authService.email;
-  }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private questionsService: QuestionsService, public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.pipe(
-      tap(url => {
-        this.urlIdQuestion = url.id;
-      }),
-      switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)),
+    this.authService.checkUserIsLogged().pipe(
+      switchMap(() => this.activatedRoute.params.pipe(
+        tap(url => {
+          this.urlIdQuestion = url.id;
+        }),
+      )),
+    switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)),
     ).subscribe(
       questionObject => {
-          this.questionObject = questionObject;
-          this.getCommentsArray(this.questionObject.comments);
-          console.log(this.commentsArray);
+            this.questionObject = questionObject;
+            this.getCommentsArray(this.questionObject.comments);
+            this.author = this.authService.user?.email;
+            this.isAdmin = this.authService.user?.isAdmin;
       },
-
       error => error.message,
     );
 
@@ -54,6 +55,15 @@ export class ScreenQuestionComponent implements OnInit {
 
   getErrorComment(): string {
     return this.comment.errors?.required ? 'You must enter value' : '';
+  }
+
+  getCommentsArray(comments: Comment[]): void {
+    if (comments === undefined || comments === null) {
+      return;
+    } else {
+      const commentsKeys = Object.keys(comments);
+      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
+    }
   }
 
   onAddComment(): void {
@@ -75,13 +85,12 @@ export class ScreenQuestionComponent implements OnInit {
     );
   }
 
-  getCommentsArray(comments: Comment[]): void {
-    if (comments === undefined || comments === null) {
-      return;
-    } else {
-      const commentsKeys = Object.keys(comments);
-      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({key: commentsKeys[i], ...commentObj}));
-    }
+  onApproveQuestions(): void {
+    this.questionObject.isApproval = true;
+    this.questionsService.updateQuestionById(this.urlIdQuestion, this.questionObject).subscribe(
+      question => this.questionObject = question,
+      error => error.message,
+    );
   }
 
   onBackEveryQuestions(): void {

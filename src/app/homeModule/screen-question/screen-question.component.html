@@ -12,10 +12,10 @@
         <mat-card-footer class="c-screenQuestionsCard__footer">
           <p class="c-screenQuestionsCard__tags" *ngFor="let tags of questionObject?.tags">{{tags}}</p>
           <div class="c-screenQuestionsCard__buttons">
-            <small class="c-screenQuestionsCard__moderation">Moderation</small>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()"><mat-icon>edit</mat-icon></button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary"><mat-icon>approval</mat-icon></button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()"><mat-icon>delete_forever</mat-icon></button>
+            <small *ngIf="questionObject?.isApproval === false && (questionObject?.author === author || isAdmin === true)" class="c-screenQuestionsCard__moderation">Moderation</small>
+            <button *ngIf="questionObject?.isApproval === false && questionObject?.author === author" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()"><mat-icon>edit</mat-icon></button>
+            <button *ngIf="questionObject?.isApproval === false && isAdmin === true" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onApproveQuestions()"><mat-icon>approval</mat-icon></button>
+            <button *ngIf="questionObject?.author === author || isAdmin === true" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()"><mat-icon>delete_forever</mat-icon></button>
             <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onBackEveryQuestions()"><mat-icon>backspace</mat-icon></button>
           </div>
         </mat-card-footer>
@@ -30,7 +30,7 @@
         <mat-card-footer class="c-screenQuestionsComments__footer">
           <div class="c-screenQuestionsComments__date">{{questionObject.comments[comment.key].date | date: 'MMM d, y, h:mm:ss a'}}</div>
           <div class="c-screenQuestionsComments__resolve">
-            <mat-label class="c-screenQuestionsComments__label">
+            <mat-label *ngIf="questionObject.author === author" class="c-screenQuestionsComments__label">
               <mat-checkbox [checked]="questionObject.comments[comment.key].isBestComment" (change)="toggleIsBestComment($event, comment.key)"></mat-checkbox>
               Resolve
             </mat-label>
