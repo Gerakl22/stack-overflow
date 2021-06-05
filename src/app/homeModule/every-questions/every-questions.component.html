@@ -85,36 +85,38 @@
         <mat-menu #settings="matMenu">
           <form class="c-everyQuestions__form">
             <mat-icon>view_module</mat-icon>
-            <mat-label class="c-everyQuestions__label">
+            <mat-radio-group
+              class="c-everyQuestions__label"
+              name="display"
+              *ngFor="let display of questionsDisplayData">
               <mat-radio-button
                 class="mat-radio-button"
-                value="tiled"
-                (click)="onDisplayQuestions('tiled')"
-                >Tiled display</mat-radio-button
+                name="display"
+                [checked]="display.checked"
+                [value]="display.name"
+                (change)="onDisplayQuestions(display.name)"
+                >{{display.name}} display</mat-radio-button
               >
-            </mat-label>
-            <mat-label class="c-everyQuestions__label">
-              <mat-radio-button
-                class="mat-radio-button"
-                value="line"
-                (click)="onDisplayQuestions('line')"
-                >Line display</mat-radio-button
-              >
-            </mat-label>
+            </mat-radio-group>
           </form>
           <mat-divider></mat-divider>
           <form class="c-everyQuestions__form">
             <mat-icon>palette</mat-icon>
-            <mat-label
+            <mat-radio-group
               class="c-everyQuestions__label"
+              name="theme"
               *ngFor="let theme of themeData"
             >
               <mat-radio-button
                 class="mat-radio-button"
-                (click)="onChangeTheme(theme.name)"
-                >{{ theme.name }} theme</mat-radio-button
+                name="theme"
+                [checked]="theme.checked"
+                [value]="theme.name"
+                (change)="onChangeTheme(theme.name)"
+              >{{ theme.name }} theme
+              </mat-radio-button
               >
-            </mat-label>
+            </mat-radio-group>
           </form>
         </mat-menu>
       </li>

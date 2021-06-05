@@ -10,7 +10,7 @@ export class ThemeService {
     const themeObject = ThemeConstants.find((item: Theme) => item.name === themeName);
 
     if (themeObject !== undefined) {
-      Object.keys(themeObject.properties).forEach((property) => {
+      Object.keys(themeObject.properties).forEach((property: string) => {
         document.documentElement.style.setProperty(property, themeObject?.properties[property]);
       });
     }

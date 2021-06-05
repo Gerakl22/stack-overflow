@@ -26,6 +26,7 @@ export const ThemeConstants: Theme[] = [
 
       '--background-tertiary-shadow': '0 1px 3px 0 rgba(92, 125, 153, 0.5)',
     },
+    checked: true,
   },
   {
     id: '2',
@@ -52,5 +53,6 @@ export const ThemeConstants: Theme[] = [
 
       '--background-tertiary-shadow': '0 1px 3px 0 rgba(8, 9, 10, 0.5)',
     },
+    checked: false,
   },
 ];

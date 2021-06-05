@@ -10,11 +10,13 @@ import { Tags } from '../../_shared/_models/Tags';
 import { Question } from '../../_shared/_models/Question';
 import { QuestionsStatus } from '../../_shared/_models/QuestionsStatus';
 import { QuestionsTime } from '../../_shared/_models/QuestionsTime';
+import { QuestionsDisplay } from 'src/app/_shared/_models/QuestionsDisplay';
 import { Theme } from '../../_shared/_models/Theme';
 import { TagsConstants } from '../../_shared/constants/TagsConstants';
 import { ThemeConstants } from '../../_shared/constants/ThemeConstants';
 import { QuestionsStatusConstants } from '../../_shared/constants/QuestionsStatusConstants';
 import { QuestionsTimeConstants } from '../../_shared/constants/QuestionsTimeConstants';
+import { QuestionsDisplayConstants } from '../../_shared/constants/QuestionsDisplayConstants';
 
 @Component({
   selector: 'app-every-questions',
@@ -26,6 +28,7 @@ export class EveryQuestionsComponent implements OnInit {
   themeData!: Theme[];
   questionsStatusData!: QuestionsStatus[];
   questionsTimeData!: QuestionsTime[];
+  questionsDisplayData!: QuestionsDisplay[];
   questionsArray: Question[] = [];
   electedTags: Tags[] = [];
   questionObject!: Question;
@@ -34,7 +37,7 @@ export class EveryQuestionsComponent implements OnInit {
   statusQuestions = 'All';
   author: string | null | undefined;
   isSortQuestions = false;
-  isLineDisplay = false;
+  isLineDisplay: boolean | undefined;
   isAdmin: boolean | undefined;
 
   get tagsFormArray(): FormArray {
@@ -62,6 +65,8 @@ export class EveryQuestionsComponent implements OnInit {
     this.themeData = ThemeConstants;
     this.questionsStatusData = QuestionsStatusConstants;
     this.questionsTimeData = QuestionsTimeConstants;
+    this.questionsDisplayData = QuestionsDisplayConstants;
+    this.isLineDisplay = false;
 
     this.filterQuestionsForm = this.fb.group({
       status: this.fb.array([]),
@@ -98,7 +103,7 @@ export class EveryQuestionsComponent implements OnInit {
     );
   }
 
-  getQuestionsArray(questions: firebase.database.Database | null | undefined): void {
+  getQuestionsArray(questions: firebase.database.Database): void {
     if (questions === undefined || questions === null) {
       return;
     } else {
@@ -124,12 +129,18 @@ export class EveryQuestionsComponent implements OnInit {
   }
 
   onChangeTheme(themeName: string): void {
-    this.themeService.setTheme(themeName);
-    localStorage.setItem('theme', themeName);
+    this.themeData.find((theme: Theme) => {
+      if (theme.name === themeName) {
+        this.themeService.setTheme(themeName);
+        theme.checked = true;
+      } else {
+        theme.checked = false;
+      }
+    });
   }
 
   onDisplayQuestions(display: string): void {
-    this.isLineDisplay = display === 'line';
+    this.isLineDisplay = display === 'Line';
   }
 
   onFilterByTags(event: { source: { name: any }; checked: boolean }): void {
