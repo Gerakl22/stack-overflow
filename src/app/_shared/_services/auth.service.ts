@@ -16,7 +16,7 @@ export class AuthService {
 
   constructor(public fireAuth: AngularFireAuth, private http: HttpClient) {
     this.user$ = this.fireAuth.authState.pipe(
-      map((userFromFirebase) => {
+      map((userFromFirebase: firebase.default.User | null) => {
         this.user = userFromFirebase ? new User({ email: userFromFirebase.email, isAdmin: false }) : null;
         return this.user;
       }),
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   checkUserIsAdmin(admins: User[]): void {
-    admins.find((admin) => {
+    admins.find((admin: User) => {
       if (admin.email === this.user?.email) {
         this.user.isAdmin = true;
       }
