@@ -4,17 +4,16 @@ import { environment } from 'src/environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {AngularMaterialModule} from './_shared/_material/angular-material.module';
-import {MatIconRegistry} from '@angular/material/icon';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AngularMaterialModule } from './_shared/_material/angular-material.module';
+import { MatIconRegistry } from '@angular/material/icon';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAuthGuardModule} from '@angular/fire/auth-guard';
-import {AngularFireDatabaseModule} from '@angular/fire/database';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -27,15 +26,14 @@ import { EveryQuestionsComponent } from './homeModule/every-questions/every-ques
 import { ScreenQuestionComponent } from './homeModule/screen-question/screen-question.component';
 import { EditQuestionComponent } from './homeModule/edit-question/edit-question.component';
 
-import {AuthService} from './_shared/_services/auth.service';
-import {QuestionsService} from './_shared/_services/questions.service';
-import {ThemeService} from './_shared/_services/theme.service';
+import { AuthService } from './_shared/_services/auth.service';
+import { QuestionsService } from './_shared/_services/questions.service';
+import { ThemeService } from './_shared/_services/theme.service';
 
-import { FilterOnQuestionsPipe } from './_shared/pipes/filter-on-questions.pipe';
+import { FilterByStatusQuestionsPipe } from './_shared/pipes/filter-by-status-questions.pipe';
 import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
 import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
 import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
-
 
 @NgModule({
   declarations: [
@@ -49,9 +47,9 @@ import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
     ScreenQuestionComponent,
     EditQuestionComponent,
     FilterPerPeriodOfTimePipe,
-    FilterOnQuestionsPipe,
+    FilterByStatusQuestionsPipe,
     FilterByTagsPipe,
-    FilterBySortPipe
+    FilterBySortPipe,
   ],
   imports: [
     BrowserModule,
@@ -66,12 +64,11 @@ import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
     AngularFireDatabaseModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [AuthService, QuestionsService, ThemeService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry) {
     matIconRegistry.registerFontClassAlias('fontawesome', 'fa');

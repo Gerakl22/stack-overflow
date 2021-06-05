@@ -1,32 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../_shared/_services/auth.service';
-import {FormGroup, FormControl, Validators, AbstractControl} from '@angular/forms';
-import {Router} from '@angular/router';
+import { AuthService } from '../../_shared/_services/auth.service';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-
   myForm!: FormGroup;
   isHidePassword = true;
   error!: string;
 
-  constructor(public authService: AuthService, public router: Router)  {}
+  constructor(public authService: AuthService, public router: Router) {}
 
   ngOnInit(): void {
     this.myForm = new FormGroup({
-        email: new FormControl('', [
-          Validators.required,
-          Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$'),
-        ]),
-        password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(6)
-        ])
-      });
+      email: new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    });
   }
 
   get email(): AbstractControl {
@@ -42,7 +35,7 @@ export class LoginPageComponent implements OnInit {
       return 'You must enter a value';
     }
 
-    return this.email.errors?.pattern ? 'Not a valid email' :  '';
+    return this.email.errors?.pattern ? 'Not a valid email' : '';
   }
 
   getErrorPassword(): string {
@@ -54,9 +47,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   logOnFacebook(): void {
-    this.authService.facebookLogin()
+    this.authService
+      .facebookLogin()
       .then(() => {
-        this.router.navigate( ['/']);
+        this.router.navigate(['/']);
       })
       .catch((err: Error) => {
         this.error = err.message;
@@ -64,7 +58,8 @@ export class LoginPageComponent implements OnInit {
   }
 
   logOnGoogle(): void {
-    this.authService.googleLogin()
+    this.authService
+      .googleLogin()
       .then(() => {
         this.router.navigate(['/']);
       })
@@ -74,7 +69,8 @@ export class LoginPageComponent implements OnInit {
   }
 
   logOnGitHub(): void {
-    this.authService.gitHubLogin()
+    this.authService
+      .gitHubLogin()
       .then(() => {
         this.router.navigate(['/']);
       })
@@ -83,9 +79,10 @@ export class LoginPageComponent implements OnInit {
       });
   }
 
-  onSubmit(e: { preventDefault: () => void; }): void {
+  onSubmit(e: { preventDefault: () => void }): void {
     e.preventDefault();
-    this.authService.login(this.myForm.value.email, this.myForm.value.password)
+    this.authService
+      .login(this.myForm.value.email, this.myForm.value.password)
       .then(() => {
         this.router.navigate(['/']);
       })
@@ -97,5 +94,4 @@ export class LoginPageComponent implements OnInit {
   toggleIconPassword(): void {
     this.isHidePassword = !this.isHidePassword;
   }
-
 }

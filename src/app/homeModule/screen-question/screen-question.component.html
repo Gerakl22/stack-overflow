@@ -1,56 +1,158 @@
 <div class="c-screenQuestionsCard__home">
-    <mat-card class="c-screenQuestionsCard__card mat-card">
+  <mat-card class="c-screenQuestionsCard__card mat-card">
     <div class="c-screenQuestionsCard__header">
-      <div class="c-screenQuestionsCard__author">{{questionObject?.author}}</div>
-      <div class="c-screenQuestionsCard__date">{{questionObject?.date | date: 'MMM d, y, h:mm:ss a'}}</div>
-    </div>
-      <mat-card-title class="c-screenQuestionsCard__title mat-card-title">{{questionObject?.title}}</mat-card-title>
-      <hr>
-      <mat-card-content class="c-screenQuestionsCard__content mat-card-content">
-        <div class="c-screenQuestionsCard__textarea">{{questionObject?.textarea}}</div>
-      </mat-card-content>
-        <mat-card-footer class="c-screenQuestionsCard__footer">
-          <p class="c-screenQuestionsCard__tags" *ngFor="let tags of questionObject?.tags">{{tags}}</p>
-          <div class="c-screenQuestionsCard__buttons">
-            <small *ngIf="questionObject?.isApproval === false && (questionObject?.author === author || isAdmin === true)" class="c-screenQuestionsCard__moderation">Moderation</small>
-            <button *ngIf="questionObject?.isApproval === false && questionObject?.author === author" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="accent" (click)="onEditQuestionById()"><mat-icon>edit</mat-icon></button>
-            <button *ngIf="questionObject?.isApproval === false && isAdmin === true" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onApproveQuestions()"><mat-icon>approval</mat-icon></button>
-            <button *ngIf="questionObject?.author === author || isAdmin === true" class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="warn" (click)="onRemoveQuestionById()"><mat-icon>delete_forever</mat-icon></button>
-            <button class="c-screenQuestionsCard__button" type="submit" mat-raised-button color="primary" (click)="onBackEveryQuestions()"><mat-icon>backspace</mat-icon></button>
-          </div>
-        </mat-card-footer>
-    </mat-card>
-</div>
-<div class="c-screenQuestionsComments__home" *ngFor="let comment of commentsArray">
-    <mat-card class="c-screenQuestionsComments__card mat-card" [ngClass]="{'isBestCommentStyle': questionObject.comments[comment.key].isBestComment}">
-      <h5 class="c-screenQuestionsComments__title">Comment</h5>
-      <div class="c-screenQuestionsComments__content" >
-        <div class="c-screenQuestionsComments__author">{{questionObject.comments[comment.key].author}}</div>
-        <div class="c-screenQuestionsComments__textarea">{{questionObject.comments[comment.key].textarea}}</div>
-        <mat-card-footer class="c-screenQuestionsComments__footer">
-          <div class="c-screenQuestionsComments__date">{{questionObject.comments[comment.key].date | date: 'MMM d, y, h:mm:ss a'}}</div>
-          <div class="c-screenQuestionsComments__resolve">
-            <mat-label *ngIf="questionObject.author === author" class="c-screenQuestionsComments__label">
-              <mat-checkbox [checked]="questionObject.comments[comment.key].isBestComment" (change)="toggleIsBestComment($event, comment.key)"></mat-checkbox>
-              Resolve
-            </mat-label>
-          </div>
-        </mat-card-footer>
+      <div class="c-screenQuestionsCard__author">
+        {{ questionObject?.author }}
       </div>
-    </mat-card>
+      <div class="c-screenQuestionsCard__date">
+        {{ questionObject?.date | date: "MMM d, y, h:mm:ss a" }}
+      </div>
+    </div>
+    <mat-card-title class="c-screenQuestionsCard__title mat-card-title">{{
+      questionObject?.title
+    }}</mat-card-title>
+    <hr />
+    <mat-card-content class="c-screenQuestionsCard__content mat-card-content">
+      <div class="c-screenQuestionsCard__textarea">
+        {{ questionObject?.textarea }}
+      </div>
+    </mat-card-content>
+    <mat-card-footer class="c-screenQuestionsCard__footer">
+      <p
+        class="c-screenQuestionsCard__tags"
+        *ngFor="let tags of questionObject?.tags"
+      >
+        {{ tags }}
+      </p>
+      <div class="c-screenQuestionsCard__buttons">
+        <small
+          *ngIf="
+            questionObject?.isApproval === false &&
+            (questionObject?.author === author || isAdmin === true)
+          "
+          class="c-screenQuestionsCard__moderation"
+          >Moderation</small
+        >
+        <button
+          *ngIf="
+            questionObject?.isApproval === false &&
+            questionObject?.author === author
+          "
+          class="c-screenQuestionsCard__button"
+          type="submit"
+          mat-raised-button
+          color="accent"
+          (click)="onEditQuestionById()"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          *ngIf="questionObject?.isApproval === false && isAdmin === true"
+          class="c-screenQuestionsCard__button"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          (click)="onApproveQuestions()"
+        >
+          <mat-icon>approval</mat-icon>
+        </button>
+        <button
+          *ngIf="questionObject?.author === author || isAdmin === true"
+          class="c-screenQuestionsCard__button"
+          type="submit"
+          mat-raised-button
+          color="warn"
+          (click)="onRemoveQuestionById()"
+        >
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+        <button
+          class="c-screenQuestionsCard__button"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          (click)="onBackEveryQuestions()"
+        >
+          <mat-icon>backspace</mat-icon>
+        </button>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>
+<div
+  class="c-screenQuestionsComments__home"
+  *ngFor="let comment of commentsArray"
+>
+  <mat-card
+    class="c-screenQuestionsComments__card mat-card"
+    [ngClass]="{
+      isBestCommentStyle: questionObject.comments[comment.key].isBestComment
+    }"
+  >
+    <h5 class="c-screenQuestionsComments__title">Comment</h5>
+    <div class="c-screenQuestionsComments__content">
+      <div class="c-screenQuestionsComments__author">
+        {{ questionObject.comments[comment.key].author }}
+      </div>
+      <div class="c-screenQuestionsComments__textarea">
+        {{ questionObject.comments[comment.key].textarea }}
+      </div>
+      <mat-card-footer class="c-screenQuestionsComments__footer">
+        <div class="c-screenQuestionsComments__date">
+          {{
+            questionObject.comments[comment.key].date
+              | date: "MMM d, y, h:mm:ss a"
+          }}
+        </div>
+        <div class="c-screenQuestionsComments__resolve">
+          <mat-label
+            *ngIf="questionObject.author === author"
+            class="c-screenQuestionsComments__label"
+          >
+            <mat-checkbox
+              [checked]="questionObject.comments[comment.key].isBestComment"
+              (change)="toggleIsBestComment($event, comment.key)"
+            ></mat-checkbox>
+            Resolve
+          </mat-label>
+        </div>
+      </mat-card-footer>
+    </div>
+  </mat-card>
 </div>
 
 <div class="c-screenQuestionsAnswer__home">
   <mat-card class="c-screenQuestionsAnswer__card">
     <h5 class="c-screenQuestionsAnswer__title">Answer</h5>
-    <form [formGroup]="commentQuestionForm" novalidate (ngSubmit)="onAddComment()" class="c-screenQuestionsAnswer__form">
-        <mat-form-field appearance="outline">
-          <mat-label>Answer</mat-label>
-          <textarea matInput class="c-screenQuestionsAnswer__textarea" type="text" placeholder="Input answer" formControlName="comment"></textarea>
-          <mat-error *ngIf="comment.invalid && comment.touched">{{getErrorComment()}}</mat-error>
-        </mat-form-field>
+    <form
+      [formGroup]="commentQuestionForm"
+      novalidate
+      (ngSubmit)="onAddComment()"
+      class="c-screenQuestionsAnswer__form"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Answer</mat-label>
+        <textarea
+          matInput
+          class="c-screenQuestionsAnswer__textarea"
+          type="text"
+          placeholder="Input answer"
+          formControlName="comment"
+        ></textarea>
+        <mat-error *ngIf="comment.invalid && comment.touched">{{
+          getErrorComment()
+        }}</mat-error>
+      </mat-form-field>
       <div class="c-screenQuestionsAnswer__item">
-        <button class="c-screenQuestionsAnswer__button" type="submit" mat-raised-button color="primary" [disabled]="commentQuestionForm.invalid"><mat-icon>add_comment</mat-icon></button>
+        <button
+          class="c-screenQuestionsAnswer__button"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="commentQuestionForm.invalid"
+        >
+          <mat-icon>add_comment</mat-icon>
+        </button>
       </div>
     </form>
   </mat-card>

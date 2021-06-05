@@ -1,4 +1,4 @@
-import {Theme} from '../_models/Theme';
+import { Theme } from '../_models/Theme';
 
 export const ThemeConstants: Theme[] = [
   {
@@ -24,9 +24,8 @@ export const ThemeConstants: Theme[] = [
       '--error-dark': '#800600',
       '--error-light': '#FFCECC',
 
-      '--background-tertiary-shadow': '0 1px 3px 0 rgba(92, 125, 153, 0.5)'
-    }
-
+      '--background-tertiary-shadow': '0 1px 3px 0 rgba(92, 125, 153, 0.5)',
+    },
   },
   {
     id: '2',
@@ -51,7 +50,7 @@ export const ThemeConstants: Theme[] = [
       '--error-dark': '#800600',
       '--error-light': '#FFCECC',
 
-      '--background-tertiary-shadow': '0 1px 3px 0 rgba(8, 9, 10, 0.5)'
-    }
-  }
+      '--background-tertiary-shadow': '0 1px 3px 0 rgba(8, 9, 10, 0.5)',
+    },
+  },
 ];

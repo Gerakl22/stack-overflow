@@ -5,27 +5,62 @@
       <mat-card-content>
         <mat-form-field appearance="outline">
           <mat-label>Username</mat-label>
-          <input matInput placeholder="username@.mail.ru" type="email" formControlName="email"/>
-          <mat-error *ngIf="email.invalid && email.touched">{{getErrorEmail()}}</mat-error>
+          <input
+            matInput
+            placeholder="username@.mail.ru"
+            type="email"
+            formControlName="email"
+          />
+          <mat-error *ngIf="email.invalid && email.touched">{{
+            getErrorEmail()
+          }}</mat-error>
         </mat-form-field>
       </mat-card-content>
       <mat-card-content>
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput [type]="isHidePassword ? 'password' : 'text'" placeholder="min length 6" formControlName="password"/>
-          <button mat-icon-button matSuffix (click)="toggleIconPassword()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidePassword">
-            <mat-icon>{{ isHidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <input
+            matInput
+            [type]="isHidePassword ? 'password' : 'text'"
+            placeholder="min length 6"
+            formControlName="password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="toggleIconPassword()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="isHidePassword"
+          >
+            <mat-icon>{{
+              isHidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
           </button>
-          <mat-error *ngIf="password.invalid && password.touched">{{getErrorPassword()}}</mat-error>
+          <mat-error *ngIf="password.invalid && password.touched">{{
+            getErrorPassword()
+          }}</mat-error>
         </mat-form-field>
       </mat-card-content>
       <mat-card-content>
-        <button mat-icon-button type="submit" (click)="logOnGoogle()"><mat-icon fontSet="fontawesome" fontIcon="fa-google"></mat-icon></button>
-        <button mat-icon-button type="submit" (click)="logOnGitHub()"><mat-icon fontSet="fontawesome" fontIcon="fa-github"></mat-icon></button>
-        <button mat-icon-button type="submit" (click)="logOnFacebook()"><mat-icon fontSet="fontawesome" fontIcon="fa-facebook"></mat-icon></button>
+        <button mat-icon-button type="submit" (click)="logOnGoogle()">
+          <mat-icon fontSet="fontawesome" fontIcon="fa-google"></mat-icon>
+        </button>
+        <button mat-icon-button type="submit" (click)="logOnGitHub()">
+          <mat-icon fontSet="fontawesome" fontIcon="fa-github"></mat-icon>
+        </button>
+        <button mat-icon-button type="submit" (click)="logOnFacebook()">
+          <mat-icon fontSet="fontawesome" fontIcon="fa-facebook"></mat-icon>
+        </button>
       </mat-card-content>
-      <button type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid"><mat-icon>login</mat-icon></button>
-      <mat-error>{{error}}</mat-error>
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="myForm.invalid"
+      >
+        <mat-icon>login</mat-icon>
+      </button>
+      <mat-error>{{ error }}</mat-error>
     </form>
   </mat-card>
 </div>

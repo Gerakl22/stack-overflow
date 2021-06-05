@@ -1,4 +1,4 @@
-import {Tags} from '../_models/Tags';
+import { Tags } from '../_models/Tags';
 
 export const TagsConstants: Tags[] = [
   {
@@ -16,5 +16,5 @@ export const TagsConstants: Tags[] = [
   {
     id: '400',
     item: '.Net',
-  }
+  },
 ];

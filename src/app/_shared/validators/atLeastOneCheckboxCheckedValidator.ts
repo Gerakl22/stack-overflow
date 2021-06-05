@@ -1,14 +1,14 @@
-import {AbstractControl, FormArray, ValidatorFn} from '@angular/forms';
+import { AbstractControl, FormArray, ValidatorFn } from '@angular/forms';
 
-export function atLeastOneCheckboxCheckedValidator(min = 1): ValidatorFn {
-  const validator: ValidatorFn = (formArray: AbstractControl) => {
+export function atLeastOneCheckboxCheckedValidator(min: number = 1): ValidatorFn {
+  return (formArray: AbstractControl) => {
     if (formArray instanceof FormArray) {
-      const totalSelected = formArray.controls.map(control => control.value).reduce((prev, next) => next ? prev + next : prev, 0);
+      const totalSelected = formArray.controls
+        .map((control: AbstractControl) => control.value)
+        .reduce((prev, next) => (next ? prev + next : prev), 0);
 
-      return totalSelected >= min ? null : {required: true};
+      return totalSelected >= min ? null : { required: true };
     }
     throw new Error('formArray is not an instance of FormArray');
   };
-
-  return validator;
 }

@@ -1,31 +1,28 @@
 import { Injectable } from '@angular/core';
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import * as firebase from 'firebase/app';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {HttpClient} from '@angular/common/http';
-import {User} from '../_models/User';
-import {Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
-
+import { AngularFireAuth } from '@angular/fire/auth';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../_models/User';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
-
   private url = environment.apiUrl;
   private urlAdmins = '/admins';
   public user$: Observable<User | null>;
   public user!: User | null;
 
-
   constructor(public fireAuth: AngularFireAuth, private http: HttpClient) {
     this.user$ = this.fireAuth.authState.pipe(
-      map( userFromFirebase => {
-        this.user = userFromFirebase ? new User({email: userFromFirebase.email, isAdmin: false}) : null;
+      map((userFromFirebase) => {
+        this.user = userFromFirebase ? new User({ email: userFromFirebase.email, isAdmin: false }) : null;
         return this.user;
       }),
-      switchMap(() => this.getAdmins()),
+      switchMap((user) => (user === null ? of(user) : this.getAdmins())),
       map((admins) => {
-        if (this.user) {
+        if (this.user && admins !== null) {
           this.checkUserIsAdmin(admins);
         }
         return this.user;
@@ -42,7 +39,7 @@ export class AuthService {
   }
 
   checkUserIsAdmin(admins: User[]): void {
-    admins.find(admin => {
+    admins.find((admin) => {
       if (admin.email === this.user?.email) {
         this.user.isAdmin = true;
       }
@@ -83,5 +80,4 @@ export class AuthService {
   signUp(email: string, password: string): Promise<any> {
     return this.fireAuth.createUserWithEmailAndPassword(email, password);
   }
-
 }

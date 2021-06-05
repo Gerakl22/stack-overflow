@@ -1,20 +1,41 @@
 <main class="c-editQuestion__home">
   <div class="c-editQuestion__wrapper">
     <h2 class="c-editQuestion__heading">Edit Question</h2>
-    <hr>
-    <form *ngIf="editQuestionForm" [formGroup]="editQuestionForm" novalidate (ngSubmit)="onSave()" class="c-editQuestion__form">
+    <hr />
+    <form
+      *ngIf="editQuestionForm"
+      [formGroup]="editQuestionForm"
+      novalidate
+      (ngSubmit)="onSave()"
+      class="c-editQuestion__form"
+    >
       <mat-card-content class="c-editQuestion__content">
         <mat-form-field appearance="outline">
           <mat-label class="c-editQuestion__label">Title</mat-label>
-          <input matInput class="c-editQuestion__input" type="text" formControlName="title"/>
-          <mat-error *ngIf="title.invalid && title.touched">{{getErrorTitle()}}</mat-error>
+          <input
+            matInput
+            class="c-editQuestion__input"
+            type="text"
+            formControlName="title"
+          />
+          <mat-error *ngIf="title.invalid && title.touched">{{
+            getErrorTitle()
+          }}</mat-error>
         </mat-form-field>
       </mat-card-content>
       <mat-card-content class="c-editQuestion__content">
         <mat-form-field appearance="outline">
           <mat-label class="c-editQuestion__label">Text</mat-label>
-          <textarea matInput class="c-editQuestion__textarea" type="text" formControlName="textarea"> </textarea>
-          <mat-error *ngIf="textarea.invalid && textarea.touched">{{getErrorTextArea()}}</mat-error>
+          <textarea
+            matInput
+            class="c-editQuestion__textarea"
+            type="text"
+            formControlName="textarea"
+          >
+          </textarea>
+          <mat-error *ngIf="textarea.invalid && textarea.touched">{{
+            getErrorTextArea()
+          }}</mat-error>
         </mat-form-field>
       </mat-card-content>
       <mat-card-content class="c-editQuestion__content">
@@ -23,16 +44,38 @@
             <mat-icon>tag</mat-icon>
           </p>
           <div class="c-editQuestion__category">
-            <mat-label class="c-editQuestion__label" *ngFor="let tag of tagsFormArray.controls; let i=index" formArrayName="tags">
-              <mat-checkbox class="c-editQuestion__checkbox" [formControlName]="i">{{tagsData[i].item}}</mat-checkbox>
+            <mat-label
+              class="c-editQuestion__label"
+              *ngFor="let tag of tagsFormArray.controls; let i = index"
+              formArrayName="tags"
+            >
+              <mat-checkbox
+                class="c-editQuestion__checkbox"
+                [formControlName]="i"
+                >{{ tagsData[i].item }}</mat-checkbox
+              >
             </mat-label>
           </div>
         </div>
       </mat-card-content>
       <div class="c-editQuestion__buttons">
-        <button class="c-editQuestion__button" type="submit" mat-raised-button [disabled]="editQuestionForm.invalid"><mat-icon>save</mat-icon></button>
-        <button class="c-editQuestion__button" type="submit" mat-raised-button (click)="onCancel()"><mat-icon>cancel</mat-icon></button>
-        <mat-error>{{error}}</mat-error>
+        <button
+          class="c-editQuestion__button"
+          type="submit"
+          mat-raised-button
+          [disabled]="editQuestionForm.invalid"
+        >
+          <mat-icon>save</mat-icon>
+        </button>
+        <button
+          class="c-editQuestion__button"
+          type="submit"
+          mat-raised-button
+          (click)="onCancel()"
+        >
+          <mat-icon>cancel</mat-icon>
+        </button>
+        <mat-error>{{ error }}</mat-error>
       </div>
     </form>
   </div>

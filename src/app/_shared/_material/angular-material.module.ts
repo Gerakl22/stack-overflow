@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkTreeModule } from '@angular/cdk/tree';
-import {PortalModule} from '@angular/cdk/portal';
+import { PortalModule } from '@angular/cdk/portal';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -26,8 +26,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatToolbarModule} from '@angular/material/toolbar';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const materialModules = [
   CdkTreeModule,
@@ -63,13 +62,7 @@ const materialModules = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ...materialModules
-  ],
-  exports: [
-    ...materialModules
-  ],
+  imports: [CommonModule, ...materialModules],
+  exports: [...materialModules],
 })
-
-export class AngularMaterialModule { }
+export class AngularMaterialModule {}

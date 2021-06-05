@@ -11,8 +11,8 @@ export const environment = {
     projectId: 'stackoverflow-bba0e',
     storageBucket: 'stackoverflow-bba0e.appspot.com',
     messagingSenderId: '4422216162',
-    appId: '1:4422216162:web:78f905c2bee9cfc6f6b1bb'
-  }
+    appId: '1:4422216162:web:78f905c2bee9cfc6f6b1bb',
+  },
 };
 
 /*
