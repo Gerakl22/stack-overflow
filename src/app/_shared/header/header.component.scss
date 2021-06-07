@@ -29,17 +29,31 @@
   }
 
   &__button {
+    padding: 0.5rem 0rem !important;
+  }
+
+  &__item {
     margin-left: 1rem;
   }
 
-  &__menu {
+  &__trigger {
     display: none;
+  }
+
+  &__addition {
+    line-height: 1rem;
+    letter-spacing: 0.05rem;
+    font-size: 0.7rem;
+  }
+
+  &__link {
+    word-break: break-word;
   }
 }
 
 @media (max-width: 600px) {
   .c-app {
-    &__menu {
+    &__trigger {
       display: block;
     }
 
@@ -47,7 +61,7 @@
       display: none;
     }
 
-    &__button {
+    &__item {
       display: flex;
       justify-content: center;
       align-items: center;

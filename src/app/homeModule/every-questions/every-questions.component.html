@@ -3,25 +3,28 @@
     <ul class="c-everyQuestions__list">
       <li class="c-everyQuestions__item">
         <button
+          class="c-everyQuestions__trigger"
           type="button"
           mat-button
           mat-raised-button
           [matMenuTriggerFor]="filters"
         >
-          <mat-icon>filter_alt</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">filter_alt</mat-icon>
+          <span class="c-everyQuestions__filters">Filters</span>
         </button>
-        <mat-menu #filters="matMenu">
+        <mat-menu class="c-everyQuestions__menu" #filters="matMenu"  >
           <form
             [formGroup]="filterQuestionsForm"
             class="c-everyQuestions__form"
           >
-            <mat-icon>question_answer</mat-icon>
+            <mat-icon class="c-everyQuestions__icon">question_answer</mat-icon>
             <mat-label
               class="c-everyQuestions__label"
               *ngFor="let status of statusFormArray.controls; let i = index"
               formArrayName="status"
             >
               <mat-checkbox
+                class="c-everyQuestions__checkbox"
                 [formControlName]="i"
                 [checked]="status.value"
                 [id]="questionsStatusData[i].id"
@@ -30,28 +33,30 @@
                 >{{ questionsStatusData[i].item }}</mat-checkbox
               >
             </mat-label>
-            <mat-divider></mat-divider>
-            <mat-icon>tag</mat-icon>
+            <mat-divider class="c-everyQuestions__divider"></mat-divider>
+            <mat-icon class="c-everyQuestions__icon">tag</mat-icon>
             <mat-label
               class="c-everyQuestions__label"
               *ngFor="let tag of tagsFormArray.controls; let i = index"
               formArrayName="tags"
             >
               <mat-checkbox
+                class="c-everyQuestions__checkbox"
                 [formControlName]="i"
                 [name]="tagsData[i].item"
                 (change)="onFilterByTags($event)"
                 >{{ tagsData[i].item }}</mat-checkbox
               >
             </mat-label>
-            <mat-divider></mat-divider>
-            <mat-icon>timeline</mat-icon>
+            <mat-divider class="c-everyQuestions__divider"></mat-divider>
+            <mat-icon class="c-everyQuestions__icon">timeline</mat-icon>
             <mat-label
                 class="c-everyQuestions__label"
                 *ngFor="let time of timeFormArray.controls; let i = index"
                 formArrayName="time"
             >
               <mat-checkbox
+                class="c-everyQuestions__checkbox"
                 [formControlName]="i"
                 [checked]="time.value"
                 [id]="questionsTimeData[i].id"
@@ -65,33 +70,37 @@
       </li>
       <li class="c-everyQuestions__item">
         <button
+          class="c-everyQuestions__trigger"
           type="button"
           mat-button
           mat-raised-button
           (click)="onSortQuestions()"
         >
-          <mat-icon *ngIf="this.isSortQuestions">sort arrow_upward</mat-icon>
-          <mat-icon *ngIf="!this.isSortQuestions">sort arrow_downward</mat-icon>
+          <mat-icon class="c-everyQuestions__icon" *ngIf="this.isSortQuestions">sort arrow_upward</mat-icon>
+          <mat-icon class="c-everyQuestions__icon" *ngIf="!this.isSortQuestions">sort arrow_downward</mat-icon>
+          <span class="c-everyQuestions__sort">Sort</span>
         </button>
       </li>
       <li class="c-everyQuestions__item">
         <button
+          class="c-everyQuestions__trigger"
           type="button"
           mat-button
           mat-raised-button
           [matMenuTriggerFor]="settings"
         >
-          <mat-icon>settings</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">settings</mat-icon>
+          <span class="c-everyQuestions__settings">Settings</span>
         </button>
-        <mat-menu #settings="matMenu">
+        <mat-menu class="c-everyQuestions__menu" #settings="matMenu">
           <form class="c-everyQuestions__form">
-            <mat-icon>view_module</mat-icon>
+            <mat-icon class="c-everyQuestions__icon">view_module</mat-icon>
             <mat-radio-group
               class="c-everyQuestions__label"
               name="display"
               *ngFor="let display of questionsDisplayData">
               <mat-radio-button
-                class="mat-radio-button"
+                class="c-everyQuestions__button mat-radio-button"
                 name="display"
                 [checked]="display.checked"
                 [value]="display.name"
@@ -100,16 +109,16 @@
               >
             </mat-radio-group>
           </form>
-          <mat-divider></mat-divider>
+          <mat-divider class="c-everyQuestions__divider"></mat-divider>
           <form class="c-everyQuestions__form">
-            <mat-icon>palette</mat-icon>
+            <mat-icon class="c-everyQuestions__icon">palette</mat-icon>
             <mat-radio-group
               class="c-everyQuestions__label"
               name="theme"
               *ngFor="let theme of themeData"
             >
               <mat-radio-button
-                class="mat-radio-button"
+                class="c-everyQuestions__button mat-radio-button"
                 name="theme"
                 [checked]="theme.checked"
                 [value]="theme.name"
@@ -124,7 +133,7 @@
     </ul>
   </mat-toolbar>
 
-  <div
+  <section
     class="c-everyQuestions__section c-everyQuestions__section--tiled"
     *ngIf="isLineDisplay === false"
   >
@@ -138,20 +147,17 @@
           | filterBySort: isSortQuestions
       "
     >
+        <p class="c-everyQuestions__date">
+          {{ question.date | date: "MMM d, y, h:mm:ss a" }}
+        </p>
+        <small class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
+        >{{ tag }}
+        </small>
       <mat-card-title
         class="c-everyQuestions__title"
         (click)="onOpenScreenQuestionById(question.key)"
         >{{ question.title }}</mat-card-title
       >
-      <hr />
-      <mat-card-content class="c-everyQuestions__content">
-        <p class="c-everyQuestions__date">
-          {{ question.date | date: "MMM d, y, h:mm:ss a" }}
-        </p>
-        <a class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
-          >{{ tag }}
-        </a>
-      </mat-card-content>
       <hr />
       <div class="c-everyQuestions__buttons">
         <small
@@ -170,7 +176,8 @@
           color="primary"
           (click)="onApproveQuestion(question.key)"
         >
-          <mat-icon>approval</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">approval</mat-icon>
+          <span class="c-everyQuestions__approve">Approve</span>
         </button>
         <button
           *ngIf="question.author === author || isAdmin === true"
@@ -179,13 +186,14 @@
           color="warn"
           (click)="onRemoveQuestionById(question.key)"
         >
-          <mat-icon>delete_forever</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">delete_forever</mat-icon>
+          <span class="c-everyQuestions__delete">Delete</span>
         </button>
       </div>
     </mat-card>
-  </div>
+  </section>
 
-  <div
+  <section
     class="c-everyQuestions__section c-everyQuestions__section--line"
     *ngIf="isLineDisplay === true"
   >
@@ -199,20 +207,17 @@
           | filterBySort: isSortQuestions
       "
     >
+      <p class="c-everyQuestions__date">
+        {{ question.date | date: "MMM d, y, h:mm:ss a" }}
+      </p>
+      <small class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
+      >{{ tag }}
+      </small>
       <mat-card-title
         class="c-everyQuestions__title"
         (click)="onOpenScreenQuestionById(question.key)"
-        >{{ question.title }}</mat-card-title
+      >{{ question.title }}</mat-card-title
       >
-      <hr />
-      <mat-card-content class="c-everyQuestions__content">
-        <p class="c-everyQuestions__date">
-          {{ question.date | date: "MMM d, y, h:mm:ss a" }}
-        </p>
-        <a class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
-          >{{ tag }}
-        </a>
-      </mat-card-content>
       <hr />
       <div class="c-everyQuestions__buttons">
         <small
@@ -230,7 +235,8 @@
           mat-raised-button
           color="primary"
         >
-          <mat-icon>approval</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">approval</mat-icon>
+          <span class="c-everyQuestions__approve">Approve</span>
         </button>
         <button
           *ngIf="question.author === author || isAdmin === true"
@@ -239,9 +245,10 @@
           color="warn"
           (click)="onRemoveQuestionById(question.key)"
         >
-          <mat-icon>delete_forever</mat-icon>
+          <mat-icon class="c-everyQuestions__icon">delete_forever</mat-icon>
+          <span class="c-everyQuestions__delete">Delete</span>
         </button>
       </div>
     </mat-card>
-  </div>
+  </section>
 </main>

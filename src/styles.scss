@@ -64,3 +64,13 @@ a {
   color: white;
   display: flex;
 }
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: 70px;
+}
+
+.mat-raised-button {
+  line-height: 12px !important;
+  padding: 1px !important;
+}
