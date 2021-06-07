@@ -70,7 +70,8 @@
           mat-raised-button
           (click)="onSortQuestions()"
         >
-          <mat-icon>sort</mat-icon>
+          <mat-icon *ngIf="this.isSortQuestions">sort arrow_upward</mat-icon>
+          <mat-icon *ngIf="!this.isSortQuestions">sort arrow_downward</mat-icon>
         </button>
       </li>
       <li class="c-everyQuestions__item">
@@ -189,7 +190,7 @@
     *ngIf="isLineDisplay === true"
   >
     <mat-card
-      class="c-everyQuestions__card"
+      class="c-everyQuestions__card c-everyQuestions__card--line"
       *ngFor="
         let question of questionsArray
           | filterByStatusQuestions: statusQuestions

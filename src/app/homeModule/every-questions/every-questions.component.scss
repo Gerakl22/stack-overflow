@@ -1,10 +1,6 @@
 .c-everyQuestions {
   padding-top: 6rem;
 
-  &__main {
-    padding: 0 2rem;
-  }
-
   &__list {
     display: flex;
     justify-content: space-between;
@@ -23,11 +19,13 @@
 
   &__section {
     display: flex;
+    width: 100%;
   }
 
   &__section--tiled {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
   }
 
   &__section--line {
@@ -36,9 +34,14 @@
   }
 
   &__card {
-    margin: 3rem;
+    flex: 1 1 auto;
     width: 15rem;
+    margin: 1rem;
     height: auto;
+  }
+
+  &__card--line {
+    width: 90%;
   }
 
   &__title {
@@ -77,7 +80,7 @@
   .c-everyQuestions {
     &__section--tiled {
       align-items: center;
-      flex-direction: column-reverse;
+      flex-direction: column;
     }
   }
 }

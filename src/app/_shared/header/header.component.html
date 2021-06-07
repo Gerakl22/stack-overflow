@@ -37,7 +37,7 @@
       <mat-divider></mat-divider>
       <li class="c-app__button" routerLinkActive="active">
         <a *ngIf="isLogUser" mat-menu-item [matMenuTriggerFor]="profile"
-          ><mat-icon>email</mat-icon></a
+          ><mat-icon>person</mat-icon></a
         >
       </li>
     </mat-menu>
@@ -83,7 +83,7 @@
           mat-button
           mat-raised-button
           [matMenuTriggerFor]="profile"
-          ><mat-icon>email</mat-icon></a
+          ><mat-icon>person</mat-icon></a
         >
         <mat-menu #profile="matMenu">
           <a mat-menu-item><mat-icon>home</mat-icon></a>

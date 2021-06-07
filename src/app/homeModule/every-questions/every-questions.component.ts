@@ -37,7 +37,7 @@ export class EveryQuestionsComponent implements OnInit {
   statusQuestions = 'All';
   author: string | null | undefined;
   isSortQuestions = false;
-  isLineDisplay: boolean | undefined;
+  isLineDisplay = false;
   isAdmin: boolean | undefined;
 
   get tagsFormArray(): FormArray {
@@ -66,7 +66,6 @@ export class EveryQuestionsComponent implements OnInit {
     this.questionsStatusData = QuestionsStatusConstants;
     this.questionsTimeData = QuestionsTimeConstants;
     this.questionsDisplayData = QuestionsDisplayConstants;
-    this.isLineDisplay = false;
 
     this.filterQuestionsForm = this.fb.group({
       status: this.fb.array([]),
