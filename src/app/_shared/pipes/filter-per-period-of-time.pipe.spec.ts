@@ -6,7 +6,7 @@ describe('Mocking the Date object', () => {
   });
   const firstQuestions = {
     author: '123456@mail.ru',
-    date: 1623231683465,
+    date: 1624231683465,
     title: 'Hello world',
     textarea: 'Thank you very much',
     tags: [],
@@ -49,9 +49,9 @@ describe('Mocking the Date object', () => {
     expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
   });
 
-  const perPeriodOfTimePipe = new FilterPerPeriodOfTimePipe();
-
   describe('FilterPerPeriodOfTimePipe', () => {
+    const perPeriodOfTimePipe = new FilterPerPeriodOfTimePipe();
+
     it('create in instance', () => {
       expect(perPeriodOfTimePipe).toBeTruthy();
     });
