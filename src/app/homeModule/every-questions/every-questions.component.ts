@@ -33,7 +33,7 @@ export class EveryQuestionsComponent implements OnInit {
   electedTags: Tags[] = [];
   questionObject!: Question;
   filterQuestionsForm!: FormGroup;
-  timeQuestions = 365;
+  timeQuestions = null;
   statusQuestions = 'All';
   author: string | null | undefined;
   isSortQuestions = false;
@@ -96,9 +96,7 @@ export class EveryQuestionsComponent implements OnInit {
         : this.statusFormArray.push(new FormControl(false))
     );
     this.questionsTimeData.filter((time: QuestionsTime) =>
-      Number(time.value) === this.timeQuestions
-        ? this.timeFormArray.push(new FormControl(true))
-        : this.timeFormArray.push(new FormControl(false))
+      time.value === this.timeQuestions ? this.timeFormArray.push(new FormControl(true)) : this.timeFormArray.push(new FormControl(false))
     );
   }
 
@@ -180,9 +178,9 @@ export class EveryQuestionsComponent implements OnInit {
         Number(id) - 10 === i ? (status.value = true) : (status.value = false)
       );
     } else {
-      this.timeQuestions = 365;
+      this.timeQuestions = null;
       this.questionsTimeData.find((timeQuestions: QuestionsTime) => {
-        if (this.timeQuestions === Number(timeQuestions.value)) {
+        if (this.timeQuestions === timeQuestions.value) {
           this.timeFormArray.controls.filter((time: any, i: number) =>
             Number(timeQuestions.id) - 10 === i ? (time.value = true) : (time.value = false)
           );

@@ -3,7 +3,10 @@ import { FilterPerPeriodOfTimePipe } from './filter-per-period-of-time.pipe';
 describe('Mocking the Date object', () => {
   beforeEach(() => {
     jasmine.clock().install();
+    const fakeTime = 1624131683465;
+    jasmine.clock().mockDate(new Date(fakeTime));
   });
+
   const firstQuestions = {
     author: '123456@mail.ru',
     date: 1624231683465,
@@ -15,7 +18,7 @@ describe('Mocking the Date object', () => {
   };
   const secondQuestions = {
     author: '123456@mail.ru',
-    date: 1623131537141,
+    date: 1623531537141,
     title: 'Hi world',
     textarea: 'Thank you',
     tags: [],
@@ -40,14 +43,6 @@ describe('Mocking the Date object', () => {
     comments: [],
     isApproval: true,
   };
-
-  it('mocks the Date object and sets it to a given time', () => {
-    let baseTime = new Date(2021, 6, 9);
-    jasmine.clock().mockDate(baseTime);
-    jasmine.clock().tick(50);
-
-    expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
-  });
 
   describe('FilterPerPeriodOfTimePipe', () => {
     const perPeriodOfTimePipe = new FilterPerPeriodOfTimePipe();
@@ -76,7 +71,7 @@ describe('Mocking the Date object', () => {
     });
 
     it('filter questions array per all time', () => {
-      expect(perPeriodOfTimePipe.transform([firstQuestions, secondQuestions, thirdQuestions, fourQuestions], 365)).toEqual([
+      expect(perPeriodOfTimePipe.transform([firstQuestions, secondQuestions, thirdQuestions, fourQuestions], null)).toEqual([
         firstQuestions,
         secondQuestions,
         thirdQuestions,

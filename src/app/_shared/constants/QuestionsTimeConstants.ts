@@ -19,6 +19,6 @@ export const QuestionsTimeConstants: QuestionsTime[] = [
   {
     id: '13',
     item: 'Per all time',
-    value: '365',
+    value: null,
   },
 ];

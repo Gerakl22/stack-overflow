@@ -6,8 +6,8 @@ import { Question } from '../_models/Question';
   pure: false,
 })
 export class FilterPerPeriodOfTimePipe implements PipeTransform {
-  transform(questionsArray: Question[], periodOfTime: number): Question[] {
-    if (periodOfTime === 365) {
+  transform(questionsArray: Question[], periodOfTime: number | null): Question[] {
+    if (periodOfTime === null) {
       return questionsArray;
     }
 

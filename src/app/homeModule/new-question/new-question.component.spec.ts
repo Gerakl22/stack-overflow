@@ -89,27 +89,27 @@ describe('NewQuestionComponent', () => {
     expect(el).toContain('New Question');
   });
 
-  it('should check for "addQuestions() that subscribe called', fakeAsync(() => {
+  it('should call the "onSubmit()" method', () => {
+    spyOn(component, 'onSubmit');
+    let el = fixture.debugElement.query(By.css('form')).nativeElement;
+    el.click();
+    expect(component.onSubmit).toHaveBeenCalledTimes(0);
+  });
+
+  it('should check for "onSubmit() that subscribe called', fakeAsync(() => {
     let spyQuestion = spyOn(questionServiceStub, 'createQuestion').and.returnValue(of(question).pipe(delay(1)));
     let subSpy = spyOn(questionServiceStub.createQuestion(question), 'subscribe');
-    component.addQuestion(question);
+    component.onSubmit();
     tick();
 
     expect(spyQuestion).toHaveBeenCalledBefore(subSpy);
     expect(subSpy).toHaveBeenCalled();
   }));
 
-  it('should check for "addQuestions()" error called', () => {
+  it('should check for "onSubmit()" error called', () => {
     spyOn(questionServiceStub, 'createQuestion').and.returnValue(throwError('Error'));
-    component.addQuestion(question);
+    component.onSubmit();
     expect(questionServiceStub.createQuestion).toHaveBeenCalled();
-  });
-
-  it('should call the onSubmit method', () => {
-    spyOn(component, 'onSubmit');
-    let el = fixture.debugElement.query(By.css('form')).nativeElement;
-    el.click();
-    expect(component.onSubmit).toHaveBeenCalledTimes(0);
   });
 
   it('form invalid when empty', () => {

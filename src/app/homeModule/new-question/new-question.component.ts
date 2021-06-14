@@ -41,22 +41,6 @@ export class NewQuestionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createFormsInput();
-  }
-
-  private addCheckBoxes(): void {
-    this.tagsData?.forEach(() => this.tagsFormArray.push(new FormControl(false)));
-  }
-
-  addQuestion(question: Question): void {
-    this.questionsService.createQuestion(question).subscribe(
-      (q: Question) => q,
-      (error) => (this.error = error),
-      () => this.onCancel()
-    );
-  }
-
-  createFormsInput(): void {
     this.newQuestionForm = this.fb.group({
       title: this.fb.control('', Validators.required),
       textarea: this.fb.control('', [Validators.required, Validators.minLength(6)]),
@@ -65,6 +49,10 @@ export class NewQuestionComponent implements OnInit {
 
     this.tagsData = TagsConstants;
     this.addCheckBoxes();
+  }
+
+  private addCheckBoxes(): void {
+    this.tagsData?.forEach(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
   getErrorTitle(): string {
@@ -94,7 +82,11 @@ export class NewQuestionComponent implements OnInit {
       isApproval: false,
     };
 
-    this.addQuestion(question);
+    this.questionsService.createQuestion(question).subscribe(
+      (q: Question) => q,
+      (error) => (this.error = error),
+      () => this.onCancel()
+    );
   }
 
   selectedTagsItem(): Tags[] {
