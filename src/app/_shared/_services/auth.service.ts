@@ -22,7 +22,6 @@ export class AuthService {
       }),
       switchMap((user) => (user === null ? of(user) : this.getAdmins())),
       map((admins) => {
-        console.log(admins);
         if (this.user && admins !== null) {
           this.checkUserIsAdmin(admins);
         }
