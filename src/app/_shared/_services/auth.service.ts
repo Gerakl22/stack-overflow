@@ -10,7 +10,7 @@ import { map, switchMap } from 'rxjs/operators';
 @Injectable()
 export class AuthService {
   private url = environment.apiUrl;
-  private urlAdmins = '/admins';
+  private urlAdmins = 'admins';
   public user$: Observable<User | null>;
   public user!: User | null;
 
@@ -22,6 +22,7 @@ export class AuthService {
       }),
       switchMap((user) => (user === null ? of(user) : this.getAdmins())),
       map((admins) => {
+        console.log(admins);
         if (this.user && admins !== null) {
           this.checkUserIsAdmin(admins);
         }
