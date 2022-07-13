@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../_shared/_services/auth.service';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
-  styleUrls: ['./sign-up-page.component.scss'],
+  styleUrls: ['./sign-up-page.component.scss']
 })
-export class SignUpPageComponent implements OnInit {
+export class SignUpPageComponent implements OnInit, OnDestroy {
   myForm!: FormGroup;
   isHidePassword = true;
   error!: string;
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(public authService: AuthService, public router: Router) {}
 
   ngOnInit(): void {
     this.myForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
   }
 
@@ -81,17 +85,24 @@ export class SignUpPageComponent implements OnInit {
 
   onSubmit(e: { preventDefault: () => void }): void {
     e.preventDefault();
-    // this.authService
-    //   .signUp(this.myForm.value.email, this.myForm.value.password)
-    //   .then(() => {
-    //     this.router.navigate(['/']);
-    //   })
-    //   .catch((err: Error) => {
-    //     this.error = err.message;
-    //   });
+    const user = {
+      email: this.myForm.value.email,
+      password: this.myForm.value.password,
+    };
+    this.authService
+      .signUp(user)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.router.navigate(['/']);
+      });
   }
 
   toggleIconPassword(): void {
     this.isHidePassword = !this.isHidePassword;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

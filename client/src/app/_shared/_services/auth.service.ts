@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from '../_models/User';
-import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, retry, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -76,7 +75,22 @@ export class AuthService {
   //   return this.fireAuth.signOut();
   // }
   //
-  // signUp(email: string, password: string): Promise<any> {
-  //   return this.fireAuth.createUserWithEmailAndPassword(email, password);
-  // }
+  signUp(user: { email: string; password: string }): Observable<{ email: string; password: string }[]> {
+    return this.http.post<any>(this.url + 'auth/sign-up', user).pipe(retry(1), catchError(this.errorHandler));
+  }
+
+  errorHandler(error: { error: { message: any }; status: any; message: any }): Observable<never> {
+    let errorMessage;
+
+    if (error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.log(errorMessage);
+
+    return throwError(errorMessage);
+  }
 }
