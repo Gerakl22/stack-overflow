@@ -4,6 +4,7 @@ const config = require('../config/config');
 
 const connect = async () => {
   logger.info(`Connecting to ${config.env} env database..`);
+
   await mongoose.connect(config.mongoose.url, {
     useNewUrlParser: config.mongoose.options.useNewUrlParser,
     useUnifiedTopology: config.mongoose.options.useUnifiedTopology,

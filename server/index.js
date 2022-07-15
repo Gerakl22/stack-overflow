@@ -5,7 +5,6 @@ const logger = require('./config/logger');
 const { unexpectedErrorHandler } = require('./middleware/errors');
 let server;
 
-
 databaseMongoService.connect()
   .then(() => {
     server = httpClient.listen(config.port, () => logger.info(`Listening port ${config.port}`));

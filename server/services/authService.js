@@ -1,25 +1,36 @@
 const bcrypt = require('bcrypt');
+const ErrorsConstants = require('../constants/errorsConstants');
 const logger = require('../config/logger');
-const roleModel = require('../models/Role');
-const userModel = require('../models/User');
+const roleService = require('../services/roleService');
+const userService = require('../services/userService');
+const RoleConstants = require('../constants/roleConstants');
 
 class AuthService {
+  static #encryptPassword(password) {
+    return bcrypt.hashSync(password, 7);
+  }
+
   async signUp(user) {
     const { email, password } = user;
-    const userExist = await userModel.findOne({ email });
-    console.log(userExist);
+    const userExist = await userService.getUserByEmail(email);
+
     if (userExist) {
-      // надо в res вывести ошибку, подумать как это переиграть
-      throw new Error('User is already exist');
+      throw new Error(ErrorsConstants.AUTH.USER_EXIST);
     }
 
-    const hashPassword = bcrypt.hashSync(password, 7);
-    const roleUser = await roleModel.findOne({ value: 'USER' });
+    const encryptPassword = AuthService.#encryptPassword(password);
+    const roleUser = await roleService.getRole(RoleConstants.USER);
 
-    await userModel.create({ email, password: hashPassword, role: [roleUser.role] });
+    const newUser = await userService.createUser(email, encryptPassword, roleUser.role);
+    logger.info(`${email} is register in database`);
 
-    logger.info(`${email} is register in database`)
+    return {
+      id: newUser.id,
+      email: newUser.email,
+      role: newUser.role
+    };
   }
+
 }
 
 module.exports = new AuthService();

@@ -9,7 +9,10 @@ const envVarsSchema = Joi.object().keys({
   PORT: Joi.number().default(3000),
   MONGO_URL: Joi.string().required().description('Mongo database url'),
   MONGO_USERNAME: Joi.string().required().description('Mongo database username'),
-  MONGO_PASSWORD: Joi.string().required().description('Mongo database password')
+  MONGO_PASSWORD: Joi.string().required().description('Mongo database password'),
+  JWT_SECRET_KEY: Joi.string().required().description('JWT secret key'),
+  JWT_ACCESS_TOKEN_EXPIRATION_MINUTES: Joi.string().required().description('JWT access of token expiration in minutes'),
+  JWT_REFRESH_TOKEN_EXPIRATION_MINUTES: Joi.string().required().description('JWT refresh of token expiration in minutes')
 }).unknown();
 
 const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
@@ -29,6 +32,11 @@ module.exports = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }
+  },
+  jwt: {
+    secret_key: envVars.JWT_SECRET_KEY,
+    access_expiration: envVars.JWT_ACCESS_TOKEN_EXPIRATION_MINUTES,
+    refresh_expiration: envVars.JWT_REFRESH_TOKEN_EXPIRATION_MINUTES
   }
 };
 

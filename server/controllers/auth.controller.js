@@ -1,17 +1,21 @@
-const logger = require('../config/logger');
 const authService = require('../services/authService');
-
+const tokenService = require('../services/tokenService');
+const ErrorsConstants = require('../constants/errorsConstants');
+const httpStatus = require('http-status');
+const logger = require('../config/logger');
 
 class AuthController {
 
   async signUp(req, res) {
     try {
       const user = await authService.signUp(req.body);
+      const token = await tokenService.generateAuthToken(user);
 
-      res.send({user, message: 'User was register right now'});
+      res.status(httpStatus.OK).send({user, token, message: ErrorsConstants.AUTH.USER_REGISTER});
     } catch (e) {
       logger.info(e.message);
-      res.status(400).json({message: 'Registration failed'});
+
+      res.status(httpStatus.UNAUTHORIZED).json({message: e.message});
     }
   }
 }
