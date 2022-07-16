@@ -3,9 +3,7 @@ const authController = require('../controllers/auth.controller');
 
 router = express.Router();
 
-router.post('/login', () => {
-
-});
+router.post('/login', authController.login);
 router.post('/logout', () => {
 
 });

@@ -1,71 +1,72 @@
-<div class="c-signUp__wrapper">
-  <mat-card class="c-signUp__card">
-    <mat-card-title class="c-signUp__title">Sign Up</mat-card-title>
-    <form class="c-signUp__form" [formGroup]="myForm" novalidate (ngSubmit)="onSubmit($event)">
-      <mat-card-content class="c-signUp__content">
-        <mat-form-field class="c-signUp__field" appearance="outline">
-          <mat-label class="c-signUp__label">Username</mat-label>
+<div class='c-signUp__wrapper'>
+  <mat-card class='c-signUp__card'>
+    <mat-card-title class='c-signUp__title'>Sign Up</mat-card-title>
+    <form class='c-signUp__form' [formGroup]='myForm' novalidate>
+      <mat-card-content class='c-signUp__content'>
+        <mat-form-field class='c-signUp__field' appearance='outline'>
+          <mat-label class='c-signUp__label'>Username</mat-label>
           <input
-            class="c-signUp__input"
+            class='c-signUp__input'
             matInput
-            placeholder="username@.mail.ru"
-            type="email"
-            formControlName="email"
+            placeholder='username@.mail.ru'
+            type='email'
+            formControlName='email'
           />
-          <mat-error class="c-signUp__error" *ngIf="email.invalid && email.touched">{{
+          <mat-error class='c-signUp__error' *ngIf='email.invalid && email.touched'>{{
             getErrorEmail()
             }}</mat-error>
         </mat-form-field>
       </mat-card-content>
-      <mat-card-content class="c-signUp__content">
-        <mat-form-field class="c-signUp__field" appearance="outline">
-          <mat-label class="c-signUp__label">Password</mat-label>
+      <mat-card-content class='c-signUp__content'>
+        <mat-form-field class='c-signUp__field' appearance='outline'>
+          <mat-label class='c-signUp__label'>Password</mat-label>
           <input
-            class="c-signUp__input"
+            class='c-signUp__input'
             matInput
             [type]="isHidePassword ? 'password' : 'text'"
-            placeholder="min length 6"
-            formControlName="password"
+            placeholder='min length 6'
+            formControlName='password'
           />
           <button
-            class="c-signUp__button"
-            type="submit"
+            class='c-signUp__button'
+            type='submit'
             mat-icon-button
             matSuffix
-            (click)="toggleIconPassword()"
+            (click)='toggleIconPassword()'
             [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="isHidePassword"
+            [attr.aria-pressed]='isHidePassword'
           >
-            <mat-icon class="c-signUp__icon">{{
+            <mat-icon class='c-signUp__icon'>{{
               isHidePassword ? "visibility_off" : "visibility"
               }}</mat-icon>
           </button>
-          <mat-error class="c-signUp__icon" *ngIf="password.invalid && password.touched">{{
+          <mat-error class='c-signUp__icon' *ngIf='password.invalid && password.touched'>{{
             getErrorPassword()
             }}</mat-error>
         </mat-form-field>
       </mat-card-content>
-      <mat-card-content class="c-signUp__content">
-        <button class="c-signUp__button" type="submit" mat-icon-button (click)="logOnGoogle()">
-          <mat-icon class="c-signUp__icon" fontSet="fontawesome" fontIcon="fa-google"></mat-icon>
+      <mat-card-content class='c-signUp__content'>
+        <button class='c-signUp__button' type='submit' mat-icon-button (click)='logOnGoogle()'>
+          <mat-icon class='c-signUp__icon' fontSet='fontawesome' fontIcon='fa-google'></mat-icon>
         </button>
-        <button class="c-signUp__button" type="submit" mat-icon-button (click)="logOnGitHub()">
-          <mat-icon class="c-signUp__icon" fontSet="fontawesome" fontIcon="fa-github"></mat-icon>
+        <button class='c-signUp__button' type='submit' mat-icon-button (click)='logOnGitHub()'>
+          <mat-icon class='c-signUp__icon' fontSet='fontawesome' fontIcon='fa-github'></mat-icon>
         </button>
-        <button class="c-signUp__button" type="submit" mat-icon-button (click)="logOnFacebook()">
-          <mat-icon class="c-signUp__icon" fontSet="fontawesome" fontIcon="fa-facebook"></mat-icon>
+        <button class='c-signUp__button' type='submit' mat-icon-button (click)='logOnFacebook()'>
+          <mat-icon class='c-signUp__icon' fontSet='fontawesome' fontIcon='fa-facebook'></mat-icon>
         </button>
       </mat-card-content>
       <button
-        class="c-signUp__button"
-        type="submit"
+        class='c-signUp__button'
+        type='submit'
         mat-raised-button
-        color="primary"
-        [disabled]="myForm.invalid"
+        color='primary'
+        [disabled]='myForm.invalid && myForm.dirty'
+        (click)='onSubmit()'
       >
-        <mat-icon class="c-signUp__icon">login</mat-icon>
+        <mat-icon class='c-signUp__icon'>login</mat-icon>
       </button>
-      <mat-error class="c-signUp__error">{{ error }}</mat-error>
+      <mat-error class='c-signUp__error'>{{ error }}</mat-error>
     </form>
   </mat-card>
 </div>

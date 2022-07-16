@@ -43,8 +43,8 @@ export class ScreenQuestionComponent implements OnInit {
         (questionObject: Question) => {
           this.questionObject = questionObject;
           this.getCommentsArray(this.questionObject.comments);
-          this.author = this.authService.user?.email;
-          this.isAdmin = this.authService.user?.isAdmin;
+          // this.author = this.authService.user?.email;
+          // this.isAdmin = this.authService.user?.isAdmin;
         },
         (error) => error.message
       );

@@ -1,9 +1,15 @@
 export class User {
-  email: string | null;
-  isAdmin: boolean;
+  id: string;
+  email: string;
+  role: string;
+  accessToken: string;
+  refreshToken: string;
 
-  constructor(user: { isAdmin: boolean; email: string | null }) {
-    this.email = user.email;
-    this.isAdmin = user.isAdmin;
+  constructor(id: string, email: string, role: string, accessToken: string, refreshToken: string) {
+    this.id = id;
+    this.email = email;
+    this.role = role;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
   }
 }

@@ -4,11 +4,12 @@ import { AuthService } from '../../_shared/_services/auth.service';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AuthUser } from '../../_shared/_models/AuthUser';
 
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
-  styleUrls: ['./sign-up-page.component.scss']
+  styleUrls: ['./sign-up-page.component.scss'],
 })
 export class SignUpPageComponent implements OnInit, OnDestroy {
   myForm!: FormGroup;
@@ -22,7 +23,7 @@ export class SignUpPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.myForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
   }
 
@@ -83,18 +84,23 @@ export class SignUpPageComponent implements OnInit, OnDestroy {
   //     });
   // }
 
-  onSubmit(e: { preventDefault: () => void }): void {
-    e.preventDefault();
-    const user = {
+  onSubmit(): void {
+    const user: AuthUser = {
       email: this.myForm.value.email,
       password: this.myForm.value.password,
     };
+
     this.authService
       .signUp(user)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.router.navigate(['/']);
-      });
+      .subscribe(
+        () => {
+          this.router.navigate(['/']);
+        },
+        (error: string) => {
+          this.error = error;
+        }
+      );
   }
 
   toggleIconPassword(): void {

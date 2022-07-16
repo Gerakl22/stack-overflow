@@ -4,6 +4,11 @@
     flex-direction: column;
     width: 300px;
   }
+
+  &__error {
+    text-align: center;
+    padding: 5px;
+  }
 }
 
 .mat-card-title {

@@ -1,7 +1,7 @@
 <div class="c-login__wrapper">
   <mat-card class="c-login__card">
     <mat-card-title class="c-login__title">Login</mat-card-title>
-    <form class="c-login__form" [formGroup]="myForm" novalidate (ngSubmit)="onSubmit($event)">
+    <form class="c-login__form" [formGroup]="myForm" novalidate>
       <mat-card-content class="c-login__content">
         <mat-form-field class="c-login__field" appearance="outline">
           <mat-label class="c-login__label">Username</mat-label>
@@ -61,7 +61,8 @@
         type="submit"
         mat-raised-button
         color="primary"
-        [disabled]="myForm.invalid"
+        [disabled]="myForm.invalid && myForm.dirty"
+        (click)='onSubmit()'
       >
         <mat-icon class="c-login__icon">login</mat-icon>
       </button>

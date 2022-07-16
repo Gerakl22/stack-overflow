@@ -37,7 +37,7 @@ export class NewQuestionComponent implements OnInit {
     public authService: AuthService,
     private questionsService: QuestionsService
   ) {
-    this.author = authService.user?.email;
+    // this.author = authService.user?.email;
   }
 
   ngOnInit(): void {

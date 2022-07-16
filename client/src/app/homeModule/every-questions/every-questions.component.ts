@@ -78,8 +78,8 @@ export class EveryQuestionsComponent implements OnInit {
     this.questionsService.getQuestions().subscribe(
       (questions: Database) => {
         this.getQuestionsArray(questions);
-        this.author = this.authService.user?.email;
-        this.isAdmin = this.authService.user?.isAdmin;
+        // this.author = this.authService.user?.email;
+        // this.isAdmin = this.authService.user?.isAdmin;
         console.log(this.questionsArray);
       },
       (error) => error.message
