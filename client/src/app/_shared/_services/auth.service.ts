@@ -14,21 +14,6 @@ export class AuthService {
   private url = environment.apiUrl;
   public user$!: Observable<User>;
 
-  // facebookLogin(): Promise<any> {
-  //   const provider = new firebase.default.auth.FacebookAuthProvider();
-  //   return this.onAuthLogin(provider);
-  // }
-  //
-  // gitHubLogin(): Promise<any> {
-  //   const provider = new firebase.default.auth.GithubAuthProvider();
-  //   return this.onAuthLogin(provider);
-  // }
-  //
-  // googleLogin(): Promise<any> {
-  //   const provider = new firebase.default.auth.GoogleAuthProvider();
-  //   return this.onAuthLogin(provider);
-  // }
-  //
   private static getUser(data: ILogin): Observable<User> {
     return of(data).pipe(
       map((data: ILogin) => {

@@ -7,7 +7,7 @@ class UserService {
   }
 
   async getUserById(id) {
-    return userModel.findOne({ _id: id });
+    return userModel.findOne(id);
   }
 
   async createUser(email, encryptPassword, role) {

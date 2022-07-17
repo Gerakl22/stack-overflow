@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
-const ErrorsConstants = require('../constants/errorsConstants');
 const logger = require('../config/logger');
 const roleService = require('../services/roleService');
+const tokenService = require('../services/tokenService');
 const userService = require('../services/userService');
+const ErrorsConstants = require('../constants/errorsConstants');
+const TokenConstants = require('../constants/tokenConstants');
 const RoleConstants = require('../constants/roleConstants');
 
 class AuthService {
@@ -47,6 +49,21 @@ class AuthService {
     } else {
       throw new Error(ErrorsConstants.AUTH.USER_NOT_CORRECT_EMAIL_AND_PASSWORD);
     }
+  }
+
+  async refreshToken(token) {
+    const currentRefreshTokenModel = await tokenService.verifyToken(token, TokenConstants.REFRESH);
+    const user = await userService.getUserById(currentRefreshTokenModel.user)
+
+    if(!user) {
+      logger.error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND)
+
+      throw new Error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND);
+    }
+
+    await currentRefreshTokenModel.remove();
+
+    return await tokenService.generateAuthToken(user);
   }
 
   async signUp(user) {

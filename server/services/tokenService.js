@@ -1,6 +1,8 @@
 const config = require('../config/config');
 const jwt = require('jsonwebtoken');
+const logger = require('../config/logger');
 const moment = require('moment');
+const ErrorConstants = require('../constants/errorsConstants');
 const TokenConstants = require('../constants/tokenConstants');
 const TokenModel = require('../models/Token');
 
@@ -27,6 +29,16 @@ class TokenService {
     });
   }
 
+  async decodeToken(token) {
+    if (token && jwt.decode(token)) {
+      const expiry = jwt.decode(token).exp;
+      const now = new Date();
+
+      return now.getTime() > expiry * 1000;
+    }
+    return false;
+  }
+
   async generateAuthToken(user) {
     const accessTokenExpires = moment().add(config.jwt.access_expiration, 'minutes');
     const accessToken = TokenService.#generateToken(user, accessTokenExpires, TokenConstants.ACCESS);
@@ -39,6 +51,21 @@ class TokenService {
       refreshToken
     };
   }
+
+  async verifyToken(token, tokenConstant) {
+    const payload = jwt.verify(token, config.jwt.secret_key);
+    const currentTokenModel = TokenModel.findOne({ token, tokenConstant, user: payload.user_id });
+
+    if (!currentTokenModel) {
+      logger.error(ErrorConstants.AUTH.TOKEN_NOT_FOUND);
+
+      throw new Error(ErrorConstants.AUTH.TOKEN_NOT_FOUND);
+    }
+
+    return currentTokenModel;
+
+  }
+
 
 }
 
