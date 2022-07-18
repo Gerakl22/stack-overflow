@@ -1,4 +1,3 @@
-
 const roleModel = require('../models/Role');
 
 class RoleService {

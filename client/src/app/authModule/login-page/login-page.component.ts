@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../_shared/_services/auth.service';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -9,16 +9,18 @@ import { AuthUser } from '../../_shared/_models/AuthUser';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
-  myForm!: FormGroup;
-  isHidePassword = true;
-  error!: string;
-
   private destroy$: Subject<void> = new Subject<void>();
+  private redirectDelay = 0;
+  error!: string;
+  isHidePassword = true;
+  myForm!: FormGroup;
 
-  constructor(public authService: AuthService, public router: Router) {}
+  constructor(public authService: AuthService, public router: Router) {
+  }
 
   ngOnInit(): void {
     this.myForm = new FormGroup({
@@ -87,7 +89,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     const user: AuthUser = {
       email: this.myForm.value.email,
-      password: this.myForm.value.password,
+      password: this.myForm.value.password
     };
 
     this.authService
@@ -95,7 +97,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         () => {
-          this.router.navigate(['/']);
+          setTimeout(() => this.router.navigateByUrl(''), this.redirectDelay);
         },
         (error: string) => {
           this.error = error;

@@ -34,7 +34,7 @@ class TokenService {
       const expiry = jwt.decode(token).exp;
       const now = new Date();
 
-      return now.getTime() > expiry * 1000;
+      return expiry * 1000 > now.getTime();
     }
     return false;
   }
@@ -50,6 +50,10 @@ class TokenService {
       accessToken,
       refreshToken
     };
+  }
+
+  async getTokenModelByPopulateUser(token, tokenConstant) {
+    return TokenModel.findOne({ token: token, tokenConstant: tokenConstant }).populate('user');
   }
 
   async verifyToken(token, tokenConstant) {

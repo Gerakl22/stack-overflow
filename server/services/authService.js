@@ -51,12 +51,24 @@ class AuthService {
     }
   }
 
-  async refreshToken(token) {
-    const currentRefreshTokenModel = await tokenService.verifyToken(token, TokenConstants.REFRESH);
-    const user = await userService.getUserById(currentRefreshTokenModel.user)
+  async logout(refreshToken) {
+    const refreshTokenModel = await tokenService.getTokenModelByPopulateUser(refreshToken, TokenConstants.REFRESH);
 
-    if(!user) {
-      logger.error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND)
+    if (!refreshTokenModel) {
+      logger.error(ErrorsConstants.AUTH.TOKEN_NOT_FOUND);
+
+      throw new Error(ErrorsConstants.AUTH.TOKEN_NOT_FOUND);
+    }
+
+    await refreshTokenModel.remove();
+  }
+
+  async refreshToken(refreshToken) {
+    const currentRefreshTokenModel = await tokenService.verifyToken(refreshToken, TokenConstants.REFRESH);
+    const user = await userService.getUserById(currentRefreshTokenModel.user);
+
+    if (!user) {
+      logger.error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND);
 
       throw new Error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND);
     }
@@ -78,6 +90,7 @@ class AuthService {
     const roleUser = await roleService.getRole(RoleConstants.USER);
 
     const newUser = await userService.createUser(email, encryptPassword, roleUser.role);
+
     logger.info(`${email} is register in database`);
 
     return {

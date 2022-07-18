@@ -11,15 +11,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_shared/header/header.component';
-import { LoginPageComponent } from './authModule/login-page/login-page.component';
-import { SignUpPageComponent } from './authModule/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './homeModule/home-page/home-page.component';
 import { NewQuestionComponent } from './homeModule/new-question/new-question.component';
 import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
 import { ScreenQuestionComponent } from './homeModule/screen-question/screen-question.component';
 import { EditQuestionComponent } from './homeModule/edit-question/edit-question.component';
 
-import { AuthService } from './_shared/_services/auth.service';
 import { QuestionsService } from './_shared/_services/questions.service';
 import { ThemeService } from './_shared/_services/theme.service';
 
@@ -27,13 +24,12 @@ import { FilterByStatusQuestionsPipe } from './_shared/pipes/filter-by-status-qu
 import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
 import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
 import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
+import { AuthModule } from './authModule/auth.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    LoginPageComponent,
-    SignUpPageComponent,
     HomePageComponent,
     EveryQuestionsComponent,
     NewQuestionComponent,
@@ -45,16 +41,18 @@ import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
     FilterBySortPipe,
   ],
   imports: [
+    AngularMaterialModule,
+    AppRoutingModule,
+    AuthModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularMaterialModule,
     HttpClientModule,
   ],
-  providers: [AuthService, QuestionsService, ThemeService],
+  providers: [QuestionsService, ThemeService],
   bootstrap: [AppComponent],
+  exports: [HeaderComponent],
 })
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry) {
