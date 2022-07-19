@@ -3,37 +3,42 @@
     <div class='c-app__home'>
       <a class='c-app__stack'>Stack Overflow</a>
     </div>
-    <button class='c-app__trigger' mat-button [matMenuTriggerFor]='menu'>
+    <button [matMenuTriggerFor]='menu' class='c-app__trigger' mat-button>
       <mat-icon class='c-app__icon'>menu</mat-icon>
     </button>
     <mat-menu class='c-app__menu' #menu='matMenu'>
       <li class='c-app__item'>
-        <a class='c-app__link' mat-menu-item *ngIf='isLogUser'>{{ email }}</a>
+        <a *ngIf='isLoginUser' class='c-app__link' mat-menu-item>{{ email }}</a>
       </li>
       <li routerLinkActive='active' class='c-app__item'>
         <button
+          *ngIf='!isLoginUser'
           class='c-app__button'
-          *ngIf='!isLogUser'
           mat-button
           mat-raised-button
           color='accent'
-          routerLink='auth/login'
+          (click)='onLogin()'
         >
           Login
         </button
         >
       </li>
       <mat-divider class='c-app__divider'></mat-divider>
-      <li *ngIf='!isLogUser' class='c-app__item' routerLinkActive='active'>
-        <button class='c-app__button' mat-button mat-raised-button routerLink='auth/sign-up'>Sign Up</button>
+      <li *ngIf='!isLoginUser' class='c-app__item' routerLinkActive='active'>
+        <button class='c-app__button'
+                mat-button
+                mat-raised-button
+                (click)='onSignUp()'
+        >
+          Sign Up
+        </button>
       </li>
-      <li *ngIf='isLogUser' class='c-app__item' routerLinkActive='active'>
+      <li *ngIf='isLoginUser' class='c-app__item' routerLinkActive='active'>
         <a
           class='c-app__link'
           type='button'
           mat-button
           mat-raised-button
-          routerLink='/newQuestion'
           (click)='addQuestion()'
         >
           <mat-icon class='c-app__icon'>post_add</mat-icon>
@@ -42,19 +47,25 @@
       </li>
       <mat-divider class='c-app__divider'></mat-divider>
       <li class='c-app__item' routerLinkActive='active'>
-        <a class='c-app__link' *ngIf='isLogUser' mat-menu-item [matMenuTriggerFor]='profile'
+        <a *ngIf='isLoginUser'
+           [matMenuTriggerFor]='profile'
+           class='c-app__link'
+           mat-menu-item
         >
           <mat-icon class='c-app__icon'>person</mat-icon>
         </a
         >
       </li>
     </mat-menu>
-    <mat-menu class='c-app__menu' #profile='matMenu' yPosition='above'>
+
+    <mat-menu #profile='matMenu' class='c-app__menu' yPosition='above'>
       <a class='c-app__link' mat-menu-item>
         <mat-icon class='c-app__icon'>home</mat-icon>
       </a>
       <mat-divider class='c-app__divider'></mat-divider>
-      <a class='c-app__link' mat-menu-item routerLink='/' (click)='signOut()'
+      <a class='c-app__link'
+         mat-menu-item
+         (click)='signOut()'
       >
         <mat-icon class='c-app__icon'>logout</mat-icon>
       </a
@@ -63,12 +74,16 @@
 
     <ul class='c-app__buttons c-app__buttons--hide'>
       <li class='c-app__item'>
-        <a class='c-app__link' mat-menu-item *ngIf='isLogUser'>{{ email }}</a>
+        <a *ngIf='isLoginUser'
+           class='c-app__link'
+           mat-menu-item>
+          {{ email }}
+        </a>
       </li>
       <li routerLinkActive='active' class='c-app__item'>
         <button
+          *ngIf='!isLoginUser'
           class='c-app__button'
-          *ngIf='!isLogUser'
           mat-button
           mat-raised-button
           color='accent'
@@ -78,10 +93,10 @@
         </button
         >
       </li>
-      <li *ngIf='!isLogUser' class='c-app__item' routerLinkActive='active'>
+      <li *ngIf='!isLoginUser' class='c-app__item' routerLinkActive='active'>
         <button class='c-app__button' mat-button mat-raised-button routerLink='auth/sign-up'>Sign Up</button>
       </li>
-      <li *ngIf='isLogUser' class='c-app__item' routerLinkActive='active'>
+      <li *ngIf='isLoginUser' class='c-app__item' routerLinkActive='active'>
         <a
           class='c-app__link'
           type='button'
@@ -96,21 +111,20 @@
       </li>
       <li class='c-app__item' routerLinkActive='active'>
         <a
+          *ngIf='isLoginUser'
+          [matMenuTriggerFor]='profile'
           class='c-app__link'
-          *ngIf='isLogUser'
           mat-button
           mat-raised-button
-          [matMenuTriggerFor]='profile'
         >
           <mat-icon class='c-app__icon'>person</mat-icon>
         </a
         >
-        <mat-menu class='c-app__menu' #profile='matMenu'>
+        <mat-menu #profile='matMenu' class='c-app__menu'>
           <a mat-menu-item class='c-app__link'>
             <mat-icon class='c-app__icon'>home</mat-icon>
           </a>
-          <a mat-menu-item class='c-app__link' routerLink='/' (click)='signOut()'
-          >
+          <a mat-menu-item class='c-app__link' (click)='signOut()'>
             <mat-icon class='c-app__icon'>logout</mat-icon>
           </a
           >
@@ -119,3 +133,4 @@
     </ul>
   </nav>
 </mat-toolbar>
+

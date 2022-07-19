@@ -4,21 +4,19 @@ import { AuthService } from '../_shared/_services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthGuardLogin implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean> | boolean {
-    console.log(this.authService.isLogUser$.value);
-    return this.authService.isLogUser$.pipe(
+    return this.authService.isLoginUser().pipe(
       map((isLogUser: boolean) => {
-        console.log(isLogUser);
         if (isLogUser) {
-          console.log(isLogUser, 'gg');
-          return true;
+          return isLogUser;
         }
         this.router.navigate(['auth/login']);
-        return false;
+
+        return isLogUser;
       })
     );
   }

@@ -11,21 +11,20 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        component: LoginPageComponent,
-        // canActivate: [AuthGuardHome],
+        component: LoginPageComponent
       },
       {
         path: 'sign-up',
-        component: SignUpPageComponent,
-        // canActivate: [AuthGuardHome],
-      },
-    ],
-  },
+        component: SignUpPageComponent
+      }
+    ]
+  }
 ];
 
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AuthRoutingModule {}
+export class AuthRoutingModule {
+}

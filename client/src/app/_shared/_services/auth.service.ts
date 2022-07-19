@@ -2,64 +2,54 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../_models/User';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthUser } from '../_models/AuthUser';
 import { ILogin } from '../interface/ILogin';
+import { IRefreshToken } from '../interface/IRefreshToken';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private http: HttpClient) { }
-  private isLogUser = false;
-  public user$!: Observable<User>;
-  public isLogUser$ = new BehaviorSubject<boolean>(this.isLogUser);
-  private url = environment.apiUrl;
+  constructor(private http: HttpClient) {}
 
-  private getUser(data: ILogin): Observable<User> {
-    return of(data).pipe(
-      map((data: ILogin) => {
-        return new User(data.user.id, data.user.email, data.user.role, data.token.accessToken, data.token.refreshToken);
-      })
-    );
-  }
+  private url = environment.apiUrl;
 
   private errorHandler(error: { error: { message: any }; status: any; message: any }): Observable<never> {
     return throwError(error.error.message);
   }
 
-  private setLogged(value: boolean): void {
-    this.isLogUser = value;
-    this.isLogUser$.next(value);
+  public getUser(): Observable<User> {
+    const authUser = JSON.parse(localStorage.getItem('authUser') || 'null');
+
+    if (authUser) {
+      return of(authUser).pipe(
+        map((authUser: User) => {
+          return new User(authUser.id, authUser.email, authUser.role, authUser.accessToken, authUser.refreshToken);
+        })
+      );
+    }
+    return EMPTY;
   }
 
-  login(user: AuthUser): Observable<ILogin> {
-    return this.http.post<ILogin>(this.url + 'auth/login', user).pipe(
-      map((data: ILogin) => {
-        if (data) {
-          this.user$ = this.getUser(data);
-          this.setLogged(true);
-          return data;
-        }
-        return data;
-      }),
-      catchError(this.errorHandler)
-    );
+  public isLoginUser(): Observable<boolean> {
+    const authUser = JSON.parse(localStorage.getItem('authUser') || 'null');
+
+    if (authUser !== null) {
+      return of(true);
+    }
+
+    return of(false);
   }
 
-  // signOut(): Promise<any> {
-  // }
+  public login(user: AuthUser): Observable<ILogin> {
+    return this.http.post<ILogin>(this.url + 'auth/login', user).pipe(catchError(this.errorHandler));
+  }
 
-  signUp(user: AuthUser): Observable<ILogin> {
-    return this.http.post<ILogin>(this.url + 'auth/sign-up', user).pipe(
-      map((data: ILogin) => {
-        if (data) {
-          this.user$ = this.getUser(data);
-          this.setLogged(true);
-          return data;
-        }
-        return data;
-      }),
-      catchError(this.errorHandler)
-    );
+  public signOut(refreshToken: IRefreshToken): Observable<IRefreshToken> {
+    return this.http.post<IRefreshToken>(this.url + 'auth/logout', refreshToken).pipe(catchError(this.errorHandler));
+  }
+
+  public signUp(user: AuthUser): Observable<ILogin> {
+    return this.http.post<ILogin>(this.url + 'auth/sign-up', user).pipe(catchError(this.errorHandler));
   }
 }

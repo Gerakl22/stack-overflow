@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    // canActivate: [AuthGuardLogin],
+    canActivate: [AuthGuardLogin],
     children: [
       { path: '', redirectTo: '/everyQuestions', pathMatch: 'full' },
       { path: 'everyQuestions', component: EveryQuestionsComponent },
@@ -23,6 +23,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
+    canActivate: [AuthGuardHome],
     loadChildren: () => import('./authModule/auth.module').then((m) => m.AuthModule),
   },
   // {

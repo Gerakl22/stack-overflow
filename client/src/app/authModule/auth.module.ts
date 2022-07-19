@@ -12,11 +12,13 @@ import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
 import { AuthService } from '../_shared/_services/auth.service';
 import { RouterModule } from '@angular/router';
 
+import { AuthGuardHome } from '../_helpers/authGuardHome';
+import { AuthGuardLogin } from '../_helpers/authGuardLogin';
 
 @NgModule({
   declarations: [AuthTemplateComponent, LoginPageComponent, SignUpPageComponent],
   imports: [AngularMaterialModule, AuthRoutingModule, CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [AuthTemplateComponent, LoginPageComponent, SignUpPageComponent],
-  providers: [AuthService],
+  providers: [AuthGuardHome, AuthGuardLogin, AuthService],
 })
 export class AuthModule {}

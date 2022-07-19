@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../_shared/_services/auth.service';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthUser } from '../../_shared/_models/AuthUser';
+import { ILogin } from '../../_shared/interface/ILogin';
+import { User } from '../../_shared/_models/User';
 
 @Component({
   selector: 'app-login-page',
@@ -14,12 +16,12 @@ import { AuthUser } from '../../_shared/_models/AuthUser';
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
-  private redirectDelay = 0;
+  private redirectDelay = 1000;
   error!: string;
   isHidePassword = true;
   myForm!: FormGroup;
 
-  constructor(public authService: AuthService, public router: Router) {
+  constructor(private authService: AuthService, private router: Router, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -53,38 +55,20 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     return this.password.errors?.minlength ? 'Min length 6 letters' : '';
   }
 
-  // logOnFacebook(): void {
-  //   this.authService
-  //     .facebookLogin()
-  //     .then(() => {
-  //       this.router.navigate(['/']);
-  //     })
-  //     .catch((err: Error) => {
-  //       this.error = err.message;
-  //     });
-  // }
-  //
-  // logOnGoogle(): void {
-  //   this.authService
-  //     .googleLogin()
-  //     .then(() => {
-  //       this.router.navigate(['/']);
-  //     })
-  //     .catch((err: Error) => {
-  //       this.error = err.message;
-  //     });
-  // }
-  //
-  // logOnGitHub(): void {
-  //   this.authService
-  //     .gitHubLogin()
-  //     .then(() => {
-  //       this.router.navigate(['/']);
-  //     })
-  //     .catch((err: Error) => {
-  //       this.error = err.message;
-  //     });
-  // }
+  private parseDataForAuthUser(data: ILogin): User {
+    return {
+      id: data.user.id,
+      email: data.user.email,
+      role: data.user.role,
+      accessToken: data.token.accessToken,
+      refreshToken: data.token.refreshToken
+    };
+  }
+
+  private setAuthUserAndReloadPage(authUser: User): void {
+    localStorage.setItem('authUser', JSON.stringify(authUser));
+    window.location.reload();
+  }
 
   onSubmit(): void {
     const user: AuthUser = {
@@ -96,11 +80,14 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       .login(user)
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        () => {
+        (data: ILogin) => {
+          this.setAuthUserAndReloadPage(this.parseDataForAuthUser(data));
+
           setTimeout(() => this.router.navigateByUrl(''), this.redirectDelay);
         },
         (error: string) => {
           this.error = error;
+          this.cd.detectChanges();
         }
       );
   }
