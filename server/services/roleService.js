@@ -2,7 +2,7 @@ const roleModel = require('../models/Role');
 
 class RoleService {
   async getRole(roleConstant) {
-    return roleModel.findOne({ value: roleConstant });
+    return roleModel.findOne({ role: roleConstant });
   }
 }
 

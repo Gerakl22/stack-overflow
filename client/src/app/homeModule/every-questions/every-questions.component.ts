@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import firebase from 'firebase';
-import Database = firebase.database.Database;
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../_shared/_services/auth.service';
 import { QuestionsService } from '../../_shared/_services/questions.service';
 import { ThemeService } from '../../_shared/_services/theme.service';
 import { Tags } from '../../_shared/_models/Tags';
@@ -17,28 +14,31 @@ import { ThemeConstants } from '../../_shared/constants/ThemeConstants';
 import { QuestionsStatusConstants } from '../../_shared/constants/QuestionsStatusConstants';
 import { QuestionsTimeConstants } from '../../_shared/constants/QuestionsTimeConstants';
 import { QuestionsDisplayConstants } from '../../_shared/constants/QuestionsDisplayConstants';
+import { LocalStorageConstants } from '../../_shared/constants/LocalStorageConstants';
+import { User } from '../../_shared/_models/User';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-every-questions',
   templateUrl: './every-questions.component.html',
   styleUrls: ['./every-questions.component.scss'],
 })
-export class EveryQuestionsComponent implements OnInit {
+export class EveryQuestionsComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
   tagsData!: Tags[];
   themeData!: Theme[];
   questionsStatusData!: QuestionsStatus[];
   questionsTimeData!: QuestionsTime[];
   questionsDisplayData!: QuestionsDisplay[];
-  questionsArray: Question[] = [];
+  questionsArray!: Question[];
   electedTags: Tags[] = [];
-  questionObject!: Question;
   filterQuestionsForm!: FormGroup;
   timeQuestions = null;
   statusQuestions = 'All';
-  author: string | null | undefined;
+  authUser!: User;
   isSortQuestions = false;
   isLineDisplay = false;
-  isAdmin: boolean | undefined;
 
   get tagsFormArray(): FormArray {
     return this.filterQuestionsForm.controls.tags as FormArray;
@@ -56,8 +56,7 @@ export class EveryQuestionsComponent implements OnInit {
     private fb: FormBuilder,
     private questionsService: QuestionsService,
     private router: Router,
-    private themeService: ThemeService,
-    private authService: AuthService
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -75,15 +74,18 @@ export class EveryQuestionsComponent implements OnInit {
 
     console.log(this.filterQuestionsForm);
 
-    this.questionsService.getQuestions().subscribe(
-      (questions: Database) => {
-        this.getQuestionsArray(questions);
-        // this.author = this.authService.user?.email;
-        // this.isAdmin = this.authService.user?.isAdmin;
-        console.log(this.questionsArray);
-      },
-      (error) => error.message
-    );
+    this.questionsService
+      .getQuestions()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (questions: Question[]) => {
+          if (questions) {
+            this.questionsArray = questions;
+            this.authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
+          }
+        },
+        (error) => error.message
+      );
 
     this.addCheckBoxes();
   }
@@ -100,32 +102,17 @@ export class EveryQuestionsComponent implements OnInit {
     );
   }
 
-  getQuestionsArray(questions: firebase.database.Database): void {
-    if (questions === undefined || questions === null) {
-      return;
-    } else {
-      this.questionsArray = Object.keys(questions).map((key: string) => ({
-        ...questions[key],
-        key,
-      }));
-    }
+  public onApproveQuestion(id: string): void {
+    this.questionsService
+      .approveQuestionById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (question: Question[]) => (this.questionsArray = question),
+        (error) => error.message
+      );
   }
 
-  onApproveQuestion(id: string): void {
-    this.questionsArray.find((question: Question) => {
-      if (question.key === id) {
-        question.isApproval = true;
-        this.questionObject = question;
-      }
-    });
-
-    this.questionsService.updateQuestionById(id, this.questionObject).subscribe(
-      (question: Question) => (this.questionObject = question),
-      (error) => error.message
-    );
-  }
-
-  onChangeTheme(themeName: string): void {
+  public onChangeTheme(themeName: string): void {
     this.themeData.find((theme: Theme) => {
       if (theme.name === themeName) {
         this.themeService.setTheme(themeName);
@@ -136,11 +123,11 @@ export class EveryQuestionsComponent implements OnInit {
     });
   }
 
-  onDisplayQuestions(display: string): void {
+  public onDisplayQuestions(display: string): void {
     this.isLineDisplay = display === 'Line';
   }
 
-  onFilterByTags(event: { source: { name: any }; checked: boolean }): void {
+  public onFilterByTags(event: { source: { name: any }; checked: boolean }): void {
     const tagName = event.source.name;
     if (event.checked) {
       this.electedTags.push(tagName);
@@ -149,7 +136,7 @@ export class EveryQuestionsComponent implements OnInit {
     }
   }
 
-  onFilterByStatusQuestions(event: { source: { name: any; id: string }; checked: boolean }): void {
+  public onFilterByStatusQuestions(event: { source: { name: any; id: string }; checked: boolean }): void {
     const statusName = event.source.name;
     const id = event.source.id;
 
@@ -168,7 +155,7 @@ export class EveryQuestionsComponent implements OnInit {
     }
   }
 
-  onFilterPerPeriodOfTime(event: { source: { name: any; id: string }; checked: boolean }): void {
+  public onFilterPerPeriodOfTime(event: { source: { name: any; id: string }; checked: boolean }): void {
     const timeName = event.source.name;
     const id = event.source.id;
 
@@ -189,19 +176,26 @@ export class EveryQuestionsComponent implements OnInit {
     }
   }
 
-  onOpenScreenQuestionById(id: string): void {
-    this.router.navigate([`screenQuestion/${id}`]);
+  public onOpenScreenQuestionById(id: string): void {
+    this.router.navigateByUrl(`questions/open/${id}`);
   }
 
-  onRemoveQuestionById(id: string): void {
-    this.questionsArray = this.questionsArray.filter((element: Question) => element.key !== id);
-    this.questionsService.removeQuestionById(id).subscribe(
-      (question: Question) => question,
-      (error) => error.message
-    );
+  public onRemoveQuestionById(id: string): void {
+    this.questionsService
+      .removeQuestionById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (question: Question[]) => (this.questionsArray = question),
+        (error) => error.message
+      );
   }
 
-  onSortQuestions(): void {
+  public onSortQuestions(): void {
     this.isSortQuestions = !this.isSortQuestions;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

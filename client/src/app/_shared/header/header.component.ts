@@ -1,25 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../_services/auth.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../_models/User';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../_services/auth.service';
 import { IRefreshToken } from '../interface/IRefreshToken';
+import { RoutesConstants } from '../constants/RoutesConstants';
+import { User } from '../_models/User';
+import { LocalStorageConstants } from '../constants/LocalStorageConstants';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  constructor(private authService: AuthService, private router: Router, private cd: ChangeDetectorRef) {}
+
   private destroy$: Subject<void> = new Subject<void>();
   private redirectDelay = 0;
   private refreshToken!: string;
   public email!: string;
   public isLoginUser = false;
-
-  constructor(private authService: AuthService, private router: Router) {
-  }
 
   private getAuthUser(): void {
     this.authService
@@ -32,40 +34,47 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
   }
 
-  private removeAuthUser(): void {
+  private removeAuthUserAndReloadPage(): void {
     this.isLoginUser = false;
-    localStorage.removeItem('authUser');
+    localStorage.removeItem(LocalStorageConstants.AUTH_USER);
   }
 
   ngOnInit(): void {
     this.getAuthUser();
   }
 
-  addQuestion(): void {
-    this.router.navigateByUrl('newQuestion');
+  public addQuestion(): void {
+    this.router.navigateByUrl('questions/add');
   }
 
-  onLogin(): void {
-    this.router.navigateByUrl('auth/login');
+  public onLogin(): void {
+    this.router.navigateByUrl(RoutesConstants.AUTH.LOGIN);
   }
 
-  onSignUp(): void {
-    this.router.navigateByUrl('auth/sign-up');
+  public onSignUp(): void {
+    this.router.navigateByUrl(RoutesConstants.AUTH.SIGN_UP);
   }
 
-  signOut(): void {
+  public logout(): void {
     const refreshToken: IRefreshToken = {
-      refreshToken: this.refreshToken
+      refreshToken: this.refreshToken,
     };
 
     this.authService
-      .signOut(refreshToken)
+      .logout(refreshToken)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.removeAuthUser();
+      .subscribe(
+        () => {
+          this.removeAuthUserAndReloadPage();
 
-        setTimeout(() => this.router.navigateByUrl('auth/login'), this.redirectDelay);
-      });
+          setTimeout(() => this.router.navigateByUrl(RoutesConstants.AUTH.LOGIN), this.redirectDelay);
+          this.cd.detectChanges();
+        },
+        (error) => {
+          console.log(error);
+          this.cd.detectChanges();
+        }
+      );
   }
 
   ngOnDestroy(): void {

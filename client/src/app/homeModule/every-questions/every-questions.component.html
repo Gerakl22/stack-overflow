@@ -134,11 +134,12 @@
   </mat-toolbar>
 
   <section
-    class="c-everyQuestions__section c-everyQuestions__section--tiled"
-    *ngIf="isLineDisplay === false"
+    class="c-everyQuestions__section"
+    [ngClass]='isLineDisplay ? "c-everyQuestions__section--line" : "c-everyQuestions__section--tiled"'
   >
     <mat-card
       class="c-everyQuestions__card"
+      [ngClass]='isLineDisplay ? "c-everyQuestions__card--line" : null'
       *ngFor="
         let question of questionsArray
           | filterByStatusQuestions: statusQuestions
@@ -150,105 +151,50 @@
         <p class="c-everyQuestions__date">
           {{ question.date | date: "MMM d, y, h:mm:ss a" }}
         </p>
-        <small class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
-        >{{ tag }}
+        <small class="c-everyQuestions__tag" *ngFor="let tag of question.tags">
+          {{ tag }}
         </small>
-      <mat-card-title
-        class="c-everyQuestions__title"
-        (click)="onOpenScreenQuestionById(question.key)"
-        >{{ question.title }}</mat-card-title
-      >
-      <hr />
-      <div class="c-everyQuestions__buttons">
-        <small
-          *ngIf="
-            question.isApproval === false &&
-            (question.author === author || isAdmin === true)
-          "
-          class="c-everyQuestions__moderation"
-          >Moderation</small
-        >
-        <button
-          *ngIf="question.isApproval === false && isAdmin === true"
-          class="c-everyQuestions__button"
-          type="submit"
-          mat-raised-button
-          color="primary"
-          (click)="onApproveQuestion(question.key)"
-        >
-          <mat-icon class="c-everyQuestions__icon">approval</mat-icon>
-          <span class="c-everyQuestions__approve">Approve</span>
-        </button>
-        <button
-          *ngIf="question.author === author || isAdmin === true"
-          class="c-everyQuestions__button"
-          mat-raised-button
-          color="warn"
-          (click)="onRemoveQuestionById(question.key)"
-        >
-          <mat-icon class="c-everyQuestions__icon">delete_forever</mat-icon>
-          <span class="c-everyQuestions__delete">Delete</span>
-        </button>
-      </div>
-    </mat-card>
-  </section>
 
-  <section
-    class="c-everyQuestions__section c-everyQuestions__section--line"
-    *ngIf="isLineDisplay === true"
-  >
-    <mat-card
-      class="c-everyQuestions__card c-everyQuestions__card--line"
-      *ngFor="
-        let question of questionsArray
-          | filterByStatusQuestions: statusQuestions
-          | filterByTags: electedTags
-          | filterPerPeriodOfTime: timeQuestions
-          | filterBySort: isSortQuestions
-      "
-    >
-      <p class="c-everyQuestions__date">
-        {{ question.date | date: "MMM d, y, h:mm:ss a" }}
-      </p>
-      <small class="c-everyQuestions__tag" *ngFor="let tag of question['tags']"
-      >{{ tag }}
-      </small>
       <mat-card-title
         class="c-everyQuestions__title"
-        (click)="onOpenScreenQuestionById(question.key)"
-      >{{ question.title }}</mat-card-title
-      >
+        (click)="onOpenScreenQuestionById(question.id)"
+        >
+        {{ question.title }}
+      </mat-card-title>
+
       <hr />
+
       <div class="c-everyQuestions__buttons">
         <small
-          *ngIf="
-            question.isApproval === false &&
-            (question.author === author || isAdmin === true)
-          "
+          *ngIf="!question.isApproval && (question.author === authUser.email || authUser.role === 'ADMIN')"
           class="c-everyQuestions__moderation"
-          >Moderation</small
+          >
+          Moderation
+        </small
         >
         <button
-          *ngIf="question.isApproval === false && isAdmin === true"
+          *ngIf="!question.isApproval && authUser.role === 'ADMIN'"
           class="c-everyQuestions__button"
           type="submit"
           mat-raised-button
           color="primary"
+          (click)="onApproveQuestion(question.id)"
         >
           <mat-icon class="c-everyQuestions__icon">approval</mat-icon>
           <span class="c-everyQuestions__approve">Approve</span>
         </button>
         <button
-          *ngIf="question.author === author || isAdmin === true"
+          *ngIf="question.author === authUser.email || authUser.role === 'ADMIN'"
           class="c-everyQuestions__button"
           mat-raised-button
           color="warn"
-          (click)="onRemoveQuestionById(question.key)"
+          (click)="onRemoveQuestionById(question.id)"
         >
           <mat-icon class="c-everyQuestions__icon">delete_forever</mat-icon>
           <span class="c-everyQuestions__delete">Delete</span>
         </button>
       </div>
+
     </mat-card>
   </section>
 </main>

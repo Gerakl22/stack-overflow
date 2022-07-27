@@ -56,6 +56,10 @@ class TokenService {
     return TokenModel.findOne({ token: token, tokenConstant: tokenConstant }).populate('user');
   }
 
+  async removeTokenModel(tokenModel) {
+    await tokenModel.remove();
+  }
+
   async verifyToken(token, tokenConstant) {
     const payload = jwt.verify(token, config.jwt.secret_key);
     const currentTokenModel = TokenModel.findOne({ token, tokenConstant, user: payload.user_id });

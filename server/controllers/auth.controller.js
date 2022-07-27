@@ -1,22 +1,10 @@
 const authService = require('../services/authService');
-const tokenService = require('../services/tokenService');
-const SuccessConstants = require('../constants/successConstants');
 const httpStatus = require('http-status');
 const logger = require('../config/logger');
+const tokenService = require('../services/tokenService');
+const SuccessConstants = require('../constants/successConstants');
 
 class AuthController {
-
-  async decodeToken(req, res) {
-    try {
-      const isValidToken = await tokenService.decodeToken(req.body.accessToken);
-
-      res.status(httpStatus.OK).send({ isValidToken });
-    } catch (e) {
-      logger.error(e.message);
-
-      res.status(httpStatus.UNAUTHORIZED).json({ message: e.message });
-    }
-  }
 
   async login(req, res) {
     try {
@@ -67,7 +55,6 @@ class AuthController {
       res.status(httpStatus.UNAUTHORIZED).json({ message: e.message });
     }
   }
-
 
 }
 

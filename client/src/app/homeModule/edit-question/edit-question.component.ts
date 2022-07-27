@@ -89,7 +89,7 @@ export class EditQuestionComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate([`screenQuestion/${this.urlId}`]);
+    this.router.navigate([`questions/open/${this.urlId}`]);
   }
 
   onSave(): void {
@@ -100,12 +100,12 @@ export class EditQuestionComponent implements OnInit {
       tags: this.selectedTagsItem(),
     };
 
-    this.onUpdateQuestionByIdAndQuestion(this.urlId, questionObject);
+    this.onUpdateQuestionByIdAndQuestion(this.urlId);
   }
 
-  onUpdateQuestionByIdAndQuestion(id: string, questionObject: Question): void {
-    this.questionsService.updateQuestionById(id, questionObject).subscribe(
-      (question: Question) => question,
+  onUpdateQuestionByIdAndQuestion(id: string): void {
+    this.questionsService.approveQuestionById(id).subscribe(
+      (question: Question[]) => question,
       (error) => (this.error = error),
       () => this.onCancel()
     );

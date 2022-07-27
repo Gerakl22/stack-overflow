@@ -10,7 +10,7 @@ import { catchError, retry } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class QuestionsService {
   private url = environment.apiUrl;
-  private urlQuestions = 'everyQuestions';
+  private urlQuestions = 'questions';
   private urlComments = 'comments';
 
   constructor(private http: HttpClient) {}
@@ -25,41 +25,33 @@ export class QuestionsService {
     return throwError(message);
   }
 
+  approveQuestionById(id: string): Observable<Question[]> {
+    return this.http.get<Question[]>(`${this.url}${this.urlQuestions}/approve/${id}`).pipe(catchError(QuestionsService.httpError));
+  }
+
   createComment(id: string, comment: Comment): Observable<Comment> {
-    return this.http
-      .post<Comment>(`${this.url}${this.urlQuestions}/${id}/${this.urlComments}.json`, comment)
-      .pipe(retry(1), catchError(QuestionsService.httpError));
+    return this.http.post<Comment>(`${this.url}${this.urlComments}/create/${id}`, comment).pipe(catchError(QuestionsService.httpError));
   }
 
   createQuestion(question: Question): Observable<Question> {
-    return this.http
-      .post<Question>(`${this.url}${this.urlQuestions}.json`, question)
-      .pipe(retry(1), catchError(QuestionsService.httpError));
+    return this.http.post<Question>(`${this.url}${this.urlQuestions}/all`, question).pipe(catchError(QuestionsService.httpError));
   }
 
-  getQuestions(): Observable<firebase.database.Database> {
-    return this.http
-      .get<firebase.database.Database>(`${this.url}${this.urlQuestions}.json`)
-      .pipe(retry(1), catchError(QuestionsService.httpError));
+  getQuestions(): Observable<Question[]> {
+    return this.http.get<Question[]>(`${this.url}${this.urlQuestions}/all`).pipe(catchError(QuestionsService.httpError));
   }
 
   getQuestionsById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(retry(1), catchError(QuestionsService.httpError));
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}/open/${id}`).pipe(catchError(QuestionsService.httpError));
   }
 
-  removeQuestionById(id: string): Observable<Question> {
-    return this.http.delete<Question>(`${this.url}${this.urlQuestions}/${id}.json`).pipe(retry(1), catchError(QuestionsService.httpError));
+  removeQuestionById(id: string): Observable<Question[]> {
+    return this.http.delete<Question[]>(`${this.url}${this.urlQuestions}/remove/${id}`).pipe(catchError(QuestionsService.httpError));
   }
 
   updateCommentById(questionsId: string, commentId: string | number, comment: Comment): Observable<Comment> {
     return this.http
       .put<Comment>(`${this.url}${this.urlQuestions}/${questionsId}/${this.urlComments}/${commentId}.json`, comment)
-      .pipe(retry(1), catchError(QuestionsService.httpError));
-  }
-
-  updateQuestionById(id: string, question: Question): Observable<Question> {
-    return this.http
-      .put<Question>(`${this.url}${this.urlQuestions}/${id}.json`, question)
-      .pipe(retry(1), catchError(QuestionsService.httpError));
+      .pipe(catchError(QuestionsService.httpError));
   }
 }

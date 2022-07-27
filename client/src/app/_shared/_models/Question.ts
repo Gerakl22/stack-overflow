@@ -2,17 +2,17 @@ import { Tags } from './Tags';
 import { Comment } from './Comment';
 
 export class Question {
-  key?: any;
+  id?: string;
   date: number;
   author: string | null | undefined;
   title: string;
   textarea: string;
   tags: Tags[];
-  comments: Comment[];
+  comments?: Comment[];
   isApproval: boolean;
 
   constructor(question: {
-    key: any;
+    id: string;
     date: number;
     author: string | null | undefined;
     title: string;
@@ -21,7 +21,7 @@ export class Question {
     comments: Comment[];
     isApproval: boolean;
   }) {
-    this.key = question.key;
+    this.id = question.id;
     this.date = question.date;
     this.author = question.author;
     this.title = question.title;

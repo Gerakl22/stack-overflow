@@ -5,9 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './_shared/_material/angular-material.module';
+import { AuthModule } from './authModule/auth.module';
 import { MatIconRegistry } from '@angular/material/icon';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_shared/header/header.component';
@@ -24,7 +25,8 @@ import { FilterByStatusQuestionsPipe } from './_shared/pipes/filter-by-status-qu
 import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
 import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
 import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
-import { AuthModule } from './authModule/auth.module';
+
+import { AuthInterceptor } from './_shared/interceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,7 @@ import { AuthModule } from './authModule/auth.module';
     FilterPerPeriodOfTimePipe,
     FilterByStatusQuestionsPipe,
     FilterByTagsPipe,
-    FilterBySortPipe,
+    FilterBySortPipe
   ],
   imports: [
     AngularMaterialModule,
@@ -50,9 +52,17 @@ import { AuthModule } from './authModule/auth.module';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [QuestionsService, ThemeService],
+  providers: [
+    QuestionsService,
+    ThemeService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
-  exports: [HeaderComponent],
+  exports: [HeaderComponent]
 })
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry) {

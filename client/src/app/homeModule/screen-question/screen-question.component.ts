@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { QuestionsService } from '../../_shared/_services/questions.service';
 import { AuthService } from '../../_shared/_services/auth.service';
 import { Question } from '../../_shared/_models/Question';
 import { Comment } from '../../_shared/_models/Comment';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { LocalStorageConstants } from '../../_shared/constants/LocalStorageConstants';
+import { User } from '../../_shared/_models/User';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-screen-question',
   templateUrl: './screen-question.component.html',
   styleUrls: ['./screen-question.component.scss'],
 })
-export class ScreenQuestionComponent implements OnInit {
+export class ScreenQuestionComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
+  private redirectDelay = 0;
   urlIdQuestion!: string;
   questionObject!: Question;
   commentQuestionForm!: FormGroup;
-  commentsArray: { key: string }[] = [];
-  author: string | null | undefined;
-  isAdmin: boolean | undefined;
+  commentsArray!: Comment[];
+  authUser!: User;
 
   get comment(): AbstractControl {
     return this.commentQuestionForm.controls.comment;
@@ -37,14 +41,18 @@ export class ScreenQuestionComponent implements OnInit {
         tap((url: Params) => {
           this.urlIdQuestion = url.id;
         }),
-        switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion))
+        switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)),
+        takeUntil(this.destroy$)
       )
       .subscribe(
         (questionObject: Question) => {
+          console.log(questionObject);
           this.questionObject = questionObject;
-          this.getCommentsArray(this.questionObject.comments);
-          // this.author = this.authService.user?.email;
-          // this.isAdmin = this.authService.user?.isAdmin;
+          this.authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
+
+          if (questionObject.comments) {
+            this.commentsArray = questionObject.comments;
+          }
         },
         (error) => error.message
       );
@@ -54,25 +62,13 @@ export class ScreenQuestionComponent implements OnInit {
     });
   }
 
-  getErrorComment(): string {
+  public getErrorComment(): string {
     return this.comment.errors?.required ? 'You must enter value' : '';
   }
 
-  getCommentsArray(comments: Comment[]): void {
-    if (comments === undefined || comments === null) {
-      return;
-    } else {
-      const commentsKeys = Object.keys(comments);
-      this.commentsArray = Object.values(comments).map((commentObj: object, i: number) => ({
-        key: commentsKeys[i],
-        ...commentObj,
-      }));
-    }
-  }
-
-  onAddComment(): void {
+  public onAddComment(): void {
     const commentObject: Comment = {
-      author: this.author,
+      author: this.authUser.email,
       textarea: this.comment.value,
       date: new Date().getTime(),
       isBestComment: false,
@@ -82,41 +78,60 @@ export class ScreenQuestionComponent implements OnInit {
       .createComment(this.urlIdQuestion, commentObject)
       .pipe(switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)))
       .subscribe((questionObject: Question) => {
-        this.getCommentsArray(questionObject.comments);
+        if (questionObject.comments) {
+          this.commentsArray = questionObject.comments;
+        }
+
         this.questionObject = questionObject;
         this.commentQuestionForm.reset();
       });
   }
 
-  onApproveQuestions(): void {
-    this.questionObject.isApproval = true;
-    this.questionsService.updateQuestionById(this.urlIdQuestion, this.questionObject).subscribe(
-      (question: Question) => (this.questionObject = question),
-      (error) => error.message
-    );
+  public onApproveQuestions(id: string): void {
+    this.questionsService
+      .approveQuestionById(id)
+      .pipe(
+        switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (question: Question) => (this.questionObject = question),
+        (error) => error.message
+      );
   }
 
-  onBackEveryQuestions(): void {
-    this.router.navigate(['everyQuestions']);
+  public onBackAllQuestions(): void {
+    this.router.navigateByUrl('questions/all');
   }
 
-  onEditQuestionById(): void {
-    this.router.navigate([`editQuestion/${this.urlIdQuestion}`]);
+  public onEditQuestionById(): void {
+    this.router.navigateByUrl(`questions/edit/${this.urlIdQuestion}`);
   }
 
-  onRemoveQuestionById(): void {
-    this.questionsService.removeQuestionById(this.urlIdQuestion).subscribe(
-      (question: Question) => question,
-      (error) => error.message,
-      () => this.onBackEveryQuestions()
-    );
+  public onRemoveQuestionById(): void {
+    this.questionsService
+      .removeQuestionById(this.urlIdQuestion)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        () => {
+          setTimeout(() => this.onBackAllQuestions(), this.redirectDelay);
+        },
+        (error) => error.message
+      );
   }
 
-  toggleIsBestComment($event: { checked: boolean }, commentId: string | number): void {
-    this.questionObject.comments[commentId as any].isBestComment = $event.checked;
-    this.questionsService.updateCommentById(this.urlIdQuestion, commentId, this.questionObject.comments[commentId as any]).subscribe(
-      (commentObj: Comment) => commentObj,
-      (error) => error.message
-    );
+  public toggleIsBestComment($event: { checked: boolean }, commentId: string | number): void {
+    if (this.questionObject.comments) {
+      this.questionObject.comments[commentId as any].isBestComment = $event.checked;
+      this.questionsService.updateCommentById(this.urlIdQuestion, commentId, this.questionObject.comments[commentId as any]).subscribe(
+        (commentObj: Comment) => commentObj,
+        (error) => error.message
+      );
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

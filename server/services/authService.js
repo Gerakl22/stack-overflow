@@ -73,7 +73,7 @@ class AuthService {
       throw new Error(ErrorsConstants.AUTH.USER_IS_NOT_FOUND);
     }
 
-    await currentRefreshTokenModel.remove();
+    await tokenService.removeTokenModel(currentRefreshTokenModel);
 
     return await tokenService.generateAuthToken(user);
   }

@@ -1,20 +1,22 @@
 .c-newQuestion {
   &__home {
+    position: relative;
     width: 90%;
     padding-top: 7rem;
     margin: 0 auto;
   }
 
   &__wrapper {
-    border: 0.2rem solid black;
+    border-radius: 0.5rem;
     padding: 2rem;
-    background-color: lightskyblue;
+    background-color: #424242;
   }
 
   &__heading {
     text-align: center;
     font-size: 1.5rem;
     text-transform: uppercase;
+    color: whitesmoke;
   }
 
   &__form {
@@ -24,6 +26,7 @@
     justify-content: center;
     margin: 0 auto;
     padding-top: 2rem;
+    color: whitesmoke;
   }
 
   &__content {
@@ -67,6 +70,13 @@
 
   &__button {
     padding: 0.5rem;
+  }
+  &__icon--absolute {
+    position: absolute;
+    top: 19%;
+    right: 0;
+    color: red;
+    cursor: pointer;
   }
 
   &__addition {

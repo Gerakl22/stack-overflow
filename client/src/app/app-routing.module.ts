@@ -10,15 +10,15 @@ import { EditQuestionComponent } from './homeModule/edit-question/edit-question.
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'questions',
     component: HomePageComponent,
     canActivate: [AuthGuardLogin],
     children: [
-      { path: '', redirectTo: '/everyQuestions', pathMatch: 'full' },
-      { path: 'everyQuestions', component: EveryQuestionsComponent },
-      { path: 'newQuestion', component: NewQuestionComponent },
-      { path: 'screenQuestion/:id', component: ScreenQuestionComponent },
-      { path: 'editQuestion/:id', component: EditQuestionComponent },
+      { path: '', redirectTo: 'all', pathMatch: 'full' },
+      { path: 'all', component: EveryQuestionsComponent },
+      { path: 'add', component: NewQuestionComponent },
+      { path: 'open/:id', component: ScreenQuestionComponent },
+      { path: 'edit/:id', component: EditQuestionComponent },
     ],
   },
   {
@@ -26,16 +26,6 @@ const routes: Routes = [
     canActivate: [AuthGuardHome],
     loadChildren: () => import('./authModule/auth.module').then((m) => m.AuthModule),
   },
-  // {
-  //   path: 'login',
-  //   component: LoginPageComponent,
-  //   // canActivate: [AuthGuardHome],
-  // },
-  // {
-  //   path: 'sign-up',
-  //   component: SignUpPageComponent,
-  //   // canActivate: [AuthGuardHome],
-  // },
 ];
 
 const config: ExtraOptions = {

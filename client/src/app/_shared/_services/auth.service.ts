@@ -7,6 +7,8 @@ import { catchError, map } from 'rxjs/operators';
 import { AuthUser } from '../_models/AuthUser';
 import { ILogin } from '../interface/ILogin';
 import { IRefreshToken } from '../interface/IRefreshToken';
+import { RoutesConstants } from '../constants/RoutesConstants';
+import { LocalStorageConstants } from '../constants/LocalStorageConstants';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -15,11 +17,11 @@ export class AuthService {
   private url = environment.apiUrl;
 
   private errorHandler(error: { error: { message: any }; status: any; message: any }): Observable<never> {
-    return throwError(error.error.message);
+    return throwError(error.error);
   }
 
   public getUser(): Observable<User> {
-    const authUser = JSON.parse(localStorage.getItem('authUser') || 'null');
+    const authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
 
     if (authUser) {
       return of(authUser).pipe(
@@ -32,7 +34,7 @@ export class AuthService {
   }
 
   public isLoginUser(): Observable<boolean> {
-    const authUser = JSON.parse(localStorage.getItem('authUser') || 'null');
+    const authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
 
     if (authUser !== null) {
       return of(true);
@@ -42,14 +44,20 @@ export class AuthService {
   }
 
   public login(user: AuthUser): Observable<ILogin> {
-    return this.http.post<ILogin>(this.url + 'auth/login', user).pipe(catchError(this.errorHandler));
+    return this.http.post<ILogin>(this.url + RoutesConstants.AUTH.LOGIN, user).pipe(catchError(this.errorHandler));
   }
 
-  public signOut(refreshToken: IRefreshToken): Observable<IRefreshToken> {
-    return this.http.post<IRefreshToken>(this.url + 'auth/logout', refreshToken).pipe(catchError(this.errorHandler));
+  public logout(refreshToken: IRefreshToken): Observable<any> {
+    return this.http.post<any>(this.url + RoutesConstants.AUTH.LOGOUT, refreshToken).pipe(
+      map((data) => {
+        console.log(data);
+        return EMPTY;
+      }),
+      catchError(this.errorHandler)
+    );
   }
 
   public signUp(user: AuthUser): Observable<ILogin> {
-    return this.http.post<ILogin>(this.url + 'auth/sign-up', user).pipe(catchError(this.errorHandler));
+    return this.http.post<ILogin>(this.url + RoutesConstants.AUTH.SIGN_UP, user).pipe(catchError(this.errorHandler));
   }
 }

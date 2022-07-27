@@ -3,13 +3,17 @@
     <div class='c-app__home'>
       <a class='c-app__stack'>Stack Overflow</a>
     </div>
+
     <button [matMenuTriggerFor]='menu' class='c-app__trigger' mat-button>
       <mat-icon class='c-app__icon'>menu</mat-icon>
     </button>
+
     <mat-menu class='c-app__menu' #menu='matMenu'>
+
       <li class='c-app__item'>
         <a *ngIf='isLoginUser' class='c-app__link' mat-menu-item>{{ email }}</a>
       </li>
+
       <li routerLinkActive='active' class='c-app__item'>
         <button
           *ngIf='!isLoginUser'
@@ -23,17 +27,21 @@
         </button
         >
       </li>
+
       <mat-divider class='c-app__divider'></mat-divider>
-      <li *ngIf='!isLoginUser' class='c-app__item' routerLinkActive='active'>
-        <button class='c-app__button'
-                mat-button
-                mat-raised-button
-                (click)='onSignUp()'
+
+      <li *ngIf='!isLoginUser' class='c-app__item'>
+        <button
+          class='c-app__button'
+          mat-button
+          mat-raised-button
+          (click)='onSignUp()'
         >
           Sign Up
         </button>
       </li>
-      <li *ngIf='isLoginUser' class='c-app__item' routerLinkActive='active'>
+
+      <li *ngIf='isLoginUser' class='c-app__item'>
         <a
           class='c-app__link'
           type='button'
@@ -45,12 +53,15 @@
           <span class='c-app__addition'>Add question</span>
         </a>
       </li>
+
       <mat-divider class='c-app__divider'></mat-divider>
-      <li class='c-app__item' routerLinkActive='active'>
-        <a *ngIf='isLoginUser'
-           [matMenuTriggerFor]='profile'
-           class='c-app__link'
-           mat-menu-item
+
+      <li class='c-app__item'>
+        <a
+          *ngIf='isLoginUser'
+          [matMenuTriggerFor]='profile'
+          class='c-app__link'
+          mat-menu-item
         >
           <mat-icon class='c-app__icon'>person</mat-icon>
         </a
@@ -63,24 +74,27 @@
         <mat-icon class='c-app__icon'>home</mat-icon>
       </a>
       <mat-divider class='c-app__divider'></mat-divider>
-      <a class='c-app__link'
-         mat-menu-item
-         (click)='signOut()'
+      <a
+        class='c-app__link'
+        mat-menu-item
+        (click)='logout()'
       >
         <mat-icon class='c-app__icon'>logout</mat-icon>
-      </a
-      >
+      </a>
     </mat-menu>
 
     <ul class='c-app__buttons c-app__buttons--hide'>
+
       <li class='c-app__item'>
-        <a *ngIf='isLoginUser'
-           class='c-app__link'
-           mat-menu-item>
+        <a
+          *ngIf='isLoginUser'
+          class='c-app__link'
+          mat-menu-item>
           {{ email }}
         </a>
       </li>
-      <li routerLinkActive='active' class='c-app__item'>
+
+      <li class='c-app__item'>
         <button
           *ngIf='!isLoginUser'
           class='c-app__button'
@@ -93,10 +107,18 @@
         </button
         >
       </li>
-      <li *ngIf='!isLoginUser' class='c-app__item' routerLinkActive='active'>
-        <button class='c-app__button' mat-button mat-raised-button routerLink='auth/sign-up'>Sign Up</button>
+
+      <li *ngIf='!isLoginUser' class='c-app__item'>
+        <button
+          class='c-app__button'
+          mat-button mat-raised-button
+          (click)='onSignUp()'
+        >
+          Sign Up
+        </button>
       </li>
-      <li *ngIf='isLoginUser' class='c-app__item' routerLinkActive='active'>
+
+      <li *ngIf='isLoginUser' class='c-app__item'>
         <a
           class='c-app__link'
           type='button'
@@ -109,7 +131,8 @@
           <span class='c-app__addition'>Add question</span>
         </a>
       </li>
-      <li class='c-app__item' routerLinkActive='active'>
+
+      <li class='c-app__item'>
         <a
           *ngIf='isLoginUser'
           [matMenuTriggerFor]='profile'
@@ -124,12 +147,13 @@
           <a mat-menu-item class='c-app__link'>
             <mat-icon class='c-app__icon'>home</mat-icon>
           </a>
-          <a mat-menu-item class='c-app__link' (click)='signOut()'>
+          <a mat-menu-item class='c-app__link' (click)='logout()'>
             <mat-icon class='c-app__icon'>logout</mat-icon>
           </a
           >
         </mat-menu>
       </li>
+
     </ul>
   </nav>
 </mat-toolbar>

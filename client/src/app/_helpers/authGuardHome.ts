@@ -12,7 +12,7 @@ export class AuthGuardHome implements CanActivate {
     return this.authService.isLoginUser().pipe(
       map((isLoginUser: boolean) => {
         if (isLoginUser) {
-          this.router.navigate(['/']);
+          this.router.navigateByUrl('questions/all');
           return false;
         }
         return true;

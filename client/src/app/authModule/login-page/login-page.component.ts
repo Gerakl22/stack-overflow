@@ -1,34 +1,29 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../_shared/_services/auth.service';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Navigation, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthUser } from '../../_shared/_models/AuthUser';
 import { ILogin } from '../../_shared/interface/ILogin';
 import { User } from '../../_shared/_models/User';
+import { Validations } from '../../_shared/validations/validations';
+import { ErrorConstants } from '../../_shared/constants/ErrorConstants';
+import { LocalStorageConstants } from '../../_shared/constants/LocalStorageConstants';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
-  private destroy$: Subject<void> = new Subject<void>();
-  private redirectDelay = 1000;
-  error!: string;
-  isHidePassword = true;
-  myForm!: FormGroup;
-
   constructor(private authService: AuthService, private router: Router, private cd: ChangeDetectorRef) {
-  }
+    const currentNavigation = this.router.getCurrentNavigation() || ({} as Navigation);
 
-  ngOnInit(): void {
-    this.myForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
-    });
+    if (currentNavigation?.extras?.state?.messageType === ErrorConstants.ACCESS_TOKEN_EXPIRED) {
+      this.error = currentNavigation?.extras?.state?.message;
+    }
   }
 
   get email(): AbstractControl {
@@ -39,41 +34,62 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     return this.myForm.controls.password;
   }
 
-  getErrorEmail(): string {
-    if (this.email.errors?.required) {
-      return 'You must enter a value';
-    }
+  private destroy$: Subject<void> = new Subject<void>();
+  private redirectDelay = 0;
+  public error!: string;
+  public isHidePassword = true;
+  public myForm!: FormGroup;
 
-    return this.email.errors?.pattern ? 'Not a valid email' : '';
-  }
-
-  getErrorPassword(): string {
-    if (this.password.errors?.required) {
-      return 'You must enter value';
-    }
-
-    return this.password.errors?.minlength ? 'Min length 6 letters' : '';
-  }
-
-  private parseDataForAuthUser(data: ILogin): User {
+  private static parseDataForAuthUser(data: ILogin): User {
     return {
       id: data.user.id,
       email: data.user.email,
       role: data.user.role,
       accessToken: data.token.accessToken,
-      refreshToken: data.token.refreshToken
+      refreshToken: data.token.refreshToken,
     };
   }
 
-  private setAuthUserAndReloadPage(authUser: User): void {
-    localStorage.setItem('authUser', JSON.stringify(authUser));
+  private static setAuthUserAndReloadPage(authUser: User): void {
+    localStorage.setItem(LocalStorageConstants.AUTH_USER, JSON.stringify(authUser));
     window.location.reload();
   }
 
-  onSubmit(): void {
+  private initForm(): void {
+    this.myForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.pattern(Validations.email)]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(Validations.password.minLength),
+        Validators.maxLength(Validations.password.maxLength),
+      ]),
+    });
+  }
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  public getErrorEmail(): string {
+    if (this.email.errors?.required) {
+      return ErrorConstants.EMAIL.MUST_VALUE;
+    }
+
+    return this.email.errors?.pattern ? ErrorConstants.EMAIL.NOT_VALID : ErrorConstants.EMPTY_STRING;
+  }
+
+  public getErrorPassword(): string {
+    if (this.password.errors?.required) {
+      return ErrorConstants.PASSWORD.MUST_VALUE;
+    }
+
+    return this.password.errors ? ErrorConstants.PASSWORD.LENGTH : ErrorConstants.EMPTY_STRING;
+  }
+
+  public onSubmit(): void {
     const user: AuthUser = {
       email: this.myForm.value.email,
-      password: this.myForm.value.password
+      password: this.myForm.value.password,
     };
 
     this.authService
@@ -81,18 +97,18 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (data: ILogin) => {
-          this.setAuthUserAndReloadPage(this.parseDataForAuthUser(data));
+          LoginPageComponent.setAuthUserAndReloadPage(LoginPageComponent.parseDataForAuthUser(data));
 
-          setTimeout(() => this.router.navigateByUrl(''), this.redirectDelay);
+          setTimeout(() => this.router.navigateByUrl('questions/all'), this.redirectDelay);
         },
-        (error: string) => {
-          this.error = error;
+        (error) => {
+          this.error = error.message;
           this.cd.detectChanges();
         }
       );
   }
 
-  toggleIconPassword(): void {
+  public toggleIconPassword(): void {
     this.isHidePassword = !this.isHidePassword;
   }
 

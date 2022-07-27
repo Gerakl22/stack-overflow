@@ -1,22 +1,24 @@
 <div class='c-signUp__wrapper'>
   <mat-card class='c-signUp__card'>
     <mat-card-title class='c-signUp__title'>Sign Up</mat-card-title>
+
     <form class='c-signUp__form' [formGroup]='myForm'>
       <mat-card-content class='c-signUp__content'>
         <mat-form-field class='c-signUp__field' appearance='outline'>
-          <mat-label class='c-signUp__label'>Username</mat-label>
+          <mat-label class='c-signUp__label'>Email</mat-label>
           <input
             class='c-signUp__input'
             matInput
-            placeholder='username@.mail.ru'
             type='email'
             formControlName='email'
+            autocomplete
           />
-          <mat-error class='c-signUp__error' *ngIf='email.invalid && email.touched'>{{
-            getErrorEmail()
-            }}</mat-error>
+          <mat-error class='c-signUp__error' *ngIf='email.invalid && email.touched && email.dirty'>
+            {{getErrorEmail()}}
+          </mat-error>
         </mat-form-field>
       </mat-card-content>
+
       <mat-card-content class='c-signUp__content'>
         <mat-form-field class='c-signUp__field' appearance='outline'>
           <mat-label class='c-signUp__label'>Password</mat-label>
@@ -24,8 +26,8 @@
             class='c-signUp__input'
             matInput
             [type]="isHidePassword ? 'password' : 'text'"
-            placeholder='min length 6'
             formControlName='password'
+            autocomplete
           />
           <button
             class='c-signUp__button'
@@ -36,15 +38,16 @@
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]='isHidePassword'
           >
-            <mat-icon class='c-signUp__icon'>{{
-              isHidePassword ? "visibility_off" : "visibility"
-              }}</mat-icon>
+            <mat-icon class='c-signUp__icon'>
+              {{isHidePassword ? "visibility_off" : "visibility"}}
+            </mat-icon>
           </button>
-          <mat-error class='c-signUp__icon' *ngIf='password.invalid && password.touched'>{{
-            getErrorPassword()
-            }}</mat-error>
+          <mat-error *ngIf='password.invalid && password.touched && password.dirty' class='c-signUp__icon' >
+            {{getErrorPassword()}}
+          </mat-error>
         </mat-form-field>
       </mat-card-content>
+
       <button
         class='c-signUp__button'
         type='submit'
@@ -55,7 +58,11 @@
       >
         <mat-icon class='c-signUp__icon'>login</mat-icon>
       </button>
+
     </form>
-    <mat-error class='c-signUp__error'>{{ error }}</mat-error>
+
+    <mat-error class='c-signUp__error'>
+      {{ error }}
+    </mat-error>
   </mat-card>
 </div>
