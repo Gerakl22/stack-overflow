@@ -2,16 +2,15 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/app",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "types": []
+    "outDir": "../out-tsc/app",
+
   },
   "files": [
     "main.ts",
-    "polyfills.ts"
+    "polyfills.ts",
+    "../node_modules/@types/jasmine/index.d.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
+    "**/*.d.ts"
   ]
 }

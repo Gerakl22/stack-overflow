@@ -64,6 +64,18 @@ class QuestionsController {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
     }
   }
+
+  async updateQuestionById(req, res) {
+    try {
+      const question = await questionsService.updateQuestionById(req.params.id, req.body);
+
+      res.status(httpStatus.OK).send(question);
+    } catch (e) {
+      logger.error(e.message);
+
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+    }
+  }
 }
 
 module.exports = new QuestionsController();

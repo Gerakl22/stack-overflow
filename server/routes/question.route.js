@@ -9,6 +9,7 @@ router.get('/all', questionsController.getAllQuestions)
 router.get('/approve/:id', questionsController.approveQuestionById)
 router.get('/open/:id', questionsController.getQuestionById)
 router.delete('/remove/:id', questionsController.removeQuestionById)
+router.put('/update/:id', questionsController.updateQuestionById)
 
 
 

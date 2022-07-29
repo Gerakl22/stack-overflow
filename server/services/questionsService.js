@@ -6,6 +6,23 @@ const questionsModel = require('../models/Questions');
 
 class QuestionsService {
 
+  static async #createQuestionsModel(question, tags) {
+    return await questionsModel.create(
+      {
+        date: question.date,
+        author: question.author,
+        title: question.title,
+        textarea: question.textarea,
+        tags: tags._id,
+        isApproval: question.isApproval
+      }
+    );
+  }
+
+  static async #getQuestionModelById(id) {
+    return questionsModel.findById(id);
+  }
+
   static async #setAllQuestions(allQuestionsModel) {
     const allQuestions = [];
 
@@ -28,7 +45,7 @@ class QuestionsService {
     }
 
     const date = new Date(questionModelById.date).getTime();
-    const comments = await commentService.setComment(questionModelById.comments);
+    const comments = await commentService.setComments(questionModelById.comments);
 
     return {
       id: questionModelById.id,
@@ -51,16 +68,7 @@ class QuestionsService {
   async createQuestion(question) {
     const tags = await tagsService.createTags(question.tags);
 
-    return await questionsModel.create(
-      {
-        date: question.date,
-        author: question.author,
-        title: question.title,
-        textarea: question.textarea,
-        tags: tags._id,
-        isApproval: question.isApproval
-      }
-    );
+    return await QuestionsService.#createQuestionsModel(question, tags);
   }
 
   async getAllQuestions() {
@@ -70,7 +78,7 @@ class QuestionsService {
   }
 
   async getQuestionById(id) {
-    const questionModelById = await this.getQuestionModelById(id);
+    const questionModelById = await QuestionsService.#getQuestionModelById(id);
 
     if (!questionModelById) {
       logger.error(ErrorsConstants.QUESTIONS.QUESTION_NOT_FOUND);
@@ -81,12 +89,8 @@ class QuestionsService {
     return await QuestionsService.#setQuestion(questionModelById);
   }
 
-  async getQuestionModelById(id) {
-    return questionsModel.findById(id);
-  }
-
   async removeQuestionById(id) {
-    const questionModelById = await this.getQuestionModelById(id);
+    const questionModelById = await QuestionsService.#getQuestionModelById(id);
 
     if (!questionModelById) {
       logger.error(ErrorsConstants.QUESTIONS.QUESTION_NOT_FOUND);
@@ -104,10 +108,31 @@ class QuestionsService {
 
     if (questionModelById && tagsModelById) {
       await tagsModelById.remove();
+      await commentService.removeComments(questionModelById.comments);
       await questionModelById.remove();
     }
 
     return await this.getAllQuestions();
+  }
+
+  async updateQuestionById(id, body) {
+    const questionModelById = await questionsModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          date: body.date,
+          author: body.author,
+          title: body.title,
+          textarea: body.textarea,
+          isApproval: body.isApproval
+        }
+      },
+      { new: true }
+    );
+
+    await tagsService.findByIdAndUpdate(questionModelById.tags, body.tags);
+
+    return await QuestionsService.#setQuestion(questionModelById);
   }
 }
 

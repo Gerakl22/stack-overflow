@@ -1,0 +1,108 @@
+.c-allQuestions {
+  padding-top: 6rem;
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__settings,
+  &__sort,
+  &__filters,
+  &__delete,
+  &__approve {
+    line-height: 1rem;
+    letter-spacing: 0.05rem;
+    font-size: 0.8rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  &__label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__section {
+    display: flex;
+    width: 100%;
+  }
+
+  &__section--tiled {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__section--line {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__card {
+    width: 20rem;
+    margin: 1rem;
+    height: auto;
+  }
+
+  &__card--line {
+    width: 90%;
+  }
+
+  &__title {
+    padding-top: 1rem;
+    text-align: center;
+    cursor: pointer;
+    word-wrap: break-word;
+  }
+
+  &__date {
+    text-align: right;
+    font-size: 0.6rem;
+    color: #28a745;
+  }
+
+  &__tag {
+    padding: 0.2rem;
+    border: cornflowerblue 0.1rem solid;
+    border-right: none;
+  }
+
+  &__tag:last-of-type {
+    border-right: cornflowerblue 0.1rem solid;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  &__button {
+    margin-left: 0.4rem;
+  }
+
+  &__moderation {
+    text-align: center;
+    font-size: 0.8rem;
+    color: red;
+  }
+}
+
+.mat-form-field-label {
+  padding-bottom: 0.2rem;
+}
+
+@media (max-width: 688px) {
+  .c-allQuestions {
+    &__section--tiled {
+      align-items: center;
+      flex-direction: column;
+    }
+  }
+}

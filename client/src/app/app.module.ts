@@ -4,57 +4,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AngularMaterialModule } from './_shared/_material/angular-material.module';
-import { AuthModule } from './authModule/auth.module';
-import { MatIconRegistry } from '@angular/material/icon';
+import { AngularMaterialModule } from './@material/angular-material.module';
+import { AuthModule } from './@auth/auth.module';
+import { HomeModule } from './@home/home.module';
+import { SharedModule } from './@shared/shared.module';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './_shared/header/header.component';
-import { HomePageComponent } from './homeModule/home-page/home-page.component';
-import { NewQuestionComponent } from './homeModule/new-question/new-question.component';
-import { EveryQuestionsComponent } from './homeModule/every-questions/every-questions.component';
-import { ScreenQuestionComponent } from './homeModule/screen-question/screen-question.component';
-import { EditQuestionComponent } from './homeModule/edit-question/edit-question.component';
 
-import { QuestionsService } from './_shared/_services/questions.service';
-import { ThemeService } from './_shared/_services/theme.service';
+import { AuthInterceptor } from './@shared/interceptor';
 
-import { FilterByStatusQuestionsPipe } from './_shared/pipes/filter-by-status-questions.pipe';
-import { FilterByTagsPipe } from './_shared/pipes/filter-by-tags.pipe';
-import { FilterPerPeriodOfTimePipe } from './_shared/pipes/filter-per-period-of-time.pipe';
-import { FilterBySortPipe } from './_shared/pipes/filter-by-sort.pipe';
-
-import { AuthInterceptor } from './_shared/interceptor/auth.interceptor';
+import { MatIconRegistry } from '@angular/material/icon'
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    HomePageComponent,
-    EveryQuestionsComponent,
-    NewQuestionComponent,
-    ScreenQuestionComponent,
-    EditQuestionComponent,
-    FilterPerPeriodOfTimePipe,
-    FilterByStatusQuestionsPipe,
-    FilterByTagsPipe,
-    FilterBySortPipe
-  ],
+  declarations: [AppComponent],
   imports: [
     AngularMaterialModule,
     AppRoutingModule,
     AuthModule,
-    BrowserModule,
     BrowserAnimationsModule,
+    BrowserModule,
     FormsModule,
-    ReactiveFormsModule,
+    HomeModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [
-    QuestionsService,
-    ThemeService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
@@ -62,7 +39,6 @@ import { AuthInterceptor } from './_shared/interceptor/auth.interceptor';
     },
   ],
   bootstrap: [AppComponent],
-  exports: [HeaderComponent]
 })
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry) {

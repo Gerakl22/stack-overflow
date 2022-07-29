@@ -18,6 +18,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "aot": false,
+            "buildOptimizer": false,
+            "optimization": false,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
@@ -36,6 +38,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
+              "aot": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
