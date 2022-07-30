@@ -7,7 +7,7 @@ import { Question, Tags } from '../models';
 })
 export class FilterByTagsPipe implements PipeTransform {
   transform(questionArray: Question[], electedTags: Tags[]): Question[] {
-    if (!electedTags.length) {
+    if (electedTags.length === questionArray.length) {
       return questionArray;
     }
 

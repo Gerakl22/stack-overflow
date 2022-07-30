@@ -10,7 +10,7 @@ $fa-font-path: '../node_modules/font-awesome/fonts';
   --foreground-quaternary: #f4faff;
   --foreground-light: #41474d;
 
-  --background-default: #f4faff;
+  --background-default: #FFA500;
   --background-secondary: #a3b9cc;
   --background-tertiary: #5c7d99;
   --background-light: #ffffff;
@@ -73,4 +73,10 @@ a {
 .mat-raised-button {
   line-height: 12px !important;
   padding: 1px !important;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -13,6 +13,8 @@ const routes: Routes = [
     canActivate: [AuthGuardHome],
     loadChildren: () => import('./@auth/auth.module').then((m) => m.AuthModule),
   },
+  { path: '', redirectTo: 'questions/all', pathMatch: 'full' },
+  { path: '**', redirectTo: 'questions/all' },
 ];
 
 const config: ExtraOptions = {

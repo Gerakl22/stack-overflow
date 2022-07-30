@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../../../@shared/services';
+import { AuthService } from '@shared/services';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Navigation, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ErrorConstants, LocalStorageConstants } from '../../../@shared/constants';
-import { ILogin } from '../../../@shared/interface';
+import { ErrorConstants, LocalStorageConstants } from '@shared/constants';
+import { ILogin } from '@shared/interface';
 
-import { AuthUser, User } from '../../../@shared/models';
-import { Validations } from '../../../@shared/validation';
+import { AuthUser, User } from '@shared/models';
+import { Validations } from '@shared/validation';
 
 @Component({
   selector: 'app-login-page',

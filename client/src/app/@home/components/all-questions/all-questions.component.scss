@@ -1,10 +1,18 @@
 .c-allQuestions {
   padding-top: 6rem;
 
+  &__toolbar {
+    background-color: black;
+  }
+
   &__list {
     display: flex;
     justify-content: space-between;
     width: 100%;
+  }
+
+  &__trigger {
+    background-color: blue;
   }
 
   &__settings,
@@ -44,26 +52,30 @@
   }
 
   &__card {
+    position: relative;
     width: 20rem;
+    height: 15rem;
     margin: 1rem;
-    height: auto;
+    background-color: black;
   }
 
   &__card--line {
     width: 90%;
   }
 
-  &__title {
-    padding-top: 1rem;
-    text-align: center;
-    cursor: pointer;
-    word-wrap: break-word;
+  &__moderation {
+    position: absolute;
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    color: lightcoral;
   }
 
   &__date {
     text-align: right;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     color: #28a745;
+    margin-bottom: 2rem;
   }
 
   &__tag {
@@ -76,6 +88,13 @@
     border-right: cornflowerblue 0.1rem solid;
   }
 
+  &__title {
+    margin-top: 3rem !important;
+    text-align: center;
+    cursor: pointer;
+    word-wrap: break-word;
+  }
+
   &__buttons {
     display: flex;
     justify-content: flex-end;
@@ -85,12 +104,6 @@
 
   &__button {
     margin-left: 0.4rem;
-  }
-
-  &__moderation {
-    text-align: center;
-    font-size: 0.8rem;
-    color: red;
   }
 }
 

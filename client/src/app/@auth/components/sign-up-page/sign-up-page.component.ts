@@ -1,14 +1,13 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../../@shared/services';
+import { AuthService } from '@shared/services';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { AuthUser } from '../../../@shared/models';
-import { ILogin } from '../../../@shared/interface';
-import { User } from '../../../@shared/models';
-import { Validations } from '../../../@shared/validation';
-import { ErrorConstants, LocalStorageConstants } from '../../../@shared/constants';
+import { AuthUser, User } from '@shared/models';
+import { ILogin } from '@shared/interface';
+import { Validations } from '@shared/validation';
+import { ErrorConstants, LocalStorageConstants } from '@shared/constants';
 
 @Component({
   selector: 'app-sign-up-page',

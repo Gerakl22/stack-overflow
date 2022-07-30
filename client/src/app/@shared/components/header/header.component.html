@@ -1,81 +1,15 @@
 <mat-toolbar color='primary' class='c-app__header'>
   <nav class='c-app__navigation'>
-    <div class='c-app__home'>
+    <span class='c-app__home'>
       <a class='c-app__stack'>Stack Overflow</a>
-    </div>
-
-    <button [matMenuTriggerFor]='menu' class='c-app__trigger' mat-button>
-      <mat-icon class='c-app__icon'>menu</mat-icon>
-    </button>
-
-    <mat-menu class='c-app__menu' #menu='matMenu'>
-
-      <li class='c-app__item'>
-        <a *ngIf='isLoginUser' class='c-app__link' mat-menu-item>{{ email }}</a>
-      </li>
-
-      <li class='c-app__item'>
-        <button
-          *ngIf='!isLoginUser'
-          class='c-app__button'
-          mat-button
-          mat-raised-button
-          color='accent'
-          (click)='onLogin()'
-        >
-          Login
-        </button
-        >
-      </li>
-
-      <mat-divider class='c-app__divider'></mat-divider>
-
-      <li *ngIf='!isLoginUser' class='c-app__item'>
-        <button
-          class='c-app__button'
-          mat-button
-          mat-raised-button
-          (click)='onSignUp()'
-        >
-          Sign Up
-        </button>
-      </li>
-
-      <li *ngIf='isLoginUser' class='c-app__item'>
-        <a
-          class='c-app__link'
-          type='button'
-          mat-button
-          mat-raised-button
-          (click)='addQuestion()'
-        >
-          <mat-icon class='c-app__icon'>post_add</mat-icon>
-          <span class='c-app__addition'>Add question</span>
-        </a>
-      </li>
-
-      <mat-divider class='c-app__divider'></mat-divider>
-
-      <li class='c-app__item'>
-        <a
-          *ngIf='isLoginUser'
-          [matMenuTriggerFor]='profile'
-          class='c-app__link'
-          mat-menu-item
-        >
-          <mat-icon class='c-app__icon'>person</mat-icon>
-        </a
-        >
-      </li>
-    </mat-menu>
+    </span>
 
     <mat-menu #profile='matMenu' class='c-app__menu' yPosition='above'>
-      <a class='c-app__link' mat-menu-item>
+      <a mat-menu-item>
         <mat-icon class='c-app__icon'>home</mat-icon>
       </a>
       <mat-divider class='c-app__divider'></mat-divider>
       <a
-        class='c-app__link'
         mat-menu-item
         (click)='logout()'
       >
@@ -88,7 +22,7 @@
       <li class='c-app__item'>
         <a
           *ngIf='isLoginUser'
-          class='c-app__link'
+          class='c-app__email'
           mat-menu-item>
           {{ email }}
         </a>
@@ -142,10 +76,10 @@
         </a
         >
         <mat-menu #profile='matMenu' class='c-app__menu'>
-          <a mat-menu-item class='c-app__link'>
+          <a mat-menu-item>
             <mat-icon class='c-app__icon'>home</mat-icon>
           </a>
-          <a mat-menu-item class='c-app__link' (click)='logout()'>
+          <a mat-menu-item (click)='logout()'>
             <mat-icon class='c-app__icon'>logout</mat-icon>
           </a
           >
@@ -153,6 +87,71 @@
       </li>
 
     </ul>
+
+<!--    This is adaptive-->
+    <button [matMenuTriggerFor]='menu' class='c-app__trigger' mat-button>
+      <mat-icon class='c-app__icon'>menu</mat-icon>
+    </button>
+
+    <mat-menu class='c-app__menu' #menu='matMenu'>
+
+      <li class='c-app__item'>
+        <a *ngIf='isLoginUser' class='c-app__email' mat-menu-item>{{ email }}</a>
+      </li>
+
+      <li class='c-app__item'>
+        <button
+          *ngIf='!isLoginUser'
+          class='c-app__button'
+          mat-button
+          mat-raised-button
+          color='accent'
+          (click)='onLogin()'
+        >
+          Login
+        </button
+        >
+      </li>
+
+      <mat-divider class='c-app__divider'></mat-divider>
+
+      <li *ngIf='!isLoginUser' class='c-app__item'>
+        <button
+          class='c-app__button'
+          mat-button
+          mat-raised-button
+          (click)='onSignUp()'
+        >
+          Sign Up
+        </button>
+      </li>
+
+      <li *ngIf='isLoginUser' class='c-app__item'>
+        <a
+          class='c-app__link'
+          type='button'
+          mat-button
+          mat-raised-button
+          (click)='addQuestion()'
+        >
+          <mat-icon class='c-app__icon'>post_add</mat-icon>
+          <span class='c-app__addition'>Add question</span>
+        </a>
+      </li>
+
+      <mat-divider class='c-app__divider'></mat-divider>
+
+      <li class='c-app__item'>
+        <a
+          *ngIf='isLoginUser'
+          [matMenuTriggerFor]='profile'
+          mat-menu-item
+        >
+          <mat-icon class='c-app__icon'>person</mat-icon>
+        </a
+        >
+      </li>
+    </mat-menu>
   </nav>
 </mat-toolbar>
 

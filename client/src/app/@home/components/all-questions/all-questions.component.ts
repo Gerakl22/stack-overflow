@@ -1,44 +1,34 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { QuestionsService } from '../../../@shared/services/questions.service';
-import { ThemeService } from '../../../@shared/services/theme.service';
-import { Tags } from '../../../@shared/models/Tags';
-import { Question } from '../../../@shared/models/Question';
-import { QuestionsStatus } from '../../../@shared/models/QuestionsStatus';
-import { QuestionsTime } from '../../../@shared/models/QuestionsTime';
-import { QuestionsDisplay } from '../../../@shared/models/QuestionsDisplay';
-import { Theme } from '../../../@shared/models/Theme';
-import { TagsConstants } from '../../../@shared/constants/TagsConstants';
-import { ThemeConstants } from '../../../@shared/constants/ThemeConstants';
-import { QuestionsStatusConstants } from '../../../@shared/constants/QuestionsStatusConstants';
-import { QuestionsTimeConstants } from '../../../@shared/constants/QuestionsTimeConstants';
-import { QuestionsDisplayConstants } from '../../../@shared/constants/QuestionsDisplayConstants';
-import { LocalStorageConstants } from '../../../@shared/constants/LocalStorageConstants';
-import { User } from '../../../@shared/models/User';
+import {
+  LocalStorageConstants,
+  QuestionsDisplayConstants,
+  QuestionsStatusConstants,
+  QuestionsTimeConstants,
+  RoutesConstants,
+  TagsConstants,
+  ThemeConstants,
+} from '@shared/constants';
+import { DisplayQuestionsEnum, StatusQuestionsEnum } from '@shared/enum';
+import { Question, QuestionsDisplay, QuestionsStatus, QuestionsTime, Tags, Theme, User } from '@shared/models';
+import { QuestionsService, ThemeService } from '@shared/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { atLeastOneCheckboxCheckedValidator } from '@shared/validation';
 
 @Component({
-  selector: 'app-every-questions',
+  selector: 'app-all-questions',
   templateUrl: './all-questions.component.html',
   styleUrls: ['./all-questions.component.scss'],
 })
 export class AllQuestionsComponent implements OnInit, OnDestroy {
-  private destroy$: Subject<void> = new Subject<void>();
-  tagsData!: Tags[];
-  themeData!: Theme[];
-  questionsStatusData!: QuestionsStatus[];
-  questionsTimeData!: QuestionsTime[];
-  questionsDisplayData!: QuestionsDisplay[];
-  questionsArray!: Question[];
-  electedTags: Tags[] = [];
-  filterQuestionsForm!: FormGroup;
-  timeQuestions = null;
-  statusQuestions = 'All';
-  authUser!: User;
-  isSortQuestions = false;
-  isLineDisplay = false;
+  constructor(
+    private fb: FormBuilder,
+    private questionsService: QuestionsService,
+    private router: Router,
+    private themeService: ThemeService
+  ) {}
 
   get tagsFormArray(): FormArray {
     return this.filterQuestionsForm.controls.tags as FormArray;
@@ -52,28 +42,48 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
     return this.filterQuestionsForm.controls.status as FormArray;
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private questionsService: QuestionsService,
-    private router: Router,
-    private themeService: ThemeService
-  ) {}
+  private destroy$: Subject<void> = new Subject<void>();
+  public authUser!: User;
+  public electedTags: Tags[] = [];
+  public filterQuestionsForm!: FormGroup;
+  public isLineDisplay = false;
+  public isSortQuestions = false;
+  public questionsArray: Question[] = [];
+  public questionsDisplayData: QuestionsDisplay[] = [];
+  public questionsStatusData: QuestionsStatus[] = [];
+  public questionsTimeData: QuestionsTime[] = [];
+  public statusQuestions: string = StatusQuestionsEnum.ALL;
+  public tagsData: Tags[] = [];
+  public timeQuestions = null;
+  public themeData: Theme[] = [];
 
-  ngOnInit(): void {
-    this.tagsData = TagsConstants;
-    this.themeData = ThemeConstants;
-    this.questionsStatusData = QuestionsStatusConstants;
-    this.questionsTimeData = QuestionsTimeConstants;
-    this.questionsDisplayData = QuestionsDisplayConstants;
-
-    this.filterQuestionsForm = this.fb.group({
-      status: this.fb.array([]),
-      tags: this.fb.array([]),
-      time: this.fb.array([]),
+  private addCheckBoxes(): void {
+    this.tagsData.forEach((item: Tags) => {
+      this.tagsFormArray.push(new FormControl(true));
+      this.electedTags.push(item.value);
     });
 
-    console.log(this.filterQuestionsForm);
+    this.setDataForFormArray(this.questionsStatusData, this.statusFormArray, this.statusQuestions);
+    this.setDataForFormArray(this.questionsTimeData, this.timeFormArray, this.timeQuestions);
+  }
 
+  private initFilterDataAndForm(): void {
+    this.questionsDisplayData = QuestionsDisplayConstants;
+    this.questionsStatusData = QuestionsStatusConstants;
+    this.questionsTimeData = QuestionsTimeConstants;
+    this.tagsData = TagsConstants;
+    this.themeData = ThemeConstants;
+
+    this.filterQuestionsForm = this.fb.group({
+      status: this.fb.array([], atLeastOneCheckboxCheckedValidator(1)),
+      tags: this.fb.array([]),
+      time: this.fb.array([], atLeastOneCheckboxCheckedValidator(1)),
+    });
+
+    this.addCheckBoxes();
+  }
+
+  private loadQuestions(): void {
     this.questionsService
       .getQuestions()
       .pipe(takeUntil(this.destroy$))
@@ -86,23 +96,38 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
         },
         (error) => error.message
       );
-
-    this.addCheckBoxes();
   }
 
-  private addCheckBoxes(): void {
-    this.tagsData.forEach(() => this.tagsFormArray.push(new FormControl(false)));
-    this.questionsStatusData.filter((status: QuestionsStatus) =>
-      status.item === this.statusQuestions
-        ? this.statusFormArray.push(new FormControl(true))
-        : this.statusFormArray.push(new FormControl(false))
-    );
-    this.questionsTimeData.filter((time: QuestionsTime) =>
-      time.value === this.timeQuestions ? this.timeFormArray.push(new FormControl(true)) : this.timeFormArray.push(new FormControl(false))
-    );
+  private setDataForFormArray(array: Array<any>, formArray: FormArray, value: string): void {
+    array.filter((item) => {
+      if (item.value === value) {
+        formArray.push(new FormControl(true));
+      } else {
+        formArray.push(new FormControl(false));
+      }
+    });
   }
 
-  public onApproveQuestion(id: string): void {
+  private updateCheckBoxesForFormArray(array: Array<any>, formArray: FormArray, value: string): void {
+    let newArray = [];
+
+    array.map((item) => {
+      if (item.value === value) {
+        newArray.push(true);
+      } else {
+        newArray.push(false);
+      }
+    });
+
+    formArray.setValue(newArray);
+  }
+
+  ngOnInit(): void {
+    this.initFilterDataAndForm();
+    this.loadQuestions();
+  }
+
+  public onApproveQuestionById(id: string): void {
     this.questionsService
       .approveQuestionById(id)
       .pipe(takeUntil(this.destroy$))
@@ -124,60 +149,49 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
   }
 
   public onDisplayQuestions(display: string): void {
-    this.isLineDisplay = display === 'Line';
+    this.isLineDisplay = display === DisplayQuestionsEnum.LINE;
+  }
+
+  public onFilterByStatusQuestions(event: { source: { name: string }; checked: boolean }): void {
+    let statusName = event.source.name;
+
+    if (event.checked) {
+      this.statusQuestions = statusName;
+      this.updateCheckBoxesForFormArray(this.questionsStatusData, this.statusFormArray, this.statusQuestions);
+    } else {
+      this.statusQuestions = StatusQuestionsEnum.ALL;
+      this.updateCheckBoxesForFormArray(this.questionsStatusData, this.statusFormArray, this.statusQuestions);
+    }
   }
 
   public onFilterByTags(event: { source: { name: any }; checked: boolean }): void {
     const tagName = event.source.name;
+
     if (event.checked) {
       this.electedTags.push(tagName);
     } else {
-      this.electedTags = this.electedTags.filter((tag: Tags) => tag !== tagName);
+      if (this.electedTags.length > 1) {
+        this.electedTags = this.electedTags.filter((tag: Tags) => tag !== tagName);
+      } else {
+        this.updateCheckBoxesForFormArray(this.tagsData, this.tagsFormArray, tagName);
+      }
     }
   }
 
-  public onFilterByStatusQuestions(event: { source: { name: any; id: string }; checked: boolean }): void {
-    const statusName = event.source.name;
-    const id = event.source.id;
-
-    if (event.checked) {
-      this.statusQuestions = statusName;
-      this.statusFormArray.controls.filter((status: any, i: number) => (Number(id) === i ? (status.value = true) : (status.value = false)));
-    } else {
-      this.statusQuestions = 'All';
-      this.questionsStatusData.find((statusQuestions: QuestionsStatus) => {
-        if (this.statusQuestions === statusQuestions.item) {
-          this.statusFormArray.controls.filter((status: any, i: number) =>
-            Number(statusQuestions.id) === i ? (status.value = true) : (status.value = false)
-          );
-        }
-      });
-    }
-  }
-
-  public onFilterPerPeriodOfTime(event: { source: { name: any; id: string }; checked: boolean }): void {
+  public onFilterPerPeriodOfTime(event: { source: { name: string }; checked: boolean }): void {
     const timeName = event.source.name;
-    const id = event.source.id;
 
     if (event.checked) {
       this.timeQuestions = timeName;
-      this.timeFormArray.controls.filter((status: any, i: number) =>
-        Number(id) - 10 === i ? (status.value = true) : (status.value = false)
-      );
+      this.updateCheckBoxesForFormArray(this.questionsTimeData, this.timeFormArray, this.timeQuestions);
     } else {
       this.timeQuestions = null;
-      this.questionsTimeData.find((timeQuestions: QuestionsTime) => {
-        if (this.timeQuestions === timeQuestions.value) {
-          this.timeFormArray.controls.filter((time: any, i: number) =>
-            Number(timeQuestions.id) - 10 === i ? (time.value = true) : (time.value = false)
-          );
-        }
-      });
+      this.updateCheckBoxesForFormArray(this.questionsTimeData, this.timeFormArray, this.timeQuestions);
     }
   }
 
-  public onOpenScreenQuestionById(id: string): void {
-    this.router.navigateByUrl(`questions/open/${id}`);
+  public onOpenCurrentQuestionById(id: string): void {
+    this.router.navigateByUrl(`${RoutesConstants.QUESTIONS.CURRENT}${id}`);
   }
 
   public onRemoveQuestionById(id: string): void {

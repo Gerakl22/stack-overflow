@@ -2,11 +2,11 @@
   &__header {
     display: flex;
     position: fixed;
+    background-color: black;
     top: 0;
     left: 0;
     right: 0;
     z-index: 2;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
   }
 
   &__navigation {
@@ -24,12 +24,14 @@
   }
 
   &__buttons {
+    width: 70%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 
   &__button {
-    padding: 0.5rem 0rem !important;
+    padding: 0.5rem 0 !important;
   }
 
   &__item {
@@ -44,14 +46,16 @@
     line-height: 1rem;
     letter-spacing: 0.05rem;
     font-size: 0.7rem;
+    padding: 0 1rem;
   }
 
   &__link {
     word-break: break-word;
+    background-color: green;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 850px) {
   .c-app {
     &__trigger {
       display: block;

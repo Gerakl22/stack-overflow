@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Comment, Question } from '../models';
+import { Comment, Question } from '@shared/models';
+import { StatusQuestionsEnum } from '@shared/enum';
 
 @Pipe({
   name: 'filterByStatusQuestions',
@@ -7,19 +8,23 @@ import { Comment, Question } from '../models';
 })
 export class FilterByStatusQuestionsPipe implements PipeTransform {
   transform(questionArray: Question[], statusQuestions: string): Question[] {
-    if (statusQuestions === 'All') {
+    if (statusQuestions === StatusQuestionsEnum.ALL) {
       return questionArray;
     }
 
     return questionArray.filter((question: Question) => {
-      if (statusQuestions === 'Answered') {
-        return question.comments !== undefined;
+      if (statusQuestions === StatusQuestionsEnum.ANSWERED) {
+        return question.comments !== null;
       }
-      if (statusQuestions === 'Unanswered') {
-        return question.comments === undefined;
+      if (statusQuestions === StatusQuestionsEnum.UNANSWERED) {
+        return question.comments === null;
       }
-      if (statusQuestions === 'Resolve' && question.comments !== undefined) {
-        return Object.values(question.comments).find((comment: Comment) => comment.isBestComment);
+
+      if (
+        statusQuestions.replace(' ', '').toUpperCase().trim() === StatusQuestionsEnum.BEST_COMMENT.trim().toUpperCase() &&
+        question.comments !== null
+      ) {
+        return question.comments.find((comment: Comment) => comment.isBestComment);
       }
 
       return false;

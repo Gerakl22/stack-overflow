@@ -1,17 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { QuestionsService } from '../../../@shared/services/questions.service';
-import { AuthService } from '../../../@shared/services/auth.service';
-import { Question } from '../../../@shared/models/Question';
-import { Comment } from '../../../@shared/models/Comment';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
-import { LocalStorageConstants } from '../../../@shared/constants/LocalStorageConstants';
-import { User } from '../../../@shared/models/User';
+import { LocalStorageConstants } from '@shared/constants';
+import { Comment, Question, User } from '@shared/models';
+import { AuthService, QuestionsService } from '@shared/services';
 import { Subject } from 'rxjs';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-screen-question',
+  selector: 'app-current-question',
   templateUrl: './current-question.component.html',
   styleUrls: ['./current-question.component.scss'],
 })
@@ -59,7 +56,7 @@ export class CurrentQuestionComponent implements OnInit, OnDestroy {
       );
 
     this.commentQuestionForm = new FormGroup({
-      comment: new FormControl('', [Validators.required])
+      comment: new FormControl('', [Validators.required]),
     });
   }
 

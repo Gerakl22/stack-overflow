@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LocalStorageConstants, RoutesConstants } from '../../constants';
+import { IRefreshToken } from '../../interface';
+import { User } from '../../models';
+import { AuthService } from '../../services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from '../../services';
-import { IRefreshToken } from '../../interface';
-import { RoutesConstants } from '../../constants';
-import { User } from '../../models';
-import { LocalStorageConstants } from '../../constants';
 
 @Component({
   selector: 'app-header',
@@ -44,7 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public addQuestion(): void {
-    this.router.navigateByUrl('questions/add');
+    this.router.navigateByUrl(RoutesConstants.QUESTIONS.NEW);
   }
 
   public onLogin(): void {

@@ -1,9 +1,10 @@
 export class QuestionsStatus {
   id: string;
   item: string;
+  value: string;
 
-  constructor(status: { id: string; item: string }) {
+  constructor(status: { id: string; value: string }) {
     this.id = status.id;
-    this.item = status.item;
+    this.value = status.value;
   }
 }

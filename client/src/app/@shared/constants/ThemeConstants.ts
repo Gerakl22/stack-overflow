@@ -11,7 +11,7 @@ export const ThemeConstants: Theme[] = [
       '--foreground-quaternary': '#F4FAFF',
       '--foreground-light': '#41474D',
 
-      '--background-default': '#F4FAFF',
+      '--background-default': '#FFA500',
       '--background-secondary': '#A3B9CC',
       '--background-tertiary': '#5C7D99',
       '--background-light': '#FFFFFF',
