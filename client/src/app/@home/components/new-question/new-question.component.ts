@@ -1,27 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../@shared/services/auth.service';
-import { QuestionsService } from '../../../@shared/services/questions.service';
-import { Tags } from '../../../@shared/models/Tags';
-import { Question } from '../../../@shared/models/Question';
-import { TagsConstants } from '../../../@shared/constants/TagsConstants';
-import { atLeastOneCheckboxCheckedValidator } from '../../../@shared/validation/atLeastOneCheckboxCheckedValidator';
-import { User } from '../../../@shared/models/User';
+import { ErrorConstants, RoutesConstants, TagsConstants } from '@shared/constants';
+import { Question, Tags, User } from '@shared/models';
+import { AuthService, QuestionsService } from '@shared/services';
+import { atLeastOneCheckboxCheckedValidator } from '@shared/validation';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-question',
   templateUrl: './new-question.component.html',
-  styleUrls: ['./new-question.component.scss'],
+  styleUrls: ['./new-question.component.scss']
 })
 export class NewQuestionComponent implements OnInit, OnDestroy {
-  private author!: string;
-  private destroy$: Subject<void> = new Subject<void>();
-  public error!: string;
-  public newQuestionForm!: FormGroup;
-  public tagsData!: Tags[];
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private questionsService: QuestionsService,
+    private router: Router
+  ) {}
 
   get tagsFormArray(): FormArray {
     return this.newQuestionForm.controls.tags as FormArray;
@@ -35,30 +33,19 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
     return this.newQuestionForm.controls.title;
   }
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    public authService: AuthService,
-    private questionsService: QuestionsService
-  ) {}
-
-  ngOnInit(): void {
-    this.initNewQuestionForm();
-    this.addCheckBoxes();
-  }
+  private author!: string;
+  private destroy$: Subject<void> = new Subject<void>();
+  public error!: string;
+  private redirectDelay = 0;
+  public newQuestionForm!: FormGroup;
+  public tagsData: Tags[] = [];
 
   private addCheckBoxes(): void {
     this.tagsData = TagsConstants;
-    this.tagsData?.forEach(() => this.tagsFormArray.push(new FormControl(false)));
+    this.tagsData.forEach(() => this.tagsFormArray.push(new FormControl(false)));
   }
 
-  private initNewQuestionForm(): void {
-    this.newQuestionForm = this.fb.group({
-      title: this.fb.control('', Validators.required),
-      textarea: this.fb.control('', [Validators.required, Validators.minLength(6)]),
-      tags: this.fb.array([], atLeastOneCheckboxCheckedValidator(1)),
-    });
-
+  private getCurrentUser(): void {
     this.authService
       .getUser()
       .pipe(takeUntil(this.destroy$))
@@ -67,26 +54,51 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
       });
   }
 
+  private initNewQuestionForm(): void {
+    this.newQuestionForm = this.fb.group({
+      title: this.fb.control('', Validators.required),
+      textarea: this.fb.control('', [Validators.required, Validators.minLength(6)]),
+      tags: this.fb.array([], atLeastOneCheckboxCheckedValidator(1))
+    });
+
+    this.getCurrentUser();
+  }
+
+  private onCreateQuestion(question: Question): void {
+    this.questionsService
+      .createQuestion(question)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        () => setTimeout(() => this.onCancel(), this.redirectDelay),
+        (error) => (this.error = error)
+      );
+  }
+
   private selectedTagsItem(): Tags[] {
     return this.newQuestionForm.value.tags
       .map((checkedItem: Tags, i: number) => (checkedItem ? this.tagsData[i].item : null))
       .filter((item: string) => item !== null);
   }
 
+  ngOnInit(): void {
+    this.initNewQuestionForm();
+    this.addCheckBoxes();
+  }
+
   public getErrorTitle(): string {
-    return this.title.errors?.required ? 'You must enter a value' : '';
+    return this.title.errors?.required ? ErrorConstants.TITLE.MUST_VALUE : ErrorConstants.EMPTY_STRING;
   }
 
   public getErrorTextarea(): string {
     if (this.textarea.errors?.required) {
-      return 'You must enter value';
+      return ErrorConstants.TEXTAREA.MUST_VALUE;
     }
 
-    return this.textarea.errors?.minlength ? 'Min length 6 letters' : '';
+    return this.textarea.errors?.minlength ? ErrorConstants.TEXTAREA.LENGTH : ErrorConstants.EMPTY_STRING;
   }
 
   public onCancel(): void {
-    this.router.navigateByUrl('questions/all');
+    this.router.navigateByUrl(RoutesConstants.QUESTIONS.ALL);
   }
 
   public onSubmit(): void {
@@ -96,18 +108,10 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
       title: this.title.value,
       textarea: this.textarea.value,
       tags: this.selectedTagsItem(),
-      isApproval: false,
+      isApproval: false
     };
-    console.log(question);
 
-    this.questionsService
-      .createQuestion(question)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (q: Question) => q,
-        (error) => (this.error = error),
-        () => this.onCancel()
-      );
+    this.onCreateQuestion(question);
   }
 
   ngOnDestroy(): void {

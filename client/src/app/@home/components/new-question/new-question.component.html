@@ -1,8 +1,7 @@
 <main class="c-newQuestion__home">
+
   <div class="c-newQuestion__wrapper">
-
     <h2 class="c-newQuestion__heading">New Question</h2>
-
     <hr />
 
     <form
@@ -21,7 +20,7 @@
             type="text"
             formControlName="title"
           />
-          <mat-error *ngIf="title.invalid && title.touched" class="c-newQuestion__error" >
+          <mat-error *ngIf="title.invalid && title.touched && title.dirty" class="c-newQuestion__error">
             {{getErrorTitle()}}
           </mat-error>
         </mat-form-field>
@@ -37,7 +36,7 @@
             formControlName="textarea"
           >
           </textarea>
-          <mat-error class="c-newQuestion__error" *ngIf="textarea.invalid && textarea.touched">
+          <mat-error *ngIf="textarea.invalid && textarea.touched && title.dirty" class="c-newQuestion__error">
             {{getErrorTextarea()}}
           </mat-error>
         </mat-form-field>
@@ -75,10 +74,13 @@
           <span class="c-newQuestion__addition">Add</span>
         </button>
 
-        <mat-error class="c-newQuestion__error">{{ error }}</mat-error>
       </div>
+
+      <mat-error class="c-newQuestion__error">{{ error }}</mat-error>
 
     </form>
   </div>
-  <mat-icon class="c-newQuestion__icon c-newQuestion__icon--absolute" (click)="onCancel()">cancel</mat-icon>
+
+  <mat-icon class="c-newQuestion__icon c-newQuestion__icon--absolute" (click)="onCancel()">backspace</mat-icon>
+
 </main>

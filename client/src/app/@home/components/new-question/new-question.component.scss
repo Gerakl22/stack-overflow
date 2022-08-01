@@ -9,7 +9,7 @@
   &__wrapper {
     border-radius: 0.5rem;
     padding: 2rem;
-    background-color: #424242;
+    background-color: black;
   }
 
   &__heading {
@@ -46,7 +46,7 @@
 
   &__textarea {
     width: 100%;
-    height: 5rem;
+    height: 5rem !important;
   }
 
   &__categories {
@@ -70,18 +70,29 @@
 
   &__button {
     padding: 0.5rem;
+    background-color: green;
+    &:disabled {
+      cursor: not-allowed;
+      color: grey;
+      background-color: grey;
+    }
   }
+
   &__icon--absolute {
     position: absolute;
-    top: 19%;
+    top: 18.3%;
     right: 0;
-    color: red;
+    min-width: 54px;
+    border-radius: 4px;
+    background-color: red;
+    color: black;
     cursor: pointer;
   }
 
   &__addition {
-    line-height: 1rem;
-    letter-spacing: 0.1rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: white;
   }
 }
 

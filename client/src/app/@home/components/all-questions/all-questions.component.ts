@@ -99,7 +99,7 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
   }
 
   private setDataForFormArray(array: Array<any>, formArray: FormArray, value: string): void {
-    array.filter((item) => {
+    array.map((item) => {
       if (item.value === value) {
         formArray.push(new FormControl(true));
       } else {
