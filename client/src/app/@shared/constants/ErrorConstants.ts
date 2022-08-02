@@ -17,5 +17,8 @@ export const ErrorConstants = {
     LENGTH: `Min length: ${Validations.password.minLength} chars`,
     MUST_VALUE: 'You must enter a value',
   },
+  COMMENT: {
+    MUST_VALUE: 'You must enter a value',
+  },
   ACCESS_TOKEN_EXPIRED: 'access_token_expired',
 };

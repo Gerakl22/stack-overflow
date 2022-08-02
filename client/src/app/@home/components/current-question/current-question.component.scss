@@ -11,10 +11,15 @@
     padding: 2rem;
   }
 
+  &__card {
+    position: relative;
+    background-color: black;
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 1rem;
+    padding: 1rem 0;
   }
 
   &__author {
@@ -87,6 +92,17 @@
     font-size: 0.8rem;
     color: white;
   }
+
+  &__icon--absolute {
+    position: absolute;
+    top:0;
+    right: 0;
+    min-width: 54px;
+    border-radius: 4px;
+    background-color: red;
+    color: black;
+    cursor: pointer;
+  }
 }
 
 @media (max-width: 400px) {
@@ -101,22 +117,20 @@
 .c-screenQuestionsComments {
   &__home {
     width: 100%;
-    color: black;
-    padding-top: 1rem;
+    color: white;
+    margin-top: 1rem;
   }
 
   &__card {
     margin-bottom: 1rem;
-    background-color: lightgrey;
     padding: 1rem;
+    background-color: black;
   }
 
   &__title {
     text-align: center;
-    text-transform: uppercase;
-    color: black;
-    font-weight: bolder;
-    letter-spacing: 0.2rem;
+    color: white;
+    letter-spacing: 0.1rem;
     font-size: 1rem;
   }
 
@@ -131,7 +145,7 @@
   &__author,
   &__date {
     color: orange;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
 
   &__textarea {
@@ -165,6 +179,10 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
     margin: 0 auto;
+  }
+
+  &__card {
+    background-color: black;
   }
 
   &__title {
@@ -204,5 +222,5 @@
 }
 
 .isBestCommentStyle {
-  background-color: #28a745;
+  background-color: green;
 }

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { LocalStorageConstants } from '@shared/constants';
+import { ErrorConstants, LocalStorageConstants, RoutesConstants } from '@shared/constants';
 import { Comment, Question, User } from '@shared/models';
 import { AuthService, QuestionsService } from '@shared/services';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -13,27 +13,26 @@ import { switchMap, takeUntil, tap } from 'rxjs/operators';
   styleUrls: ['./current-question.component.scss'],
 })
 export class CurrentQuestionComponent implements OnInit, OnDestroy {
-  private destroy$: Subject<void> = new Subject<void>();
-  private redirectDelay = 0;
-  urlIdQuestion!: string;
-  questionObject!: Question;
-  commentQuestionForm!: FormGroup;
-  commentsArray!: Comment[];
-  authUser!: User;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router,
+    private questionsService: QuestionsService
+  ) {}
 
   get comment(): AbstractControl {
     return this.commentQuestionForm.controls.comment;
   }
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private questionsService: QuestionsService,
-    public authService: AuthService
-  ) {
-  }
+  private destroy$: Subject<void> = new Subject<void>();
+  private redirectDelay = 0;
+  private urlIdQuestion!: string;
+  public authUser!: User;
+  public commentsArray: Comment[] = [];
+  public commentQuestionForm!: FormGroup;
+  public question$: Observable<Question>;
 
-  ngOnInit(): void {
+  private getQuestionById(): void {
     this.activatedRoute.params
       .pipe(
         tap((url: Params) => {
@@ -43,25 +42,31 @@ export class CurrentQuestionComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(
-        (questionObject: Question) => {
-          console.log(questionObject);
-          this.questionObject = questionObject;
-          this.authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
-
-          if (questionObject.comments) {
-            this.commentsArray = questionObject.comments;
+        (question: Question) => {
+          if (question.comments) {
+            this.commentsArray = question.comments;
           }
+
+          this.question$ = of(question);
+          this.authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
         },
         (error) => error.message
       );
+  }
 
+  private initCommentForm(): void {
     this.commentQuestionForm = new FormGroup({
       comment: new FormControl('', [Validators.required]),
     });
   }
 
+  ngOnInit(): void {
+    this.getQuestionById();
+    this.initCommentForm();
+  }
+
   public getErrorComment(): string {
-    return this.comment.errors?.required ? 'You must enter value' : '';
+    return this.comment.errors?.required ? ErrorConstants.COMMENT.MUST_VALUE : ErrorConstants.EMPTY_STRING;
   }
 
   public onAddComment(): void {
@@ -69,18 +74,18 @@ export class CurrentQuestionComponent implements OnInit, OnDestroy {
       author: this.authUser.email,
       textarea: this.comment.value,
       date: new Date().getTime(),
-      isBestComment: false
+      isBestComment: false,
     };
 
     this.questionsService
       .createComment(this.urlIdQuestion, comment)
       .pipe(switchMap(() => this.questionsService.getQuestionsById(this.urlIdQuestion)))
-      .subscribe((questionObject: Question) => {
-        if (questionObject.comments) {
-          this.commentsArray = questionObject.comments;
+      .subscribe((question: Question) => {
+        if (question.comments) {
+          this.commentsArray = question.comments;
         }
 
-        this.questionObject = questionObject;
+        this.question$ = of(question);
         this.commentQuestionForm.reset();
       });
   }
@@ -93,17 +98,17 @@ export class CurrentQuestionComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(
-        (question: Question) => (this.questionObject = question),
+        (question: Question) => (this.question$ = of(question)),
         (error) => error.message
       );
   }
 
   public onBackAllQuestions(): void {
-    this.router.navigateByUrl('questions/all');
+    this.router.navigateByUrl(RoutesConstants.QUESTIONS.ALL);
   }
 
   public onEditQuestionById(): void {
-    this.router.navigateByUrl(`questions/edit/${this.urlIdQuestion}`);
+    this.router.navigateByUrl(`${RoutesConstants.QUESTIONS.EDIT}${this.urlIdQuestion}`);
   }
 
   public onRemoveQuestionById(): void {
