@@ -1,0 +1,51 @@
+<span
+  *ngIf="!question.isApproval && (question.author === authUser.email || authUser.role === 'ADMIN')"
+  class='c-question-card__moderation'
+>
+  Moderation
+</span>
+
+<p class='c-question-card__date'> {{ question.date | date: "MMM d, y, h:mm:ss a" }} </p>
+
+<span
+  *ngFor='let tag of question.tags'
+  class='c-question-card__tag'
+>
+  {{ tag }}
+</span>
+
+<mat-card-title
+  (click)='onOpenCurrentQuestionById(question.id)'
+  class='c-question-card__title text-truncate'
+>
+  {{ question.title }}
+</mat-card-title>
+
+<hr />
+
+<div class='c-question-card__buttons'>
+
+  <button
+    *ngIf="!question.isApproval && authUser.role === 'ADMIN'"
+    (click)='onApproveQuestionById(question.id)'
+    class='c-question-card__button'
+    type='submit'
+    mat-raised-button
+    color='primary'
+  >
+    <mat-icon class='c-question-card__icon'>approval</mat-icon>
+    <span class='c-question-card__approve'>Approve</span>
+  </button>
+
+  <button
+    *ngIf="question.author === authUser.email || authUser.role === 'ADMIN'"
+    (click)='onRemoveQuestionById(question.id)'
+    class='c-question-card__button'
+    mat-raised-button
+    color='warn'
+  >
+    <mat-icon class='c-question-card__icon'>delete_forever</mat-icon>
+    <span class='c-question-card__delete'>Delete</span>
+  </button>
+
+</div>

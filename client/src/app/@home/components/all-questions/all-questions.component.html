@@ -74,17 +74,7 @@
       </li>
 
       <li class='c-allQuestions__item'>
-        <button
-          class='c-allQuestions__trigger'
-          type='button'
-          mat-button
-          mat-raised-button
-          (click)='onSortQuestions()'
-        >
-          <mat-icon *ngIf='this.isSortQuestions' class='c-allQuestions__icon'>sort arrow_upward</mat-icon>
-          <mat-icon *ngIf='!this.isSortQuestions' class='c-allQuestions__icon'>sort arrow_downward</mat-icon>
-          <span class='c-allQuestions__sort'>Sort</span>
-        </button>
+        <app-sort-questions [isSort]='isSortQuestions' (sortItems)='onSortQuestions($event)'></app-sort-questions>
       </li>
 
       <li class='c-allQuestions__item'>
@@ -146,71 +136,29 @@
   </mat-toolbar>
 
   <section
-    class='c-allQuestions__section'
     [ngClass]='isLineDisplay ? "c-allQuestions__section--line" : "c-allQuestions__section--tiled"'
+    class='c-allQuestions__section'
   >
-    <mat-card
-      class='c-allQuestions__card'
-      [ngClass]='isLineDisplay ? "c-allQuestions__card--line" : null'
-      *ngFor='
-        let question of questionsArray
-          | filterByTags: electedTags
-          | filterByStatusQuestions: statusQuestions
-          | filterPerPeriodOfTime: timeQuestions
-          | filterBySort: isSortQuestions
-      '
-    >
-
-      <span
-        *ngIf="!question.isApproval && (question.author === authUser.email || authUser.role === 'ADMIN')"
-        class='c-allQuestions__moderation'
+    <ng-container *ngIf='questions$ | async as questions'>
+      <mat-card
+        *ngFor='
+          let question of questions
+            | filterByTags: electedTags
+            | filterByStatusQuestions: statusQuestions
+            | filterPerPeriodOfTime: timeQuestions
+            | filterBySort: isSortQuestions
+        '
+        [ngClass]='isLineDisplay ? "c-allQuestions__card--line" : null'
+        class='c-allQuestions__card'
       >
-      Moderation
-      </span>
-      <p class='c-allQuestions__date'>
-        {{ question.date | date: "MMM d, y, h:mm:ss a" }}
-      </p>
-
-
-      <span class='c-allQuestions__tag' *ngFor='let tag of question.tags'>
-        {{ tag }}
-      </span>
-
-      <mat-card-title
-        class='c-allQuestions__title text-truncate'
-        (click)='onOpenCurrentQuestionById(question.id)'
-      >
-        {{ question.title }}
-      </mat-card-title>
-
-      <hr />
-
-      <div class='c-allQuestions__buttons'>
-        <button
-          *ngIf="!question.isApproval && authUser.role === 'ADMIN'"
-          class='c-allQuestions__button'
-          type='submit'
-          mat-raised-button
-          color='primary'
-          (click)='onApproveQuestionById(question.id)'
+        <app-question-card
+          [question]='question'
+          (removeQuestionById)='onRemoveQuestionById($event)'
         >
-          <mat-icon class='c-allQuestions__icon'>approval</mat-icon>
-          <span class='c-allQuestions__approve'>Approve</span>
-        </button>
+        </app-question-card>
 
-        <button
-          *ngIf="question.author === authUser.email || authUser.role === 'ADMIN'"
-          class='c-allQuestions__button'
-          mat-raised-button
-          color='warn'
-          (click)='onRemoveQuestionById(question.id)'
-        >
-          <mat-icon class='c-allQuestions__icon'>delete_forever</mat-icon>
-          <span class='c-allQuestions__delete'>Delete</span>
-        </button>
+      </mat-card>
+    </ng-container>
 
-      </div>
-
-    </mat-card>
   </section>
 </main>

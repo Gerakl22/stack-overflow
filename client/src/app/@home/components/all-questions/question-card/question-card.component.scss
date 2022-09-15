@@ -1,0 +1,44 @@
+.c-question-card {
+  &__moderation {
+    position: absolute;
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    color: lightcoral;
+  }
+
+  &__date {
+    text-align: right;
+    font-size: 0.7rem;
+    color: #28a745;
+    margin-bottom: 2rem;
+  }
+
+  &__tag {
+    padding: 0.2rem;
+    border: cornflowerblue 0.1rem solid;
+    border-right: none;
+  }
+
+  &__tag:last-of-type {
+    border-right: cornflowerblue 0.1rem solid;
+  }
+
+  &__title {
+    margin-top: 3rem !important;
+    text-align: center;
+    cursor: pointer;
+    word-wrap: break-word;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  &__button {
+    margin-left: 0.4rem;
+  }
+}

@@ -1,29 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  LocalStorageConstants,
   QuestionsDisplayConstants,
   QuestionsStatusConstants,
   QuestionsTimeConstants,
-  RoutesConstants,
   TagsConstants,
   ThemeConstants,
 } from '@shared/constants';
 import { DisplayQuestionsEnum, StatusQuestionsEnum } from '@shared/enum';
-import { Question, QuestionsDisplay, QuestionsStatus, QuestionsTime, Tags, Theme, User } from '@shared/models';
+import { Question, QuestionsDisplay, QuestionsStatus, QuestionsTime, Tags, Theme } from '@shared/models';
 import { QuestionsService, ThemeService } from '@shared/services';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { atLeastOneCheckboxCheckedValidator } from '@shared/validation';
 
 @Component({
   selector: 'app-all-questions',
   templateUrl: './all-questions.component.html',
   styleUrls: ['./all-questions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AllQuestionsComponent implements OnInit, OnDestroy {
+export class AllQuestionsComponent implements OnInit {
   constructor(
+    private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private questionsService: QuestionsService,
     private router: Router,
@@ -42,13 +42,11 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
     return this.filterQuestionsForm.controls.status as FormArray;
   }
 
-  private destroy$: Subject<void> = new Subject<void>();
-  public authUser!: User;
   public electedTags: Tags[] = [];
   public filterQuestionsForm!: FormGroup;
   public isLineDisplay = false;
   public isSortQuestions = false;
-  public questionsArray: Question[] = [];
+  public questions$: Observable<Question[]>;
   public questionsDisplayData: QuestionsDisplay[] = [];
   public questionsStatusData: QuestionsStatus[] = [];
   public questionsTimeData: QuestionsTime[] = [];
@@ -84,18 +82,10 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
   }
 
   private loadQuestions(): void {
-    this.questionsService
-      .getQuestions()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (questions: Question[]) => {
-          if (questions) {
-            this.questionsArray = questions;
-            this.authUser = JSON.parse(localStorage.getItem(LocalStorageConstants.AUTH_USER) || 'null');
-          }
-        },
-        (error) => error.message
-      );
+    this.questions$ = this.questionsService.getQuestions().pipe(
+      tap(() => this.cdr.detectChanges()),
+      catchError((error) => error.message)
+    ) as Observable<Question[]>;
   }
 
   private setDataForFormArray(array: Array<any>, formArray: FormArray, value: string): void {
@@ -125,16 +115,6 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initFilterDataAndForm();
     this.loadQuestions();
-  }
-
-  public onApproveQuestionById(id: string): void {
-    this.questionsService
-      .approveQuestionById(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (question: Question[]) => (this.questionsArray = question),
-        (error) => error.message
-      );
   }
 
   public onChangeTheme(themeName: string): void {
@@ -190,26 +170,16 @@ export class AllQuestionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onOpenCurrentQuestionById(id: string): void {
-    this.router.navigateByUrl(`${RoutesConstants.QUESTIONS.CURRENT}${id}`);
-  }
-
   public onRemoveQuestionById(id: string): void {
-    this.questionsService
-      .removeQuestionById(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (question: Question[]) => (this.questionsArray = question),
-        (error) => error.message
-      );
+    if (id) {
+      this.questions$ = this.questionsService.removeQuestionById(id).pipe(
+        tap(() => this.cdr.detectChanges()),
+        catchError((error) => error.message)
+      ) as Observable<Question[]>;
+    }
   }
 
-  public onSortQuestions(): void {
-    this.isSortQuestions = !this.isSortQuestions;
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  public onSortQuestions(isSort: boolean): boolean {
+    return (this.isSortQuestions = isSort);
   }
 }

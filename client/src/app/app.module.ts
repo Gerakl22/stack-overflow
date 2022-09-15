@@ -13,9 +13,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
-import { AuthInterceptor } from './@shared/interceptor';
+import { AuthInterceptor } from '@shared/interceptor';
 
-import { MatIconRegistry } from '@angular/material/icon'
+import { MatIconRegistry } from '@angular/material/icon';
 
 @NgModule({
   declarations: [AppComponent],

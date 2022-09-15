@@ -1,0 +1,11 @@
+<button
+  class='c-sort__trigger'
+  type='button'
+  mat-button
+  mat-raised-button
+  (click)='sort()'
+>
+  <mat-icon *ngIf='this.isSort' class='c-sort__icon'>sort arrow_upward</mat-icon>
+  <mat-icon *ngIf='!this.isSort' class='c-sort__icon'>sort arrow_downward</mat-icon>
+  <span class='c-sort__sort'>Sort</span>
+</button>
