@@ -18,7 +18,7 @@ import { Validations } from '@shared/validation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
-  constructor(private authService: AuthService, private router: Router, private cd: ChangeDetectorRef) {
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {
     const currentNavigation = this.router.getCurrentNavigation() || ({} as Navigation);
 
     if (currentNavigation?.extras?.state?.messageType === ErrorConstants.ACCESS_TOKEN_EXPIRED) {
@@ -103,7 +103,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.error = error.message;
-          this.cd.detectChanges();
+          this.cdr.detectChanges();
         }
       );
   }

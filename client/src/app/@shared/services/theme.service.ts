@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ThemeConstants } from '../constants';
+import { LocalStorageConstants, ThemeConstants } from '../constants';
 import { Theme } from '../models';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { Theme } from '../models';
 export class ThemeService {
   setTheme(themeName: string | null): void {
     const themeObject = ThemeConstants.find((item: Theme) => item.name === themeName);
+    localStorage.setItem(LocalStorageConstants.THEME, JSON.stringify(themeName));
 
     if (themeObject !== undefined) {
       Object.keys(themeObject.properties).forEach((property: string) => {

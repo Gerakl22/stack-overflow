@@ -1,0 +1,24 @@
+<app-filter-button [icon]='icon' [name]='name' [trigger]='trigger' (selectTrigger)='getTrigger($event)'></app-filter-button>
+
+<mat-menu class='c-filter-questions__menu' #trigger='matMenu'>
+  <ng-container *ngIf='this.currentTrigger === triggerEnum.Filters'>
+    <app-filter-by-status [statusQuestions]='statusQuestions' (filterByStatus)='filterStatus($event)'></app-filter-by-status>
+
+    <mat-divider></mat-divider>
+
+    <app-filter-by-tag [electedTags]='electedTags' (filterByTags)='filterTags($event)'></app-filter-by-tag>
+
+    <mat-divider></mat-divider>
+
+    <app-filter-by-time [timeQuestions]='timeQuestions' (filterByTime)='filterTime($event)'></app-filter-by-time>
+  </ng-container>
+
+  <ng-container *ngIf='this.currentTrigger === triggerEnum.Settings'>
+    <app-filter-by-display [isLineDisplay]='isLineDisplay' (filterByDisplay)='filterDisplay($event)'></app-filter-by-display>
+
+    <mat-divider></mat-divider>
+
+    <app-filter-by-theme></app-filter-by-theme>
+  </ng-container>
+
+</mat-menu>

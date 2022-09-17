@@ -1,0 +1,11 @@
+.c-filter-by-display {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  &__label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

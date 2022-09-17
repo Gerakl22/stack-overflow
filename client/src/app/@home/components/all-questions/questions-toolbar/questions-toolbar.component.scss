@@ -1,0 +1,11 @@
+.c-questions-toolbar {
+  &__toolbar {
+    background-color: black;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}

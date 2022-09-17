@@ -23,8 +23,8 @@ export class QuestionsService {
     return throwError(message);
   }
 
-  approveQuestionById(id: string): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.url}${this.urlQuestions}/approve/${id}`).pipe(catchError(QuestionsService.httpError));
+  approveQuestionById(id: string): Observable<Question> {
+    return this.http.get<Question>(`${this.url}${this.urlQuestions}/approve/${id}`).pipe(catchError(QuestionsService.httpError));
   }
 
   createComment(id: string, comment: Comment): Observable<Comment> {

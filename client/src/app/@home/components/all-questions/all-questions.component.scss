@@ -1,22 +1,6 @@
 .c-allQuestions {
   padding-top: 6rem;
 
-  &__toolbar {
-    background-color: black;
-  }
-
-  &__list {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  &__trigger {
-    background-color: blue;
-  }
-
-  &__settings,
-  &__filters,
   &__delete,
   &__approve {
     line-height: 1rem;
@@ -37,29 +21,17 @@
   &__section {
     display: flex;
     width: 100%;
-  }
 
-  &__section--tiled {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+    &--tiled {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
 
-  &__section--line {
-    align-items: center;
-    flex-direction: column;
-  }
-
-  &__card {
-    position: relative;
-    width: 20rem;
-    height: 15rem;
-    margin: 1rem;
-    background-color: black;
-  }
-
-  &__card--line {
-    width: 90%;
+    &--line {
+      align-items: center;
+      flex-direction: column;
+    }
   }
 }
 

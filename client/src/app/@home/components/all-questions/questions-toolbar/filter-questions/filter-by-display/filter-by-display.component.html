@@ -1,0 +1,22 @@
+<form class='c-filter-by-display__form'>
+
+  <mat-icon class='c-filter-by-display__icon'>view_module</mat-icon>
+
+  <mat-radio-group
+    *ngFor='let display of questionsDisplayData'
+    class='c-filter-by-display__label'
+    name='display'
+  >
+
+    <mat-radio-button
+      class='c-filter-by-display__button mat-radio-button'
+      name='display'
+      [checked]='display.checked'
+      [value]='display.name'
+      (change)='displayName(display.name)'
+    >
+      {{display.name}} display
+    </mat-radio-button>
+
+  </mat-radio-group>
+</form>

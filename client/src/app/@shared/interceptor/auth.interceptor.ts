@@ -2,8 +2,8 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { RoutesConstants } from '../constants/RoutesConstants';
+import { AuthService } from '@shared/services';
+import { RoutesConstants } from '@shared/constants';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()

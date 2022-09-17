@@ -1,0 +1,35 @@
+<mat-toolbar color='accent' class='c-questions-toolbar__toolbar'>
+  <ul class='c-questions-toolbar__list'>
+
+    <li class='c-questions-toolbar__item'>
+      <app-filter-questions
+        [electedTags]='electedTags'
+        [icon]="'filter_alt'"
+        [name]="'Filters'"
+        [trigger]="'filters'"
+        [statusQuestions]='statusQuestions'
+        [timeQuestions]='timeQuestions'
+        (filterByStatus)='filterStatus($event)'
+        (filterByTags)='filterTags($event)'
+        (filterByTime)='filterTime($event)'
+      >
+      </app-filter-questions>
+    </li>
+
+    <li class='c-questions-toolbar__item'>
+      <app-sort [isSort]='isSortQuestions' (sortAction)='sortQuestions($event)'></app-sort>
+    </li>
+
+    <li class='c-questions-toolbar__item'>
+      <app-filter-questions
+        [icon]="'settings'"
+        [isLineDisplay]='isLineDisplay'
+        [name]="'Settings'"
+        [trigger]="'settings'"
+        (filterByDisplay)='filterDisplay($event)'
+      >
+      </app-filter-questions>
+    </li>
+
+  </ul>
+</mat-toolbar>

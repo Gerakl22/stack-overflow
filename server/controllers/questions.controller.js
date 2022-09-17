@@ -1,14 +1,13 @@
 const httpStatus = require('http-status');
 const logger = require('../config/logger');
-const SuccessConstants = require('../constants/successConstants');
 const questionsService = require('../services/questionsService');
 
 class QuestionsController {
   async approveQuestionById(req, res) {
     try {
-      const allQuestions = await questionsService.approveQuestionById(req.params.id);
+      const question = await questionsService.approveQuestionById(req.params.id);
 
-      res.status(httpStatus.OK).send(allQuestions);
+      res.status(httpStatus.OK).send(question);
     } catch (e) {
       logger.error(e.message);
 

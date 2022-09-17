@@ -1,0 +1,11 @@
+<button
+  class='c-filter-button__trigger'
+  type='button'
+  mat-button
+  mat-raised-button
+  [matMenuTriggerFor]='trigger'
+  (click)='select()'
+>
+  <mat-icon class='c-filter-button__icon'>{{icon}}</mat-icon>
+  <span class='c-filter-button__name'>{{name}}</span>
+</button>

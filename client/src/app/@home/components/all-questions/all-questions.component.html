@@ -1,146 +1,24 @@
 <main class='c-allQuestions'>
-  <mat-toolbar color='accent' class='c-allQuestions__toolbar'>
-    <ul class='c-allQuestions__list'>
-
-      <li class='c-allQuestions__item'>
-        <button
-          class='c-allQuestions__trigger'
-          type='button'
-          mat-button
-          mat-raised-button
-          [matMenuTriggerFor]='filters'
-        >
-          <mat-icon class='c-allQuestions__icon'>filter_alt</mat-icon>
-          <span class='c-allQuestions__filters'>Filters</span>
-        </button>
-        <mat-menu class='c-allQuestions__menu' #filters='matMenu'>
-          <form
-            [formGroup]='filterQuestionsForm'
-            class='c-allQuestions__form'
-          >
-
-            <mat-icon class='c-allQuestions__icon'>question_answer</mat-icon>
-            <mat-label
-              class='c-allQuestions__label'
-              *ngFor='let status of statusFormArray.controls; let i = index'
-              formArrayName='status'
-            >
-              <mat-checkbox
-                class='c-allQuestions__checkbox'
-                [formControlName]='i'
-                [checked]='status.value'
-                [name]='questionsStatusData[i].value'
-                (change)='onFilterByStatusQuestions($event)'
-              >{{ questionsStatusData[i].item }}</mat-checkbox
-              >
-            </mat-label>
-
-            <mat-divider class='c-allQuestions__divider'></mat-divider>
-
-            <mat-icon class='c-allQuestions__icon'>tag</mat-icon>
-            <mat-label
-              class='c-allQuestions__label'
-              *ngFor='let tag of tagsFormArray.controls; let i = index'
-              formArrayName='tags'
-            >
-              <mat-checkbox
-                class='c-allQuestions__checkbox'
-                [formControlName]='i'
-                [name]='tagsData[i].item'
-                (change)='onFilterByTags($event)'
-              >{{ tagsData[i].item }}</mat-checkbox
-              >
-            </mat-label>
-
-            <mat-divider class='c-allQuestions__divider'></mat-divider>
-
-            <mat-icon class='c-allQuestions__icon'>timeline</mat-icon>
-            <mat-label
-              class='c-allQuestions__label'
-              *ngFor='let time of timeFormArray.controls; let i = index'
-              formArrayName='time'
-            >
-              <mat-checkbox
-                class='c-allQuestions__checkbox'
-                [formControlName]='i'
-                [checked]='time.value'
-                [name]='questionsTimeData[i].value'
-                (change)='onFilterPerPeriodOfTime($event)'
-              >{{questionsTimeData[i].item}}</mat-checkbox
-              >
-            </mat-label>
-          </form>
-        </mat-menu>
-      </li>
-
-      <li class='c-allQuestions__item'>
-        <app-sort-questions [isSort]='isSortQuestions' (sortItems)='onSortQuestions($event)'></app-sort-questions>
-      </li>
-
-      <li class='c-allQuestions__item'>
-        <button
-          class='c-allQuestions__trigger'
-          type='button'
-          mat-button
-          mat-raised-button
-          [matMenuTriggerFor]='settings'
-        >
-          <mat-icon class='c-allQuestions__icon'>settings</mat-icon>
-          <span class='c-allQuestions__settings'>Settings</span>
-        </button>
-        <mat-menu class='c-allQuestions__menu' #settings='matMenu'>
-          <form class='c-allQuestions__form'>
-
-            <mat-icon class='c-allQuestions__icon'>view_module</mat-icon>
-            <mat-radio-group
-              class='c-allQuestions__label'
-              name='display'
-              *ngFor='let display of questionsDisplayData'>
-              <mat-radio-button
-                class='c-allQuestions__button mat-radio-button'
-                name='display'
-                [checked]='display.checked'
-                [value]='display.name'
-                (change)='onDisplayQuestions(display.name)'
-              >
-                {{display.name}} display
-              </mat-radio-button
-              >
-            </mat-radio-group>
-          </form>
-
-          <mat-divider class='c-allQuestions__divider'></mat-divider>
-
-          <form class='c-allQuestions__form'>
-            <mat-icon class='c-allQuestions__icon'>palette</mat-icon>
-            <mat-radio-group
-              class='c-allQuestions__label'
-              name='theme'
-              *ngFor='let theme of themeData'
-            >
-              <mat-radio-button
-                class='c-allQuestions__button mat-radio-button'
-                name='theme'
-                [checked]='theme.checked'
-                [value]='theme.name'
-                (change)='onChangeTheme(theme.name)'
-              >{{ theme.name }} theme
-              </mat-radio-button
-              >
-            </mat-radio-group>
-          </form>
-
-        </mat-menu>
-      </li>
-    </ul>
-  </mat-toolbar>
+  <app-questions-toolbar
+    [electedTags]='electedTags'
+    [isLineDisplay]='isLineDisplay'
+    [isSortQuestions]='isSortQuestions'
+    [statusQuestions]='statusQuestions'
+    [timeQuestions]='timeQuestions'
+    (filterByDisplay)='onDisplayQuestions($event)'
+    (filterByStatus)='onFilterByStatusQuestions($event)'
+    (filterByTags)='onFilterByTagsQuestions($event)'
+    (filterByTime)='onFilterByTimeQuestions($event)'
+    (sortByQuestions)='onSortQuestions($event)'
+  >
+  </app-questions-toolbar>
 
   <section
     [ngClass]='isLineDisplay ? "c-allQuestions__section--line" : "c-allQuestions__section--tiled"'
     class='c-allQuestions__section'
   >
     <ng-container *ngIf='questions$ | async as questions'>
-      <mat-card
+      <app-question-card
         *ngFor='
           let question of questions
             | filterByTags: electedTags
@@ -148,16 +26,12 @@
             | filterPerPeriodOfTime: timeQuestions
             | filterBySort: isSortQuestions
         '
-        [ngClass]='isLineDisplay ? "c-allQuestions__card--line" : null'
-        class='c-allQuestions__card'
+        [question]='question'
+        [isLineDisplay]='isLineDisplay'
+        (removeQuestionById)='onRemoveQuestionById($event)'
       >
-        <app-question-card
-          [question]='question'
-          (removeQuestionById)='onRemoveQuestionById($event)'
-        >
-        </app-question-card>
+      </app-question-card>
 
-      </mat-card>
     </ng-container>
 
   </section>

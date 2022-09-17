@@ -1,0 +1,19 @@
+<form class='c-filter-by-theme__form'>
+
+  <mat-icon class='c-filter-by-theme__icon'>palette</mat-icon>
+
+  <mat-radio-group
+    class='c-filter-by-theme__label'
+    name='theme'
+    *ngFor='let theme of themeData'
+  >
+    <mat-radio-button
+      class='c-filter-by-theme__button mat-radio-button'
+      name='theme'
+      [checked]='theme.checked'
+      [value]='theme.name'
+      (change)='changeTheme(theme.name)'
+    >{{ theme.name }} theme
+    </mat-radio-button>
+  </mat-radio-group>
+</form>

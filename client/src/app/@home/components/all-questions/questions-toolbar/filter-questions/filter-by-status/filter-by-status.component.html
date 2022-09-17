@@ -1,0 +1,23 @@
+<form
+  [formGroup]='formStatus'
+  class='c-filter-by-status__form'
+>
+  <mat-icon class='c-filter-by-status__icon'>question_answer</mat-icon>
+
+  <mat-label
+    *ngFor='let status of statusFormArray.controls; let i = index'
+    [formArrayName]='formArrayNameStatus'
+    class='c-filter-by-status__label'
+  >
+    <mat-checkbox
+      [formControlName]='i'
+      [checked]='status.value'
+      [name]='questionsStatusData[i].value'
+      (change)='filter($event)'
+      class='c-filter-by-status__checkbox'
+    >
+      {{ questionsStatusData[i].item }}
+    </mat-checkbox>
+
+  </mat-label>
+</form>

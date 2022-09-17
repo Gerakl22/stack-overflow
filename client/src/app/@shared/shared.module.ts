@@ -3,17 +3,31 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '../@material/angular-material.module';
-
-import { FilterBySortPipe, FilterByStatusQuestionsPipe, FilterByTagsPipe, FilterPerPeriodOfTimePipe } from './pipes';
-
-import { HeaderComponent } from './components';
-
+import { FilterButtonComponent, HeaderComponent, SortComponent } from '@shared/components';
 import { AuthGuardHome, AuthGuardLogin } from './guards';
+import { FilterBySortPipe, FilterByStatusQuestionsPipe, FilterByTagsPipe, FilterPerPeriodOfTimePipe } from '@shared/pipes';
 
 @NgModule({
-  declarations: [HeaderComponent, FilterPerPeriodOfTimePipe, FilterByStatusQuestionsPipe, FilterByTagsPipe, FilterBySortPipe],
+  declarations: [
+    HeaderComponent,
+    FilterButtonComponent,
+    FilterPerPeriodOfTimePipe,
+    FilterByStatusQuestionsPipe,
+    FilterByTagsPipe,
+    FilterBySortPipe,
+    SortComponent
+  ],
   imports: [AngularMaterialModule, CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
-  exports: [HeaderComponent, FilterPerPeriodOfTimePipe, FilterByStatusQuestionsPipe, FilterByTagsPipe, FilterBySortPipe],
-  providers: [AuthGuardHome, AuthGuardLogin],
+  exports: [
+    HeaderComponent,
+    FilterButtonComponent,
+    FilterPerPeriodOfTimePipe,
+    FilterByStatusQuestionsPipe,
+    FilterByTagsPipe,
+    FilterBySortPipe,
+    SortComponent
+  ],
+  providers: [AuthGuardHome, AuthGuardLogin]
 })
-export class SharedModule {}
+export class SharedModule {
+}

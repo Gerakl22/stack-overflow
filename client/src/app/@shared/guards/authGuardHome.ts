@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { AuthService } from '../services';
+import { RoutesConstants } from '@shared/constants';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +13,7 @@ export class AuthGuardHome implements CanActivate {
     return this.authService.isLoginUser().pipe(
       map((isLoginUser: boolean) => {
         if (isLoginUser) {
-          this.router.navigateByUrl('questions/all');
+          this.router.navigateByUrl(RoutesConstants.QUESTIONS.ALL);
           return false;
         }
         return true;

@@ -62,7 +62,9 @@ class QuestionsService {
   async approveQuestionById(id) {
     await questionsModel.findByIdAndUpdate({ _id: id }, { $set: { isApproval: true } });
 
-    return await this.getAllQuestions();
+    const questionModelById = await QuestionsService.#getQuestionModelById(id);
+
+    return await QuestionsService.#setQuestion(questionModelById);
   }
 
   async createQuestion(question) {

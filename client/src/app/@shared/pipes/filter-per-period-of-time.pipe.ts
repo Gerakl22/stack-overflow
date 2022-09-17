@@ -6,13 +6,13 @@ import { Question } from '../models';
   pure: false,
 })
 export class FilterPerPeriodOfTimePipe implements PipeTransform {
-  transform(questionsArray: Question[], periodOfTime: number | null): Question[] {
+  transform(questionsArray: Question[], periodOfTime: string | null): Question[] {
     if (periodOfTime === null) {
       return questionsArray;
     }
 
     return questionsArray.filter((question: Question) => {
-      return question.date > new Date().getTime() - periodOfTime * 24 * 60 * 60 * 1000;
+      return question.date > new Date().getTime() - Number(periodOfTime) * 24 * 60 * 60 * 1000;
     });
   }
 }

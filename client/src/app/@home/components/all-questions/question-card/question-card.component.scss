@@ -1,4 +1,29 @@
 .c-question-card {
+  &__card {
+    position: relative;
+    width: 20rem;
+    height: 15rem;
+    margin: 1rem;
+    background-color: black;
+
+    &--line {
+      width: 80rem;
+
+      @media (max-width: 1500px) {
+        width: 70rem;
+      }
+      @media (max-width: 1200px) {
+        width: 50rem;
+      }
+      @media (max-width: 900px) {
+        width: 30rem;
+      }
+      @media (max-width: 600px) {
+        width: 20rem;
+      }
+    }
+  }
+
   &__moderation {
     position: absolute;
     text-align: left;

@@ -1,0 +1,11 @@
+.c-filter-button {
+  &__trigger {
+    background-color: blue;
+  }
+
+  &__name {
+    line-height: 1rem;
+    letter-spacing: 0.05rem;
+    font-size: 0.8rem;
+  }
+}

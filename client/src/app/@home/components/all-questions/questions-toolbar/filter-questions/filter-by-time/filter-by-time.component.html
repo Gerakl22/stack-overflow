@@ -1,0 +1,22 @@
+<form
+  [formGroup]='formTime'
+  class='c-filter-by-time__form'
+>
+  <mat-icon class='c-filter-by-time__icon'>timeline</mat-icon>
+  <mat-label
+    *ngFor='let time of timeFormArray.controls; let i = index'
+    [formArrayName]='formArrayNameTime'
+    class='c-filter-by-time__label'
+  >
+    <mat-checkbox
+      [formControlName]='i'
+      [checked]='time.value'
+      [name]='questionsTimeData[i].value'
+      (change)='filter($event)'
+      class='c-filter-by-time__checkbox'
+    >
+      {{questionsTimeData[i].item}}
+    </mat-checkbox>
+
+  </mat-label>
+</form>

@@ -1,0 +1,22 @@
+<form
+  [formGroup]='formTags'
+  class='c-filter-by-tag__form'
+>
+    <mat-icon class='c-filter-by-tag__icon'>tag</mat-icon>
+
+    <mat-label
+      *ngFor='let tag of tagsFormArray.controls; let i = index'
+      [formArrayName]='formArrayNameTags'
+      class='c-filter-by-tag__label'
+    >
+      <mat-checkbox
+        [formControlName]='i'
+        [name]='tagsData[i].item'
+        (change)='filter($event)'
+        class='c-filter-by-tag__checkbox'
+      >
+        {{ tagsData[i].item }}
+      </mat-checkbox>
+
+    </mat-label>
+</form>

@@ -10,9 +10,10 @@ import { catchError, takeUntil, tap } from 'rxjs/operators';
   selector: 'app-question-card',
   templateUrl: 'question-card.component.html',
   styleUrls: ['question-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestionCardComponent implements OnDestroy {
+  @Input() isLineDisplay: boolean;
   @Input() question: Question;
   @Output() removeQuestionById: EventEmitter<string> = new EventEmitter<string>();
 
@@ -31,12 +32,8 @@ export class QuestionCardComponent implements OnDestroy {
     this.questionsService
       .approveQuestionById(id)
       .pipe(
-        tap((questions: Question[]) => {
-          questions.map((question: Question) => {
-            if (question.id === id) {
-              this.question = question;
-            }
-          });
+        tap((question: Question) => {
+          this.question = question;
 
           this.cdr.detectChanges();
         }),
